@@ -5,7 +5,7 @@ import { CartIcon } from "../../../../../packages/ui/src";
 import { useGetList } from "data_providers";
 import { ProviderNames } from "../../types/providers";
 
-const CartIconReactive = () => {
+export const CartIconReactive = () => {
   const getCartList = useGetList(ProviderNames.CART)
   const productsCount = useLiveQuery(async ()=> (await getCartList()).length)
   const isOpenRef = useRef<boolean | undefined>(false)
@@ -20,4 +20,3 @@ const CartIconReactive = () => {
   )
 }
 
-export default CartIconReactive
