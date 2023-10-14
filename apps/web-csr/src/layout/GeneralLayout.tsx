@@ -61,6 +61,7 @@ export function GeneralLayout({
           }}
         />
       </Box>
+      {/* Curar modales y luego pasarlos a la maquina estado */}
       <CartModal content={<BodyCart />} />
       <CartFloat />
       <PickupStore content={<BodyPickup />} />

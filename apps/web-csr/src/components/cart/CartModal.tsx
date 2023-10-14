@@ -1,27 +1,21 @@
-import { Modal, Typography } from "@mui/material";
+import { Typography } from "@mui/material";
 import ShoppingCartOutlinedIcon from "@mui/icons-material/ShoppingCartOutlined";
-import { ModalLayout } from "../../../../../../packages/ui/src";
+import { ModalLayout } from "../../../../../packages/ui/src";
 import HeadModal from "../common/HeadModal";
-import { setIsCartShop, useIsCartShopOpen } from "../../../observables";
+
+import { setModalState } from "../../observables";
 
 interface CartProps {
   content?: JSX.Element;
 }
 
 export function CartModal({ content }: CartProps) {
-  const isOpen = useIsCartShopOpen()
-
-  return (
-    <Modal
-      onClose={()=> setIsCartShop(false)}
-      open={!!isOpen}
-      sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
-    >
+   return (
       <ModalLayout
         sx={{ maxWidth: "40rem" }}
         headerModal={
           <HeadModal
-            onClose={()=> setIsCartShop(false)}
+            onClose={()=> setModalState({})}
             title={<Typography variant="h5">Carrito</Typography>}
             icon={<ShoppingCartOutlinedIcon />}
           />
@@ -29,6 +23,5 @@ export function CartModal({ content }: CartProps) {
       >
         {content}
       </ModalLayout>
-    </Modal>
   );
 }

@@ -22,3 +22,24 @@ export const [useIsConfirmedStoreOpen, isConfirmedStoreOpen$] = bind(isConfirmed
 
 export const [isPickupStore$, setIsPickupStore] = createSignal<boolean | undefined>();
 export const [useIsPickupStoreOpen, isPickupStoreOpen$] = bind(isPickupStore$, false);
+
+
+export enum ModalState {
+  CART = 'cart',
+  DETAIL = 'detail',
+  IN_STORE_SUMMARY = 'inStoreSummary',
+  IN_STORE_CONFIRMATION = 'inStoreConfirmation',
+  DELIVERY_CENTRAL_CLIENT_DATA = 'deliveryCentralClientData',
+  DELIVERY_CENTRAL_PAYMENT_METHOD = 'deliveryCentralPaymentMethod',
+  DELIVERY_CENTRAL_CONFIRMATION = 'deliveryCentralConfirmation',
+
+}
+
+export interface IModalState{
+  currentModal?: ModalState;
+  prevModal?: ModalState;
+}
+
+export const [modalStateChange$, setModalState] = createSignal<IModalState>()
+export const [useModalState, modalState$] = bind(modalStateChange$, {})
+
