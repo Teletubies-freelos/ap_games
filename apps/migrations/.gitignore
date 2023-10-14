@@ -1,0 +1,10 @@
+node_modules/
+dist/
+bin/
+
+dev.sqlite3
+
+localPostgres/
+
+.env
+db_data/
