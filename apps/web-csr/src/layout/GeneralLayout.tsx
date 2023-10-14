@@ -1,16 +1,16 @@
 import { Box, Stack, Typography } from '@mui/material';
 import type { PropsWithChildren } from 'react';
 import { StepStatus, WhatsappLogo } from '../../../../packages/ui/src';
-import { CartFloat } from '../components/cart/CartFloat';
-/* import Cart from '../components/modals/Cart/Cart';
-import BodyCart from '../components/modals/Cart/BodyCart';
+import { CartFloat, CartModal, BodyCart } from '../components/cart';
+
 import PickupStore from '../components/modals/PickupStore/PickupStore';
 import BodyPickup from '../components/modals/PickupStore/BodyPickup';
 import MyData from '../components/modals/MyPersonalnfo/MyData';
 import Payments from '../components/modals/Payments/Payments';
 import ConfirmedOrder from '../components/modals/ConfirmedOrder/ConfirmedOrder';
 import FooterModal from '../components/modals/common/FooterModal';
-import InfoPayment from '../components/modals/common/InfoPayment'; */
+import InfoPayment from '../components/modals/common/InfoPayment';
+
 import {
   setIsConfirmedOrder,
   setIsConfirmedStore,
@@ -61,7 +61,7 @@ export function GeneralLayout({
           }}
         />
       </Box>
-      <Cart content={<BodyCart />} />
+      <CartModal content={<BodyCart />} />
       <CartFloat />
       <PickupStore content={<BodyPickup />} />
       <MyData />
