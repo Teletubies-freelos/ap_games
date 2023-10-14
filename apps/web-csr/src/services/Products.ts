@@ -1,14 +1,20 @@
-import { GraphQLClient } from "graphql-request";
-import { IDataProvider } from 'data_providers'
+import { GraphQLClient } from 'graphql-request';
+import { IDataProvider, IGetListParams } from 'data_providers';
+import { GET_PRODUCTS } from '../../../request/src/graphql/queries';
 
-import { GET_PRODUCTS } from '../../../request/src/graphql/queries'
+export class Products implements IDataProvider {
+  constructor(private client: GraphQLClient) {}
 
-export class Products implements IDataProvider{
-  constructor(private client: GraphQLClient){}
-  
-  async getList(){
-    const { Products } = await this.client.request<{Products: unknown[]}>(GET_PRODUCTS)
+  async getList({ pagination }: IGetListParams) {
+    const { limit = 10, page = 0 } = pagination ?? {};
+    const { products } = await this.client.request<{ products: unknown[] }>(
+      GET_PRODUCTS,
+      {
+        limit,
+        offset: page * limit,
+      }
+    );
 
-    return Products;
+    return products;
   }
 }

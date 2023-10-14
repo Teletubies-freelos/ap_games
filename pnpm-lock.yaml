@@ -130,6 +130,9 @@ importers:
       react-dom:
         specifier: ^18.2.0
         version: 18.2.0(react@18.2.0)
+      react-material-ui-carousel:
+        specifier: ^3.4.2
+        version: 3.4.2(@emotion/react@11.11.1)(@emotion/styled@11.11.0)(@mui/icons-material@5.14.13)(@mui/material@5.14.13)(@mui/system@5.14.13)(react-dom@18.2.0)(react@18.2.0)
       react-router-dom:
         specifier: ^6.16.0
         version: 6.16.0(react-dom@18.2.0)(react@18.2.0)
