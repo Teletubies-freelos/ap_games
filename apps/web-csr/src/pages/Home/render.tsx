@@ -1,5 +1,5 @@
-import { CardHeroHOC, IOffer } from "./carHeroHOC";
+import { CardHeroHOC, IFeatured } from './carHeroHOC';
 
-export const render = (props: IOffer) => (
-  <CardHeroHOC key={props.product_id} {...props} />
+export const render = (props: IFeatured) => (
+  <CardHeroHOC key={props.featured_id} {...props} />
 );
