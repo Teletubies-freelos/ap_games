@@ -3,19 +3,17 @@ import type { PropsWithChildren } from 'react';
 import { StepStatus, WhatsappLogo } from '../../../../packages/ui/src';
 import { CartFloat, CartModal, BodyCart } from '../components/cart';
 
-import PickupStore from '../components/modals/PickupStore/PickupStore';
-import BodyPickup from '../components/modals/PickupStore/BodyPickup';
-import MyData from '../components/modals/MyPersonalnfo/MyData';
-import Payments from '../components/modals/Payments/Payments';
-import ConfirmedOrder from '../components/modals/ConfirmedOrder/ConfirmedOrder';
-import FooterModal from '../components/modals/common/FooterModal';
-import InfoPayment from '../components/modals/common/InfoPayment';
+/* import PickupStore from '../components/PickupStore/PickupStore';
+import BodyPickup from '../components/PickupStore/BodyPickup';
+import MyData from '../components/MyPersonalnfo/MyData';
+import Payments from '../components/Payments/Payments'; */
+import ConfirmedOrder from '../components/ConfirmOrder';
+import FooterModal from '../components/common/FooterModal';
+import InfoPayment from '../components/common/InfoPayment';
 
 import {
   setIsConfirmedOrder,
   setIsConfirmedStore,
-  useIsConfirmedOrderOpen,
-  useIsConfirmedStoreOpen,
 } from '../observables';
 
 interface GeneralLayoutProps {
@@ -26,8 +24,6 @@ export function GeneralLayout({
   children,
   navBar,
 }: PropsWithChildren<GeneralLayoutProps>) {
-  const isOpen = useIsConfirmedOrderOpen();
-  const isOpenConfirmedStore = useIsConfirmedStoreOpen();
 
   return (
     <Box
@@ -64,11 +60,10 @@ export function GeneralLayout({
       {/* Curar modales y luego pasarlos a la maquina estado */}
       <CartModal content={<BodyCart />} />
       <CartFloat />
-      <PickupStore content={<BodyPickup />} />
+      {/* <PickupStore content={<BodyPickup />} />
       <MyData />
-      <Payments />
+      <Payments /> */}
       <ConfirmedOrder
-        isOpen={!!isOpenConfirmedStore}
         stepStatus={
           <StepStatus
             steps={['En tienda', 'Entregado']}
@@ -90,7 +85,6 @@ export function GeneralLayout({
         }
       />
       <ConfirmedOrder
-        isOpen={!!isOpen}
         stepStatus={
           <StepStatus
             steps={['En tienda', 'En camino', 'Entregado']}

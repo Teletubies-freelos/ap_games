@@ -23,6 +23,10 @@ export const [useIsConfirmedStoreOpen, isConfirmedStoreOpen$] = bind(isConfirmed
 export const [isPickupStore$, setIsPickupStore] = createSignal<boolean | undefined>();
 export const [useIsPickupStoreOpen, isPickupStoreOpen$] = bind(isPickupStore$, false);
 
+export const [purchaseCode$, setPurchaseCode] = createSignal<string>();
+export const [usePurchaseCode, purchaseCodeDefault$] = bind(purchaseCode$, '');
+
+
 
 export enum ModalState {
   CART = 'cart',
