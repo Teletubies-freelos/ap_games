@@ -1,56 +1,55 @@
-import { Box, MenuItem, Paper, type SxProps } from "@mui/material";
-import { VirtuosoGrid } from "react-virtuoso";
-import { DropDown, Isotype } from "../../../../../packages/ui/src";
-import { useFeaturedProducts } from "./hooks/useFeaturedProducts";
-import { Loading } from "./Loading";
+import { Box, MenuItem, Paper, type SxProps } from '@mui/material';
+import { VirtuosoGrid } from 'react-virtuoso';
+import { DropDown, Isotype } from '../../../../../packages/ui/src';
+import { useProducts } from './hooks/useFeaturedProducts';
+import { Loading } from './Loading';
 
-import Filters from "./Filters";
+import Filters from './Filters';
 
-import { itemContentRender } from "./Containers/itemContentRender";
-import { ItemContainer, ListContainer } from "./Containers/ListContainer";
-import { useMemo } from "react";
+import { itemContentRender } from './Containers/itemContentRender';
+import { ItemContainer, ListContainer } from './Containers/ListContainer';
+import { useMemo } from 'react';
 
 const sxProductListHeader: SxProps = {
-  width: "100%",
-  display: "flex",
-  flexWrap: "wrap",
-  justifyContent: "space-between",
+  width: '100%',
+  display: 'flex',
+  flexWrap: 'wrap',
+  justifyContent: 'space-between',
   marginBottom: 2,
-  alignItems: "center",
+  alignItems: 'center',
   gap: 2,
 };
 
 export default function ProductsList() {
-  const { products, fetchNextPage } = useFeaturedProducts();
+  const { products, fetchNextPage } = useProducts();
 
   const loadMore = () => {
     fetchNextPage();
   };
 
-  const ItemContent= useMemo(()=> itemContentRender(), [])
-
+  const ItemContent = useMemo(() => itemContentRender(), []);
   return (
     <Paper
       sx={{
         padding: {
-          xs: "2rem 1rem",
-          sm: "2rem 3.5rem",
-          md: "2rem 5.5rem",
-          lg: "2rem 7.5rem",
+          xs: '2rem 1rem',
+          sm: '2rem 3.5rem',
+          md: '2rem 5.5rem',
+          lg: '2rem 7.5rem',
         },
       }}
     >
       <Box sx={sxProductListHeader}>
         <Isotype
           sx={{
-            order: "1",
-            width: "3.5rem",
+            order: '1',
+            width: '3.5rem',
           }}
         />
         <DropDown
           sxForm={{
-            width: { xs: "80%", md: "30%" },
-            order: { xs: "2", md: "3" },
+            width: { xs: '80%', md: '30%' },
+            order: { xs: '2', md: '3' },
           }}
         >
           <MenuItem value={1}>Juegos PS4</MenuItem>

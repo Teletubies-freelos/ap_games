@@ -48,6 +48,7 @@ function createTableFeatured(table: Knex.CreateTableBuilder) {
   table.text('description').nullable();
   table.integer('product_id').nullable();
   table.text('banner_img_url').nullable();
+  table.float('price').notNullable();
 }
 
 function createTableOrderStatus(table: Knex.CreateTableBuilder) {
