@@ -33,7 +33,9 @@ export default function HeadModal({
         }}
       >
         {icon}
-        <Typography variant="h6">{title}</Typography>
+        <Typography variant="h6" component='div'>
+          {title}
+        </Typography>
       </Box>
       <IconButton onClick={onClose}>
         <CloseIcon  />
