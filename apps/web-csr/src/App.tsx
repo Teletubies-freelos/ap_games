@@ -38,7 +38,7 @@ function App() {
             <RouterProvider router={routes} />
           </Suspense>
         </ThemeProvider>
-        {/*   <ReactQueryDevtools initialIsOpen /> */}
+        <ReactQueryDevtools initialIsOpen />
       </QueryClientProvider>
     </DataProvider>
   );

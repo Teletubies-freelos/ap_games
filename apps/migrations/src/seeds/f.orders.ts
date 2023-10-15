@@ -3,7 +3,7 @@ import { OrderDTO, Tables } from "../types/tables";
 import { faker } from "@faker-js/faker";
 
 export async function seed(knex: Knex) {
-  await knex(Tables.ORDER).del();
+  await knex(Tables.ORDER).del().catch(()=>{});
   const paymentMethods = await knex(Tables.PAYMENT_METHOD).select('payment_method_id')
 
   const paymentMethodsId = paymentMethods.map(({payment_method_id})=>payment_method_id)

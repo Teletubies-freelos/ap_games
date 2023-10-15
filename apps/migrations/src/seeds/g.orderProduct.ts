@@ -3,7 +3,7 @@ import { OrderDTO, OrderProductDTO, Tables } from "../types/tables";
 import { faker } from "@faker-js/faker";
 
 export async function seed(knex: Knex) {
-  await knex(Tables.ORDER_PRODUCT).del();
+  await knex(Tables.ORDER_PRODUCT).del().catch(()=>{});
 
   const orders: {order_id: string}[] = await knex(Tables.ORDER).select('order_id')
   

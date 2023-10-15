@@ -25,7 +25,7 @@ const serializeGames = ({
 type Maybe<T> = T | undefined | null;
 
 const getNextPage: GetNextPageParamFunction<IOffer[]> = (_lastPage, pages) => {
-  return pages.length * 10;
+  return pages.length
 };
 
 export const useProducts = () => {
