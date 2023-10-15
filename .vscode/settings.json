@@ -3,5 +3,9 @@
     {
       "mode": "auto"
     }
-  ]
+  ],
+  "sonarlint.connectedMode.project": {
+    "connectionId": "teletubies-freelos",
+    "projectKey": "Teletubies-freelos_ap_games"
+  }
 }

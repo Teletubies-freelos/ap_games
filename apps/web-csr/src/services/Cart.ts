@@ -8,4 +8,10 @@ export class Cart implements IDataProvider{
   async getList(){
     return await this.table.toArray()
   }
+
+  async createOne(payload: ICartProduct){
+    await this.table.add(payload)
+    
+    return payload
+  }
 }

@@ -1,4 +1,5 @@
 export enum ProviderNames {
   CART = 'cart',
-  PRODUCTS = 'products'
+  PRODUCTS = 'products',
+  FEATURED = 'featured'
 }
