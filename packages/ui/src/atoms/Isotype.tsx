@@ -27,8 +27,8 @@ export default function Isotype({ sx }: UnsetSvgProps) {
             y2="40.7503"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#2193CE" />
-            <stop offset="1" stop-color="#7339FF" />
+            <stop stopColor="#2193CE" />
+            <stop offset="1" stopColor="#7339FF" />
           </linearGradient>
           <linearGradient
             id="paint1_linear_9322_7712"
@@ -38,8 +38,8 @@ export default function Isotype({ sx }: UnsetSvgProps) {
             y2="44.7157"
             gradientUnits="userSpaceOnUse"
           >
-            <stop stop-color="#2193CE" />
-            <stop offset="1" stop-color="#7339FF" />
+            <stop stopColor="#2193CE" />
+            <stop offset="1" stopColor="#7339FF" />
           </linearGradient>
         </defs>
       </svg>

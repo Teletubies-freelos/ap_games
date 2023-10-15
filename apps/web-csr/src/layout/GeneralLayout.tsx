@@ -1,20 +1,16 @@
-import { Box, Stack, Typography } from '@mui/material';
+import { Box } from '@mui/material';
 import type { PropsWithChildren } from 'react';
-import { StepStatus, WhatsappLogo } from '../../../../packages/ui/src';
-import { CartFloat, CartModal, BodyCart } from '../components/cart';
+import { WhatsappLogo } from '../../../../packages/ui/src';
+import { CartFloat } from '../components/cart';
 
 /* import PickupStore from '../components/PickupStore/PickupStore';
 import BodyPickup from '../components/PickupStore/BodyPickup';
 import MyData from '../components/MyPersonalnfo/MyData';
 import Payments from '../components/Payments/Payments'; */
-import ConfirmedOrder from '../components/ConfirmOrder';
-import FooterModal from '../components/common/FooterModal';
-import InfoPayment from '../components/common/InfoPayment';
 
-import {
-  setIsConfirmedOrder,
-  setIsConfirmedStore,
-} from '../observables';
+
+
+import { Modal } from '../components/modal';
 
 interface GeneralLayoutProps {
   navBar: JSX.Element;
@@ -58,12 +54,12 @@ export function GeneralLayout({
         />
       </Box>
       {/* Curar modales y luego pasarlos a la maquina estado */}
-      <CartModal content={<BodyCart />} />
+      <Modal />
       <CartFloat />
       {/* <PickupStore content={<BodyPickup />} />
       <MyData />
       <Payments /> */}
-      <ConfirmedOrder
+      {/* <ConfirmedOrder
         stepStatus={
           <StepStatus
             steps={['En tienda', 'Entregado']}
@@ -119,7 +115,7 @@ export function GeneralLayout({
             infoMessage='Realiza el seguimiento de tu pedido aquí.'
           />
         }
-      />
+      /> */}
     </Box>
   );
 }

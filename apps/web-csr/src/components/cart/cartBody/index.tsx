@@ -10,6 +10,8 @@ import { useMemo } from "react";
 import { reduceTotalPrice } from "../../../utils";
 import { setIsCartOpen, setIsPickupStore, setIsYourData } from "../../../observables";
 
+import totalMoney from '../../common/total.svg'
+
 export function BodyCart() {
   const getCartProducts = useGetList(ProviderNames.CART)
   const { data, isFetching, refetch } = useQuery(['productsCart'], async ()=> await getCartProducts() )

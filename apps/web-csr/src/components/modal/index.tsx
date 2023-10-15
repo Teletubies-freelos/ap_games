@@ -18,7 +18,7 @@ export const Modal = ()=>{
 
   return (<ModalMUI
       onClose={()=> setModalState({})}
-      open={!!modalState}
+      open={!!modalState.currentModal}
       sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
     >
       {modals[modalState.currentModal ?? ModalState.CART]}

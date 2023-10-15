@@ -12,6 +12,7 @@ if(import.meta.env.DEV && isMSWOn){
   });
 }
 
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <App />

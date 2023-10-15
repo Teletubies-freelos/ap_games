@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import { RouterProvider } from 'react-router-dom';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { DataProvider } from 'data_providers';
 import { routes } from './routes';
 
@@ -15,7 +16,13 @@ const providers = {
   [ProviderNames.FEATURED]: featuredProvider
 };
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions:{
+    queries:{
+      refetchOnWindowFocus: false
+    }
+  }
+});
 
 if (import.meta.env.DEV) {
   //@ts-expect-error just in dev mode
@@ -31,6 +38,7 @@ function App() {
             <RouterProvider router={routes} />
           </Suspense>
         </ThemeProvider>
+        <ReactQueryDevtools initialIsOpen />
       </QueryClientProvider>
     </DataProvider>
   );

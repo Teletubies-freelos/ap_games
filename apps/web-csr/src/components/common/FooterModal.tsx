@@ -1,6 +1,6 @@
-import { Box, Stack, SxProps, Typography } from '@mui/material';
+import { Box, Stack, SxProps, Typography, Button } from '@mui/material';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import { Button } from '../../../../../../packages/ui/src';
+
 
 interface FooterModalProps {
   nameButton: string;
@@ -17,7 +17,9 @@ export default function FooterModal({
 }: FooterModalProps) {
   return (
     <Stack sx={sx}>
-      <Button label={nameButton} variant='contained' onClick={onClick} />
+      <Button variant='contained' onClick={onClick}>
+        {nameButton}
+      </Button>
       {infoMessage && (
         <Box
           display='flex'
