@@ -1,13 +1,12 @@
-export enum Tables{
+export enum Tables {
   PRODUCT = 'products',
   FEATURED = 'featureds',
-  CATEGORY ='categories',
+  CATEGORY = 'categories',
   ORDER = 'orderers',
   ORDER_PRODUCT = 'order_products',
   ORDER_STATUS = 'order_statuses',
-  PAYMENT_METHOD = 'payment_methods'
+  PAYMENT_METHOD = 'payment_methods',
 }
-
 
 export interface ProductDTO {
   id?: string;
@@ -22,7 +21,7 @@ export interface ProductDTO {
   secondary_img_url?: string;
   banner_img_url?: string;
   quantity: number;
-  category_id: number | string
+  category_id: number | string;
 }
 
 export interface OrderDTO {
@@ -35,7 +34,15 @@ export interface OrderDTO {
   payment_method_id: number;
 }
 
-export interface OrderProductDTO{
+export interface OrderProductDTO {
   order_id: string;
   product_id: number;
+}
+
+export interface FeaturedDTO {
+  featured_id?: number;
+  title: string;
+  description: string;
+  product_id?: number;
+  banner_img_url: string;
 }

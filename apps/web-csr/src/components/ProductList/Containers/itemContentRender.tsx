@@ -1,6 +1,6 @@
-import { MouseEventHandler } from "react";
-import { CardProduct } from "../../../../../../packages/ui/src";
-import { cartProvider } from "../../../modules";
+import { MouseEventHandler } from 'react';
+import { CardProduct } from '../../../../../../packages/ui/src';
+import { cartProvider } from '../../../modules';
 
 interface CardProductProps {
   readonly alt: string;
@@ -13,7 +13,7 @@ interface CardProductProps {
   readonly className?: string;
 }
 
-export const itemContentRender = (handleOnClick?: (price: number)=>void) =>
+export const itemContentRender = (handleOnClick?: (price: number) => void) =>
   function (_index: number, product: CardProductProps) {
     const _handleOnClick = () => {
       cartProvider.createOne({
@@ -22,12 +22,11 @@ export const itemContentRender = (handleOnClick?: (price: number)=>void) =>
         price: product.price,
         quantity: 1,
         priceDiscount: 0,
-        productId: product.title
-      })
+        productId: product.title,
+      });
 
-      if(handleOnClick)
-        handleOnClick(product.price)
-    }
+      if (handleOnClick) handleOnClick(product.price);
+    };
 
     return <CardProduct {...product} onAdd={_handleOnClick} />;
-  }
+  };

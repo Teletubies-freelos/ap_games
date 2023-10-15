@@ -1,11 +1,11 @@
-import { useCreateOne } from "data_providers";
-import { CardHero } from "../../../../../packages/ui/src";
-import { ProviderNames } from "../../types/providers";
+import { useCreateOne } from 'data_providers';
+import { CardHero } from '../../../../../packages/ui/src';
+import { ProviderNames } from '../../types/providers';
 
 export interface IOffer {
   product_id?: string | number;
   description?: string;
-  image_url?: string;
+  img_url?: string;
   name?: string;
   price_offer?: number;
   quantity?: number;
@@ -13,28 +13,36 @@ export interface IOffer {
   category_id?: number;
 }
 
+export interface IFeatured {
+  title: string;
+  description: string;
+  featured_id: number;
+  banner_img_url: string;
+  price: number;
+}
+
 export const CardHeroHOC = ({
-  image_url = '',
+  banner_img_url = '',
   description = '',
-  product_id = '',
-  name = '',
+  featured_id,
   price = 0,
-}: IOffer) => {
-  const createCartProduct = useCreateOne(ProviderNames.CART, {payload: {
-    image_url,
-    description,
-    product_id,
-    name,
-    price
-  }})
+}: IFeatured) => {
+  const createCartProduct = useCreateOne(ProviderNames.CART, {
+    payload: {
+      banner_img_url,
+      description,
+      featured_id,
+      price,
+    },
+  });
 
   return (
     <CardHero
-      onClick={async ()=> await createCartProduct()}
+      onClick={async () => await createCartProduct()}
       alt=''
       description={description}
-      image={image_url}
-      key={image_url ?? ''}
+      image={banner_img_url}
+      key={banner_img_url ?? ''}
     />
   );
 };

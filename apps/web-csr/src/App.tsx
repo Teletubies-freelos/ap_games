@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { RouterProvider } from 'react-router-dom';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { DataProvider } from 'data_providers';
 import { routes } from './routes';
 
@@ -13,15 +13,15 @@ import { ThemeProvider } from './providers/theme';
 const providers = {
   [ProviderNames.PRODUCTS]: productsProvider,
   [ProviderNames.CART]: cartProvider,
-  [ProviderNames.FEATURED]: featuredProvider
+  [ProviderNames.FEATURED]: featuredProvider,
 };
 
 const queryClient = new QueryClient({
-  defaultOptions:{
-    queries:{
-      refetchOnWindowFocus: false
-    }
-  }
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+    },
+  },
 });
 
 if (import.meta.env.DEV) {
@@ -38,7 +38,7 @@ function App() {
             <RouterProvider router={routes} />
           </Suspense>
         </ThemeProvider>
-        <ReactQueryDevtools initialIsOpen />
+        {/*   <ReactQueryDevtools initialIsOpen /> */}
       </QueryClientProvider>
     </DataProvider>
   );
