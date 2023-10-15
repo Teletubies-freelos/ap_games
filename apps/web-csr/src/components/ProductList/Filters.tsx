@@ -1,5 +1,7 @@
-import { Box, Chip, Typography } from "@mui/material";
-export default function Filters() {
+import { Box, Typography } from "@mui/material";
+import { PropsWithChildren } from "react";
+
+export default function Filters({children}: PropsWithChildren) {
   return (
     <Box
       display="flex"
@@ -15,8 +17,7 @@ export default function Filters() {
       >
         Filtros:
       </Typography>
-      <Chip label="Precio más bajo" sx={{ cursor: "pointer" }} />
-      <Chip label="Recién añañdidos" sx={{ cursor: "pointer" }} />
+      {children}
     </Box>
   );
 }

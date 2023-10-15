@@ -4,7 +4,7 @@ import { ORDER_DATA, PRODUCT_DATA } from './fragments';
 export const GET_PRODUCTS = gql`
   query GET_PRODUCTS($limit: Int, $offset: Int) {
     products(
-      where: { is_visible: { _neq: true } }
+      where: { is_visible: { _eq: true } }
       limit: $limit
       offset: $offset
       order_by: { updated_at: desc }
@@ -15,6 +15,37 @@ export const GET_PRODUCTS = gql`
 
   ${PRODUCT_DATA}
 `;
+
+export const GET_PRODUCT_DATA_IS_OFFER = gql`
+  query GET_PRODUCT_DATA_IS_OFFER($limit: Int, $offset: Int) {
+    products(
+      where: { is_visible: { _eq: true }, is_offer: {_eq: true} }
+      limit: $limit
+      offset: $offset
+      order_by: { updated_at: desc }
+    ) {
+      ...PRODUCT_DATA
+    }
+  }
+
+  ${PRODUCT_DATA}
+`
+
+
+export const GET_PRODUCT_DATA_LOW_PRICE = gql`
+  query GET_PRODUCT_DATA_LOW_PRICE($limit: Int, $offset: Int) {
+    products(
+      where: { is_visible: { _eq: true } }
+      limit: $limit
+      offset: $offset
+      order_by: { updated_at: desc,  price: asc }
+    ) {
+      ...PRODUCT_DATA
+    }
+  }
+
+  ${PRODUCT_DATA}
+`
 
 export const GET_PRODUCT_BY_CATEGORY = gql`
   query GET_PRODUCT_BY_CATEGORY($limit: Int, $offset: Int, $categoryId: Int) {
