@@ -1,14 +1,17 @@
-import { Box, MenuItem, Paper, type SxProps } from '@mui/material';
+import { Box, Chip, MenuItem, Paper, type SxProps } from '@mui/material';
 import { VirtuosoGrid } from 'react-virtuoso';
 import { DropDown, Isotype } from '../../../../../packages/ui/src';
-import { useProducts } from './hooks/useFeaturedProducts';
+import { HookFilters, useProducts } from './hooks/useFeaturedProducts';
 import { Loading } from './Loading';
 
 import Filters from './Filters';
 
 import { itemContentRender } from './Containers/itemContentRender';
 import { ItemContainer, ListContainer } from './Containers/ListContainer';
-import { useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
+import { useGetList } from 'data_providers';
+import { ProviderNames } from '../../types/providers';
+import { useQuery } from '@tanstack/react-query';
 
 const sxProductListHeader: SxProps = {
   width: '100%',
@@ -20,14 +23,27 @@ const sxProductListHeader: SxProps = {
   gap: 2,
 };
 
-export default function ProductsList() {
-  const { products, fetchNextPage } = useProducts();
+const useCategories = ()=>{
+  const getCategories = useGetList(ProviderNames.CATEGORIES)
 
-  const loadMore = () => {
+  const  queryData = useQuery(['categories'], async ()=> await getCategories())
+
+  return queryData
+}
+
+export default function ProductsList() {
+  const [filters, setFilters] = useState<HookFilters>({})
+
+  const { products, fetchNextPage } = useProducts(filters);
+
+  const { data: categories } = useCategories()
+
+  const loadMore = useCallback(() => {
     fetchNextPage();
-  };
+  }, [fetchNextPage]);
 
   const ItemContent = useMemo(() => itemContentRender(), []);
+
   return (
     <Paper
       sx={{
@@ -47,17 +63,20 @@ export default function ProductsList() {
           }}
         />
         <DropDown
+          onChange={()=>{console.log('meter a los filtros')}}
           sxForm={{
             width: { xs: '80%', md: '30%' },
             order: { xs: '2', md: '3' },
           }}
         >
-          <MenuItem value={1}>Juegos PS4</MenuItem>
-          <MenuItem value={2}>Juegos PS5</MenuItem>
-          <MenuItem value={3}>Juegos Switch</MenuItem>
-          <MenuItem value={4}>Juegos Xbox</MenuItem>
+          {
+            categories?.map(({category_id, name})=> <MenuItem value={category_id} key={category_id}>Juegos {name}</MenuItem>)
+          }
         </DropDown>
-        <Filters />
+        <Filters>
+          <Chip variant={filters.isOffer ? 'filled' : 'outlined'} onClick={()=>setFilters({isOffer: true})} label="Ofertas" sx={{ cursor: "pointer" }} />
+          <Chip variant={filters.isLowerPrice ? 'filled' : 'outlined'} onClick={()=> setFilters({isLowerPrice: true})} label="Precio más bajo" sx={{ cursor: "pointer" }} />
+        </Filters>
       </Box>
       <VirtuosoGrid
         components={{
