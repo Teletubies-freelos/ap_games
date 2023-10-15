@@ -15,3 +15,15 @@ export const GET_PRODUCTS = gql`
 
   ${PRODUCT_DATA}
 `;
+
+
+export const GET_FEATURED_PRODUCTS = gql`
+  query GET_FEATURED_PRODUCTS() {
+    featureds{
+      featured_id
+      title
+      description
+      banner_img_url
+    }
+  }
+`

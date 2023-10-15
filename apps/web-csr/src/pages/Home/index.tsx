@@ -1,5 +1,4 @@
-import { SxProps, Stack, Button } from '@mui/material';
-import { useTheme } from '@mui/material/styles';
+import { Stack, Button } from '@mui/material';
 import { Link } from 'react-router-dom';
 import {
   ColorSwitch,
@@ -16,26 +15,22 @@ import ResponsiveCarousel from '../../components/ResponsiveCarousel';
 
 import ProductsList from '../../components/ProductList';
 import NavLinks from '../../components/NavLinks';
-import { useGames } from '../hooks/useGames';
-import { sxInnerStack } from './styles';
-import { useToggleColor } from '../providers/theme';
-import { useMemo } from 'react';
+
+import { noMargin, sxInnerStack } from './styles';
+import { useToggleColor } from '../../providers/theme';
 import { CartIconReactive } from '../../components/cart/cartReactiveIcon';
 import { render } from './render';
-
+import { useGetList } from 'data_providers';
+import { ProviderNames } from '../../types/providers';
+import { useQuery } from '@tanstack/react-query';
 
 
 export default function Home() {
-  const { data } = useGames();
+  const getFeaturedProducts = useGetList(ProviderNames.FEATURED);
+
+  const { data } = useQuery(['home featured'], async () => await getFeaturedProducts())
+
   const toggleColor = useToggleColor();
-  const theme = useTheme();
-  const noMargin: SxProps = useMemo(
-    () => ({
-      margin: '0 !important',
-      filter: theme.palette.mode == 'dark' ? 'invert(1)' : 'invert(0)',
-    }),
-    [theme.palette.mode],
-  );
 
   return (
     <GeneralLayout

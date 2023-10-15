@@ -1,12 +1,14 @@
 import { Box, MenuItem, Paper, type SxProps } from "@mui/material";
 import { VirtuosoGrid } from "react-virtuoso";
 import { DropDown, Isotype } from "../../../../../packages/ui/src";
-import { useProducts } from "../../hooks/useProducts";
+import { useFeaturedProducts } from "./hooks/useFeaturedProducts";
 import { Loading } from "./Loading";
-import { ItemContainer, ListContainer, itemContentRender } from "./Containers";
+
 import Filters from "./Filters";
-import { useContext, useMemo } from "react";
-import { cartContext } from "../../context/cartContext";
+
+import { itemContentRender } from "./Containers/itemContentRender";
+import { ItemContainer, ListContainer } from "./Containers/ListContainer";
+import { useMemo } from "react";
 
 const sxProductListHeader: SxProps = {
   width: "100%",
@@ -19,14 +21,13 @@ const sxProductListHeader: SxProps = {
 };
 
 export default function ProductsList() {
-  const { products, fetchNextPage } = useProducts();
-  const {handleOnClick} = useContext(cartContext)
+  const { products, fetchNextPage } = useFeaturedProducts();
 
   const loadMore = () => {
     fetchNextPage();
   };
 
-  const ItemContent= useMemo(()=> itemContentRender(handleOnClick), [])
+  const ItemContent= useMemo(()=> itemContentRender(), [])
 
   return (
     <Paper
@@ -63,7 +64,8 @@ export default function ProductsList() {
         components={{
           Footer: Loading,
           Item: ItemContainer,
-          List: ListContainer,
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          List: ListContainer as any,
         }}
         data={products ?? []}
         endReached={loadMore}
