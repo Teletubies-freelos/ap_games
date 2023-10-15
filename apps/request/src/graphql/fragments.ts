@@ -9,5 +9,21 @@ export const PRODUCT_DATA = gql`
     name
     quantity
     price
+    product_id
+    discount_price
+    is_visible
+    category_id
   }
 `;
+
+export const ORDER_DATA = gql`
+  fragment ORDER_DATA on orderers {
+    address
+    client_name
+    order_id
+    payment_method {
+      name
+    }
+    phone
+  }
+`
