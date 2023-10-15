@@ -63,6 +63,7 @@ export default function ProductsList() {
           }}
         />
         <DropDown
+          onChange={()=>{console.log('meter a los filtros')}}
           sxForm={{
             width: { xs: '80%', md: '30%' },
             order: { xs: '2', md: '3' },

@@ -5,7 +5,7 @@ import { DataProvider } from 'data_providers';
 import { routes } from './routes';
 
 import { LoadingPage } from '../../../packages/ui/src';
-import { cartProvider, featuredProvider, productsProvider } from './modules';
+import { cartProvider, categoriesProvider, featuredProvider, productsProvider } from './modules';
 import { ProviderNames } from './types/providers';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from './providers/theme';
@@ -14,6 +14,7 @@ const providers = {
   [ProviderNames.PRODUCTS]: productsProvider,
   [ProviderNames.CART]: cartProvider,
   [ProviderNames.FEATURED]: featuredProvider,
+  [ProviderNames.CATEGORIES]: categoriesProvider
 };
 
 const queryClient = new QueryClient({
