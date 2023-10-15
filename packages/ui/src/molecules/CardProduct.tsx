@@ -8,6 +8,8 @@ import {
   Typography,
 } from "@mui/material";
 import { MouseEventHandler } from "react";
+import Tag from "../atoms/Tag";
+import Discount from "../atoms/Discount";
 
 export interface CardProductProps {
   alt: string;
@@ -16,7 +18,9 @@ export interface CardProductProps {
   description: string;
   price: number;
   previousPrice?: number;
+  category_id?: number;
   onAdd?: MouseEventHandler<HTMLButtonElement>;
+  onViewDetail?: MouseEventHandler<HTMLImageElement>;
   className?: string;
 }
 
@@ -28,6 +32,7 @@ export default function CardProduct({
   title,
   previousPrice,
   onAdd,
+  onViewDetail,
   className,
 }: CardProductProps) {
   return (
@@ -47,6 +52,7 @@ export default function CardProduct({
           }}
         >
           <CardMedia
+            onClick={onViewDetail}
             component="img"
             alt={alt}
             src={src}
@@ -56,6 +62,7 @@ export default function CardProduct({
               margin: "auto 0",
               padding: "1rem",
               width: "100%",
+              cursor: "pointer"
             }}
           />
         </Box>
@@ -85,24 +92,27 @@ export default function CardProduct({
               {description}
             </Typography>
           </Box>
-          <Box>
-            {!!previousPrice && (
+          <Box sx={{ display: "flex", alignItems: "flex-end", gap: "10px" }}>
+            <Box>
+              {!!previousPrice && (
+                <Typography
+                  variant="body2"
+                  sx={{ textDecoration: "line-through", color: "text.subdued" }}
+                >
+                  S/ {previousPrice}
+                </Typography>
+              )}
               <Typography
                 variant="body2"
-                sx={{ textDecoration: "line-through" }}
+                sx={{
+                  fontSize: "1.1em",
+                  color: "text.primary",
+                }}
               >
-                S/ {previousPrice}
+                S/ {price}
               </Typography>
-            )}
-            <Typography
-              variant="body2"
-              sx={{
-                fontSize: "1.1em",
-                color: (theme) => theme.palette.text.primary,
-              }}
-            >
-              S/ {price}
-            </Typography>
+            </Box>
+            {!!previousPrice && <Tag icon={<Discount />} label="Oferta" />}
           </Box>
         </CardContent>
       </Box>

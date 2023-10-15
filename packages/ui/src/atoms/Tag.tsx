@@ -6,7 +6,7 @@ interface TagProps {
   label: string;
 }
 
-export default function DiscountTag({ icon, label }: Readonly<TagProps>) {
+export default function Tag({ icon, label }: Readonly<TagProps>) {
   return (
     <Box
       sx={{
