@@ -1,8 +1,8 @@
-import { SvgIcon, SxProps } from "@mui/material";
+import { SvgIcon, SxProps, Theme } from "@mui/material";
 import { PropsWithChildren } from "react";
 
 export interface UnsetSvgProps {
-  sx?: SxProps;
+  sx?: SxProps | SxProps<Theme>;
 }
 
 export const UnsetSvg = ({
