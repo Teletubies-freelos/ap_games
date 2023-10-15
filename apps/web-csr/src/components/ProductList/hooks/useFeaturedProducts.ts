@@ -28,11 +28,23 @@ const getNextPage: GetNextPageParamFunction<IOffer[]> = (_lastPage, pages) => {
   return pages.length
 };
 
-export const useProducts = () => {
-  const getProducts = useGetList(ProviderNames.PRODUCTS);
+export interface HookFilters{
+  isLowerPrice?: boolean;
+  isOffer?: boolean;
+}
+
+export const useProducts = ({isLowerPrice, isOffer}:HookFilters = {}) => {
+  const getProducts = useGetList(ProviderNames.PRODUCTS, {payload:{
+    filter: {
+      isOffer
+    },
+    sort: { 
+      ...(isLowerPrice? {price: 'asc'}: {})
+    }
+  }});
 
   const query = useInfiniteQuery({
-    queryKey: ['list_games'],
+    queryKey: ['list_games', isLowerPrice, isOffer],
     queryFn: ({ pageParam = 0 }) =>
       getProducts({ pagination: { limit: 20, page: pageParam } }),
     getNextPageParam: getNextPage,

@@ -1,14 +1,14 @@
-import { Box, MenuItem, Paper, type SxProps } from '@mui/material';
+import { Box, Chip, MenuItem, Paper, type SxProps } from '@mui/material';
 import { VirtuosoGrid } from 'react-virtuoso';
 import { DropDown, Isotype } from '../../../../../packages/ui/src';
-import { useProducts } from './hooks/useFeaturedProducts';
+import { HookFilters, useProducts } from './hooks/useFeaturedProducts';
 import { Loading } from './Loading';
 
 import Filters from './Filters';
 
 import { itemContentRender } from './Containers/itemContentRender';
 import { ItemContainer, ListContainer } from './Containers/ListContainer';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 
 const sxProductListHeader: SxProps = {
   width: '100%',
@@ -21,13 +21,16 @@ const sxProductListHeader: SxProps = {
 };
 
 export default function ProductsList() {
-  const { products, fetchNextPage } = useProducts();
+  const [filters, setFilters] = useState<HookFilters>({})
+
+  const { products, fetchNextPage } = useProducts(filters);
 
   const loadMore = () => {
     fetchNextPage();
   };
 
   const ItemContent = useMemo(() => itemContentRender(), []);
+
   return (
     <Paper
       sx={{
@@ -57,7 +60,10 @@ export default function ProductsList() {
           <MenuItem value={3}>Juegos Switch</MenuItem>
           <MenuItem value={4}>Juegos Xbox</MenuItem>
         </DropDown>
-        <Filters />
+        <Filters>
+          <Chip onClick={()=> setFilters({isLowerPrice: true})} label="Precio más bajo" sx={{ cursor: "pointer" }} />
+          <Chip onClick={()=>setFilters({isOffer: true})} label="Recién añañdidos" sx={{ cursor: "pointer" }} />
+        </Filters>
       </Box>
       <VirtuosoGrid
         components={{
