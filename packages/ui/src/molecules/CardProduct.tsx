@@ -111,21 +111,21 @@ export default function CardProduct({
                 S/ {price}
               </Typography>
               {!!previousPrice &&
-                <Box 
-                  display='flex' 
-                  padding={0.5} 
+                <Box
+                  display='flex'
+                  padding={0.5}
                   borderRadius={1}
-                  gap={1} 
+                  gap={1}
                   alignItems={'center'}
-                  sx={{backgroundColor: '#F2F8F3'}}>
+                  sx={{ backgroundColor: '#F2F8F3' }}>
                   <TagIcon />
-                  <Typography sx={{color: '#0A801F'}}>
+                  <Typography sx={{ color: '#0A801F' }}>
                     Oferta
                   </Typography>
                 </Box>
               }
             </Box>
-              
+
           </Box>
         </CardContent>
       </Box>
@@ -149,7 +149,7 @@ export default function CardProduct({
             aspectRatio: !inCart ? 1 : 'unset',
           }}
         >
-          {inCart? 'En el carrito' : <Add />}
+          {inCart ? 'En el carrito' : <Add />}
         </Button>
       </Box>
     </Card>

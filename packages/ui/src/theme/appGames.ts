@@ -1,4 +1,15 @@
 import { createTheme } from "@mui/material/styles";
+declare module '@mui/material/styles' {
+  interface TypeText {
+    action?: string;
+    emphasized?: string;
+    subdued?: string;
+  }
+
+  interface TypeBackground {
+    subdued?: string;
+  }
+}
 
 const typography = {
   allVariants: {
@@ -33,9 +44,15 @@ export const darkTheme = createTheme({
     background: {
       default: "#1F1D2B",
       paper: "#363B50",
+      subdued: "#363B50",
     },
     text: {
       primary: "#FFFFFF",
+      action: "#E3E9FF",
+      emphasized: "#FFF",
+    },
+    action: {
+      active: "#996FFF",
     },
   },
 });
@@ -49,10 +66,14 @@ export const defaultTheme = createTheme({
     background: {
       default: "white",
       paper: "#EEF2FF",
+      subdued: "#F8FBFF"
     },
     text: {
       primary: "#444444",
       secondary: "#737373",
+      action: "#E3E9FF",
+      emphasized: "#333",
+      subdued: "#737373"
     },
     action: {
       active: "#7339FF",
@@ -62,6 +83,8 @@ export const defaultTheme = createTheme({
     },
     success: {
       main: "#0A801F",
+      light: "#F2F8F3",
+      dark: "#0A801F",
     },
     error: {
       main: "#DD1D1D",
