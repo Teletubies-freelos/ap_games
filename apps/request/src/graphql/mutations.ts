@@ -10,7 +10,7 @@ export const CREATE_PRODUCT = gql`
     $quantity: Int
     $category_id: Int
   ) {
-    createProducts(
+    insert_products(
       object: {
         description: $description
         img_url: $img_url
@@ -38,7 +38,7 @@ export const UPDATE_PRODUCT = gql`
     $discount_price: float8!
     $quantity: Int
   ) {
-    updateProductById(
+    update_categories_by_pk(
       pk_columns: { product_id: $product_id }
       _set: {
         description: $description
@@ -57,7 +57,7 @@ export const UPDATE_PRODUCT = gql`
 
 export const DELETE_PRODUCT = gql`
   mutation DELETE_PRODUCT($productId: Int!) {
-    deleteProductById(product_id: $productId) {
+    delete_products_by_pk(product_id: $productId) {
       product_id
     }
   }
@@ -65,8 +65,31 @@ export const DELETE_PRODUCT = gql`
 
 export const CREATE_CATEGORY = gql`
   mutation CREATE_CATEGORY($name: String!) {
-    createCategory(object: { name: $name }) {
+    insert_categories(object: { name: $name }) {
       name
     }
   }
 `;
+
+export const CREATE_ORDER = gql`
+  mutation CREATE_ORDER(
+    $address: String,
+    $client_name: String,
+    $email: String,
+    $phone: Int
+  ) {
+    insert_orderers(
+      objects: {
+        address: $address,
+        client_name: $client_name,
+        email: $email,
+        order_id: $order_id,
+        phone: $phone
+      }
+    ) {
+      returning {
+        order_id
+      }
+    }
+  }
+`
