@@ -18,6 +18,9 @@ export interface CardProductProps {
   previousPrice?: number;
   onAdd?: MouseEventHandler<HTMLButtonElement>;
   className?: string;
+  productId: number | string;
+  inCart?: boolean
+  onCardClick?: MouseEventHandler<HTMLElement>;
 }
 
 export default function CardProduct({
@@ -29,6 +32,8 @@ export default function CardProduct({
   previousPrice,
   onAdd,
   className,
+  inCart,
+  onCardClick
 }: CardProductProps) {
   return (
     <Card
@@ -40,7 +45,7 @@ export default function CardProduct({
       })}
       className={className}
     >
-      <Box display={"flex"} height="100%">
+      <Box onClick={onCardClick} display={"flex"} height="100%">
         <Box
           sx={{
             maxWidth: "6rem",
@@ -114,19 +119,19 @@ export default function CardProduct({
       >
         {/* TODO: try to use translate instead to avoid shift layout */}
         <Button
+          disabled={inCart}
           onClick={onAdd}
           variant="contained"
           sx={{
             position: "relative",
             bottom: { xs: "2.8rem", sm: "3.2rem" },
             right: "2rem",
-            height: { xs: "1.8rem", sm: "2.5rem" },
+            padding: 1,
             minWidth: "unset",
-            aspectRatio: 1,
-            padding: 0,
+            aspectRatio: !inCart ? 1 : 'unset',
           }}
         >
-          <Add />
+          {inCart? 'En el carrito' : <Add />}
         </Button>
       </Box>
     </Card>

@@ -14,12 +14,14 @@ const serializeGames = ({
   description = '',
   img_url: src = '',
   price = 0,
+  product_id: productId = 0
 }: IOffer) => ({
   description,
   price,
   src,
   alt: name,
   title: name,
+  productId
 });
 
 type Maybe<T> = T | undefined | null;
@@ -33,10 +35,11 @@ export interface HookFilters{
   isOffer?: boolean;
 }
 
-export const useProducts = ({isLowerPrice, isOffer}:HookFilters = {}) => {
+export const useProducts = (categoryId: number,{isLowerPrice, isOffer}:HookFilters = {}) => {
   const getProducts = useGetList(ProviderNames.PRODUCTS, {payload:{
     filter: {
-      isOffer
+      isOffer,
+      categoryId
     },
     sort: { 
       ...(isLowerPrice? {price: 'asc'}: {})
@@ -44,10 +47,12 @@ export const useProducts = ({isLowerPrice, isOffer}:HookFilters = {}) => {
   }});
 
   const query = useInfiniteQuery({
-    queryKey: ['list_games', isLowerPrice, isOffer],
-    queryFn: ({ pageParam = 0 }) =>
-      getProducts({ pagination: { limit: 20, page: pageParam } }),
+    queryKey: ['list_games', isLowerPrice, isOffer, categoryId],
+    queryFn: async ({ pageParam = 0 }) =>
+      await getProducts({ pagination: { limit: 20, page: pageParam } }),
     getNextPageParam: getNextPage,
+    cacheTime: 5000*60,
+    staleTime: 5000*60,
   });
 
   const products: Maybe<CardProductProps[]> = useMemo(

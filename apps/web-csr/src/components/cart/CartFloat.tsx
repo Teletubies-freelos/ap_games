@@ -1,32 +1,34 @@
 import { Box, Button, CircularProgress, Modal, Typography } from '@mui/material';
 
 import {
-  setIsCartOpen,
+  ModalState,
   setIsWishList,
-  useIsWishListOpen,
+  setModalState,
+  useIsCartFloatOpen,
 } from '../../observables';
 import { useQuery } from '@tanstack/react-query';
 import { useGetList } from 'data_providers';
 import { ProviderNames } from '../../types/providers';
-import { useMemo } from 'react';
+import { useCallback } from 'react';
 import { ICartProduct } from '../../data/indexedDB';
 import { reduceQuantity, reduceTotalPrice } from '../../utils';
 
 
 export function CartFloat() {
-  const isOpen = useIsWishListOpen();
+  const isOpen = useIsCartFloatOpen();
   const handleClose = () => setIsWishList(false);
 
   const getCartProducts = useGetList<ICartProduct>(ProviderNames.CART);
-  const { data, isFetching } = useQuery(['cart'], async () => await getCartProducts());
+  const { data, isFetching } = useQuery(['cart', isOpen], async () => await getCartProducts());
 
-  const totalPriceProducts = useMemo(
-    ()=> reduceTotalPrice(data) ?? 0,
-  [data])
+  const totalPriceProducts = reduceTotalPrice(data) ?? 0
 
-  const quantityProducts =  useMemo(
-    ()=> reduceQuantity(data) ?? 0, 
-  [data])
+  const quantityProducts = reduceQuantity(data) ?? 0
+
+  const _handleOpenCart = useCallback(()=>{
+    setIsWishList(false)
+    setModalState({ currentModal: ModalState.CART })
+  }, [])
 
   return (
     <Modal
@@ -95,10 +97,7 @@ export function CartFloat() {
                 <Button
                   color='primary'
                   fullWidth
-                  onClick={() => {
-                    setIsCartOpen(true);
-                    setIsWishList(false);
-                  }}
+                  onClick={_handleOpenCart}
                   sx={{
                     display: { xs: 'block', md: 'none' },
                     height: '2.6rem',
@@ -109,10 +108,7 @@ export function CartFloat() {
                   Ir al carrito
                 </Button>
                 <Button
-                  onClick={() => {
-                    setIsCartOpen(true);
-                    setIsWishList(false);
-                  }}
+                  onClick={_handleOpenCart}
                   color='primary'
                   fullWidth
                   sx={{

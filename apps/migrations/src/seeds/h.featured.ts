@@ -13,6 +13,9 @@ export async function seed(knex: Knex) {
     title: faker.commerce.product(),
     banner_img_url: faker.image.urlPicsumPhotos(),
     description: faker.commerce.productDescription(),
+    price: Number(faker.commerce.price()),
+    is_offer: faker.datatype.boolean(),
+    offer_price: Number(faker.commerce.price())
   }));
 
   await knex(Tables.FEATURED).insert(featured);
