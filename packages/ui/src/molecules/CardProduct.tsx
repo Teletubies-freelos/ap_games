@@ -8,6 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { MouseEventHandler } from "react";
+import TagIcon from "../atoms/TagIcon";
 
 export interface CardProductProps {
   alt: string;
@@ -99,15 +100,32 @@ export default function CardProduct({
                 S/ {previousPrice}
               </Typography>
             )}
-            <Typography
-              variant="body2"
-              sx={{
-                fontSize: "1.1em",
-                color: (theme) => theme.palette.text.primary,
-              }}
-            >
-              S/ {price}
-            </Typography>
+            <Box display='flex' gap={2}>
+              <Typography
+                variant="body2"
+                sx={{
+                  fontSize: "1.1em",
+                  color: (theme) => theme.palette.text.primary,
+                }}
+              >
+                S/ {price}
+              </Typography>
+              {!!previousPrice &&
+                <Box 
+                  display='flex' 
+                  padding={0.5} 
+                  borderRadius={1}
+                  gap={1} 
+                  alignItems={'center'}
+                  sx={{backgroundColor: '#F2F8F3'}}>
+                  <TagIcon />
+                  <Typography sx={{color: '#0A801F'}}>
+                    Oferta
+                  </Typography>
+                </Box>
+              }
+            </Box>
+              
           </Box>
         </CardContent>
       </Box>

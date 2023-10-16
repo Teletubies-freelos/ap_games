@@ -10,10 +10,8 @@ export class Cart implements IDataProvider{
   }
 
   async getList(){
-    console.log('asdsad')
-
     const data = await this.table.toArray()
-    console.log({data})
+  
     return [...data]
   }
 

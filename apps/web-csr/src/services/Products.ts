@@ -9,7 +9,7 @@ export interface IProduct{
   price: number;
   discount_price?: number;
   is_offer?: boolean;
-  img_url: boolean;
+  img_url: string;
   quantity: number;
 }
 

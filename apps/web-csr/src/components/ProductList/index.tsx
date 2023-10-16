@@ -88,7 +88,9 @@ export default function ProductsList() {
             order: { xs: "2", md: "3" },
           }}
         >
-          <MenuItem value={"all"}>Todos</MenuItem>
+          <MenuItem value={"all"}>
+            Todos
+          </MenuItem>
           {categories?.map(({ category_id, name }) => (
             <MenuItem value={category_id} key={category_id}>
               Juegos {name}

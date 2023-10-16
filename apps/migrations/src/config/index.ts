@@ -26,9 +26,13 @@ export const config: { [key: string]: Knex.Config } = {
     ...defaultOptions,
     client: "postgresql",
     connection: {
-      database: process.env.POSTGRES_DB ?? 'postgres',
-      user: process.env.POSTGRES_USER ?? 'postgres',
-      password: process.env.POSTGRES_PASSWORD
+      ...(process.env.POSTGRES_URI? {
+          uri: process.env.POSTGRES_URI
+        } : {
+        database: process.env.POSTGRES_DB ?? 'postgres',
+        user: process.env.POSTGRES_USER ?? 'postgres',
+        password: process.env.POSTGRES_PASSWORD,
+      })
     },
     pool: {
       min: 2,
@@ -39,9 +43,13 @@ export const config: { [key: string]: Knex.Config } = {
   production: {
     client: "postgresql",
     connection: {
-      database: "my_db",
-      user: "username",
-      password: "password"
+      ...(process.env.URI? {
+          uri: process.env.URI
+        } : {
+        database: process.env.DB ?? 'postgres',
+        user: process.env.USER ?? 'postgres',
+        password: process.env.PASSWORD,
+      })
     },
     pool: {
       min: 2,

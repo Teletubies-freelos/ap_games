@@ -6,27 +6,30 @@ import {
 
 import { useGetList } from 'data_providers';
 import { ProviderNames } from '../../../types/providers';
-import type { IOffer } from '../../../pages/Home/carHeroHOC';
 import { CardProductProps } from '../../../../../../packages/ui/src/molecules/CardProduct';
+import { IProduct } from '../../../services/Products';
 
 const serializeGames = ({
   name = '',
   description = '',
   img_url: src = '',
   price = 0,
-  product_id: productId = 0
-}: IOffer) => ({
+  product_id: productId = 0,
+  discount_price,
+  is_offer
+}: IProduct) => ({
   description,
-  price,
+  price: (is_offer && discount_price)? discount_price: price,
   src,
   alt: name,
   title: name,
-  productId
+  productId,
+  previousPrice: (is_offer && discount_price)? price : undefined
 });
 
 type Maybe<T> = T | undefined | null;
 
-const getNextPage: GetNextPageParamFunction<IOffer[]> = (_lastPage, pages) => {
+const getNextPage: GetNextPageParamFunction<IProduct[]> = (_lastPage, pages) => {
   return pages.length
 };
 
