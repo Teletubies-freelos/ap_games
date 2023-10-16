@@ -9,8 +9,7 @@ export default defineConfig({
     rollupOptions: {
       manualChunks: {
         react: ['react', 'react-dom'],
-        material: ['@mui/material'],
-        emotion: ['@emotion/styled', '@emotion/react'],
+        material: ['@mui/material', '@emotion/styled', '@emotion/react'],
         router: ['react-router-dom'],
         reactQuery: ['@tanstack/react-query'],
       },
