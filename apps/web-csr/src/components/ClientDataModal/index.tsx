@@ -11,8 +11,9 @@ import CustomTextField from '../common/CustomTextField';
 import SelectModals from '../common/SelectModals';
 import { Button } from '../../../../../packages/ui/src';
 
-import { setIsPaymentData, setIsYourData } from '../../observables';
-import { objectToSession } from '../../utils';
+import { ModalState, setModalState } from '../../observables';
+import { useContext } from 'react';
+import { SessionContext } from '../../providers/session';
 
 type UserInfo = {
   fullName: string;
@@ -22,13 +23,17 @@ type UserInfo = {
   email: string;
 }
 
-export default function MyPersonalnfo() {
-  const {register, handleSubmit} = useForm<UserInfo>()
+export default function ClientDataModal() {
+  const objectToSession = useContext(SessionContext);
 
+  const {register, handleSubmit} = useForm<UserInfo>()
   const _handleSubmit: SubmitHandler<UserInfo> = (data)=>{
     objectToSession(data)
-    setIsYourData(false);
-    setIsPaymentData(true);
+
+    setModalState({
+      prevModal: ModalState.DELIVERY_CENTRAL_CLIENT_DATA,
+      currentModal: ModalState.DELIVERY_CENTRAL_PAYMENT_METHOD
+    })
   }
 
   return (

@@ -9,6 +9,7 @@ import { cartProvider, categoriesProvider, featuredProvider, productsProvider } 
 import { ProviderNames } from './types/providers';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from './providers/theme';
+import { SessionProvider } from './providers/session';
 
 const providers = {
   [ProviderNames.PRODUCTS]: productsProvider,
@@ -38,9 +39,11 @@ function App() {
     <DataProvider providers={providers}>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider>
-          <Suspense fallback={<LoadingPage />}>
-            <RouterProvider router={routes} />
-          </Suspense>
+          <SessionProvider>
+            <Suspense fallback={<LoadingPage />}>
+              <RouterProvider router={routes} />
+            </Suspense>
+          </SessionProvider>
         </ThemeProvider>
         {/* <ReactQueryDevtools initialIsOpen /> */}
       </QueryClientProvider>
