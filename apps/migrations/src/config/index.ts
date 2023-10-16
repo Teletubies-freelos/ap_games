@@ -1,63 +1,56 @@
-import 'dotenv/config'
-import type { Knex } from "knex";
+import 'dotenv/config';
+import type { Knex } from 'knex';
 
 // Update with your config settings.
 
- const defaultOptions = {
+const defaultOptions = {
   migrations: {
-    directory: "./src/migrations"
+    directory: './src/migrations',
   },
-  seeds:{
-    directory: "./src/seeds"
+  seeds: {
+    directory: './src/seeds',
   },
-}
+};
 
 export const config: { [key: string]: Knex.Config } = {
   development: {
-    client: "sqlite3",
+    client: 'sqlite3',
     useNullAsDefault: true,
     ...defaultOptions,
     connection: {
-      filename: "./dev.sqlite3"
-    }
+      filename: './dev.sqlite3',
+    },
   },
 
   staging: {
     ...defaultOptions,
-    client: "postgresql",
+    client: 'postgresql',
     connection: {
-      ...(process.env.POSTGRES_URI? {
-          uri: process.env.POSTGRES_URI
-        } : {
-        database: process.env.POSTGRES_DB ?? 'postgres',
-        user: process.env.POSTGRES_USER ?? 'postgres',
-        password: process.env.POSTGRES_PASSWORD,
-      })
+      database: process.env.POSTGRES_DB ?? 'postgres',
+      user: process.env.POSTGRES_USER ?? 'postgres',
+      password: process.env.POSTGRES_PASSWORD,
+      host: process.env.POSTGRES_HOST ?? 'localhost',
     },
     pool: {
       min: 2,
-      max: 10
-    }
+      max: 10,
+    },
   },
 
   production: {
-    client: "postgresql",
+    client: 'postgresql',
     connection: {
-      ...(process.env.URI? {
-          uri: process.env.URI
-        } : {
-        database: process.env.DB ?? 'postgres',
-        user: process.env.USER ?? 'postgres',
-        password: process.env.PASSWORD,
-      })
+      database: process.env.POSTGRES_DB ?? 'postgres',
+      user: process.env.POSTGRES_USER ?? 'postgres',
+      password: process.env.POSTGRES_PASSWORD,
+      host: process.env.POSTGRES_HOST,
+      ssl: true,
     },
     pool: {
       min: 2,
-      max: 10
+      max: 10,
     },
-    migrations: {
-      tableName: "knex_migrations"
-    }
-  }
-
+    ...defaultOptions,
+  },
 };
+console.log(process.env.URI);
