@@ -12,8 +12,7 @@ import SelectModals from '../common/SelectModals';
 import { Button } from '../../../../../packages/ui/src';
 
 import { ModalState, setModalState } from '../../observables';
-import { useContext } from 'react';
-import { SessionContext } from '../../providers/session';
+import { sessionStorageProvider } from '../../modules';
 
 type UserInfo = {
   fullName: string;
@@ -24,11 +23,9 @@ type UserInfo = {
 }
 
 export default function ClientDataModal() {
-  const objectToSession = useContext(SessionContext);
-
   const {register, handleSubmit} = useForm<UserInfo>()
   const _handleSubmit: SubmitHandler<UserInfo> = (data)=>{
-    objectToSession(data)
+    sessionStorageProvider.createOne(data)
 
     setModalState({
       prevModal: ModalState.DELIVERY_CENTRAL_CLIENT_DATA,
