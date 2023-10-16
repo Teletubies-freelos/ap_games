@@ -1,0 +1,39 @@
+on: 
+  push:
+     tags:
+      - "certi-static*"
+
+name: 🚀 Deploy website on push
+
+
+jobs:
+  web-deploy:
+    env:
+      VITE_HASURA_SECRET: ${{ vars.HASURA_SECRET }}
+      VITE_HASURA_BASE_URL: ${{ vars.HASURA_BASE_URLs }}
+    name: 🎉 Deploy
+    runs-on: ubuntu-latest
+    steps:
+    - name: 🚚 Get latest code
+      uses: actions/checkout@v3
+    - name: Set up Node
+      uses: actions/setup-node@v3
+      with:
+        node-version: 18
+    - uses: pnpm/action-setup@v2
+      with:
+        version: 8
+        run_install: false
+    - name: Build
+      working-directory: apps/web2
+      run: |
+        pnpm install
+        pnpm build
+    - name: 📂 Sync files
+      uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+      with:
+        server: ${{ secrets.FTP_HOST }}
+        username: ${{ secrets.FTP_USERNAME }}
+        password: ${{ secrets.FTP_PASSWORD }}
+        local-dir: ./apps/web2/dist/
+        server-dir: /cert.apgames.pe/public_html/

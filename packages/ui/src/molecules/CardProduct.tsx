@@ -8,8 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { MouseEventHandler } from "react";
-import Tag from "../atoms/Tag";
-import Discount from "../atoms/Discount";
+import TagIcon from "../atoms/TagIcon";
 
 export interface CardProductProps {
   alt: string;
@@ -19,8 +18,10 @@ export interface CardProductProps {
   price: number;
   previousPrice?: number;
   onAdd?: MouseEventHandler<HTMLButtonElement>;
-  onViewDetail?: MouseEventHandler<HTMLImageElement>;
   className?: string;
+  productId: number | string;
+  inCart?: boolean
+  onCardClick?: MouseEventHandler<HTMLElement>;
 }
 
 export default function CardProduct({
@@ -31,8 +32,9 @@ export default function CardProduct({
   title,
   previousPrice,
   onAdd,
-  onViewDetail,
   className,
+  inCart,
+  onCardClick
 }: CardProductProps) {
   return (
     <Card
@@ -44,14 +46,13 @@ export default function CardProduct({
       })}
       className={className}
     >
-      <Box display={"flex"} height="100%">
+      <Box onClick={onCardClick} display={"flex"} height="100%">
         <Box
           sx={{
             maxWidth: "6rem",
           }}
         >
           <CardMedia
-            onClick={onViewDetail}
             component="img"
             alt={alt}
             src={src}
@@ -61,7 +62,6 @@ export default function CardProduct({
               margin: "auto 0",
               padding: "1rem",
               width: "100%",
-              cursor: "pointer"
             }}
           />
         </Box>
@@ -91,27 +91,41 @@ export default function CardProduct({
               {description}
             </Typography>
           </Box>
-          <Box sx={{ display: "flex", alignItems: "flex-end", gap: "10px" }}>
-            <Box>
-              {!!previousPrice && (
-                <Typography
-                  variant="body2"
-                  sx={{ textDecoration: "line-through", color: "text.subdued" }}
-                >
-                  S/ {previousPrice}
-                </Typography>
-              )}
+          <Box>
+            {!!previousPrice && (
+              <Typography
+                variant="body2"
+                sx={{ textDecoration: "line-through" }}
+              >
+                S/ {previousPrice}
+              </Typography>
+            )}
+            <Box display='flex' gap={2}>
               <Typography
                 variant="body2"
                 sx={{
                   fontSize: "1.1em",
-                  color: "text.primary",
+                  color: (theme) => theme.palette.text.primary,
                 }}
               >
                 S/ {price}
               </Typography>
+              {!!previousPrice &&
+                <Box
+                  display='flex'
+                  padding={0.5}
+                  borderRadius={1}
+                  gap={1}
+                  alignItems={'center'}
+                  sx={{ backgroundColor: '#F2F8F3' }}>
+                  <TagIcon />
+                  <Typography sx={{ color: '#0A801F' }}>
+                    Oferta
+                  </Typography>
+                </Box>
+              }
             </Box>
-            {!!previousPrice && <Tag icon={<Discount />} label="Oferta" />}
+
           </Box>
         </CardContent>
       </Box>
@@ -123,19 +137,19 @@ export default function CardProduct({
       >
         {/* TODO: try to use translate instead to avoid shift layout */}
         <Button
+          disabled={inCart}
           onClick={onAdd}
           variant="contained"
           sx={{
             position: "relative",
             bottom: { xs: "2.8rem", sm: "3.2rem" },
             right: "2rem",
-            height: { xs: "1.8rem", sm: "2.5rem" },
+            padding: 1,
             minWidth: "unset",
-            aspectRatio: 1,
-            padding: 0,
+            aspectRatio: !inCart ? 1 : 'unset',
           }}
         >
-          <Add />
+          {inCart ? 'En el carrito' : <Add />}
         </Button>
       </Box>
     </Card>

@@ -1,0 +1,41 @@
+on:
+  push:
+    tags:
+      - 'certi-cms-static*'
+
+name: 🚀 Deploy website on push
+
+jobs:
+  web-deploy:
+    env:
+      VITE_HASURA_GRAPHQL_MASTER_TOKEN: ${{ vars.HASURA_SECRET }}
+      VITE_HASURA_GRAPHQL_URL: ${{ vars.HASURA_BASE_URLs }}
+      VITE_AUTH0_ID: ${{ vars.OAUTH_ID }}
+      VITE_AUTH0_DOMAIN: ${{ vars.OAUTH_DOMAIN }}
+      VITE_PHOTO_UPLOAD_URL: ${{ vars.PHOTO_UPLOAD_URL }}
+    name: 🎉 Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🚚 Get latest code
+        uses: actions/checkout@v3
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: false
+      - name: Build
+        working-directory: apps/crm2
+        run: |
+          pnpm install
+          pnpm build
+      - name: 📂 Sync files
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          server: ${{ secrets.FTP_HOST }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ./apps/crm2/dist/
+          server-dir: /cert.apgames.pe/public_html/cms/

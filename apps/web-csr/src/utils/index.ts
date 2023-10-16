@@ -2,7 +2,7 @@ import { ICartProduct } from "../data/indexedDB"
 
 export const reduceTotalPrice = (products?: ICartProduct[]) => products
   ?.reduce(
-    (acm, {quantity, price, priceDiscount})=> acm  + (priceDiscount ?? price)*quantity,
+    (acm, {quantity, price, priceDiscount})=> acm  + (priceDiscount || price)*quantity,
     0
   )
 

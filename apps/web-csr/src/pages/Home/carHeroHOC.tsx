@@ -2,17 +2,6 @@ import { useCreateOne } from 'data_providers';
 import { CardHero } from '../../../../../packages/ui/src';
 import { ProviderNames } from '../../types/providers';
 
-export interface IOffer {
-  product_id?: string | number;
-  description?: string;
-  img_url?: string;
-  name?: string;
-  price_offer?: number;
-  quantity?: number;
-  price?: number;
-  category_id?: number;
-}
-
 export interface IFeatured {
   title: string;
   description: string;

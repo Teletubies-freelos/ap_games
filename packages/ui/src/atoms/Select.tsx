@@ -6,6 +6,7 @@ import {
   MenuItem,
   SxProps,
   SelectChangeEvent,
+  SelectProps,
 } from "@mui/material";
 
 import { ArrowDropDown as ArrowDropDownIcon } from "@mui/icons-material";
@@ -20,6 +21,7 @@ export interface SelectFilterProps<T extends IOption = IOption> {
   sxForm?: SxProps;
   sxSelect?: Record<string, unknown>;
   onChange?: (event: SelectChangeEvent) => void;
+  selectProps?: SelectProps
 }
 
 export default function SelectFilter({
@@ -28,6 +30,7 @@ export default function SelectFilter({
   sxSelect,
   children,
   onChange,
+  selectProps
 }: PropsWithChildren<SelectFilterProps>) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -52,16 +55,17 @@ export default function SelectFilter({
   return (
     <FormControl sx={sxForm}>
       <MUISelect
+        // @ts-expect-error no idea why
         onChange={onChange}
         onOpen={() => setIsOpen(true)}
         onClose={() => setIsOpen(false)}
         open={isOpen}
-        defaultValue={String(1)}
         IconComponent={ArrowDown}
         sx={({ palette }) => ({
           backgroundColor: palette.background.default,
           ...sxSelect,
         })}
+        {...selectProps}
       >
         {items?.map(({ label, value }) => (
           <MenuItem value={value} key={label + value}>
