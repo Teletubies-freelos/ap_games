@@ -27,8 +27,8 @@ export default function ClientDataModal() {
   const {register, handleSubmit} = useForm<UserInfo>()
   const createToSession = useCreateOne(ProviderNames.SESSION_STORAGE);
 
-  const _handleSubmit: SubmitHandler<UserInfo> = (data)=>{
-    createToSession(data)
+  const _handleSubmit: SubmitHandler<UserInfo> = async (data) => {
+    await createToSession(data)
 
     setModalState({
       prevModal: ModalState.DELIVERY_CENTRAL_CLIENT_DATA,
