@@ -14,7 +14,7 @@ interface PickupStoreProps {
   content?: JSX.Element;
 }
 
-export default function PickupStoreModal({ content }: PickupStoreProps) {
+export default function PickupStoreModal({ content }: Readonly<PickupStoreProps>) {
   const createOrder = useCreateOne(ProviderNames.ORDERS);
   const { mutate, isLoading } = useMutation(['orders'], async (orders: IOrders) => await createOrder(orders));
 
