@@ -1,0 +1,41 @@
+on:
+  push:
+    tags:
+      - 'static*'
+    paths:
+      - 'apps/web-csr/**'
+
+permissions:
+  contents: write
+  pages: write
+
+jobs:
+  build:
+    env:
+      VITE_MASTER_TOKEN: ${{ vars.MASTER_TOKEN }}
+      VITE_GRAPHQL_URL: ${{ vars.GRAPHQL_URL }}
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18
+      - uses: pnpm/action-setup@v2
+        with:
+          version: 8
+          run_install: false
+      - name: Build
+        working-directory: ./apps/web-csr
+        run: |
+          pnpm install
+          pnpm build
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./apps/web-csr/dist
+          destination_dir: web-csr

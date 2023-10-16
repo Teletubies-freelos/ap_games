@@ -45,4 +45,7 @@ export interface FeaturedDTO {
   description: string;
   product_id?: number;
   banner_img_url: string;
+  offer_price?: number;
+  price: number;
+  is_offer?: boolean;
 }

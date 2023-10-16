@@ -1,5 +1,6 @@
 import { Knex } from 'knex';
 import { Tables } from '../types/tables';
+import { deleteWithCascadeDev } from '../utils';
 
 function createTableCategory(table: Knex.CreateTableBuilder) {
   table.increments('category_id').primary();
@@ -18,10 +19,12 @@ function createTableProduct(table: Knex.CreateTableBuilder) {
   table.text('secondary_img_url').nullable();
   table.text('banner_img_url').nullable();
   table.integer('quantity').notNullable();
-  table
-    .integer('category_id')
-    .references('category_id')
-    .inTable(Tables.CATEGORY);
+  deleteWithCascadeDev(
+    table
+      .integer('category_id')
+      .references('category_id')
+      .inTable(Tables.CATEGORY)
+  )
   table.timestamps({ defaultToNow: true });
 }
 
@@ -31,14 +34,20 @@ function createTableOrder(table: Knex.CreateTableBuilder) {
   table.text('client_name');
   table.integer('phone');
   table.text('email');
-  table
+
+  deleteWithCascadeDev(table
     .integer('order_status_id')
     .references('order_status_id')
-    .inTable(Tables.ORDER_STATUS);
-  table
-    .integer('payment_method_id')
-    .references('payment_method_id')
-    .inTable(Tables.PAYMENT_METHOD);
+    .inTable(Tables.ORDER_STATUS)
+  )
+
+  deleteWithCascadeDev(
+    table
+      .integer('payment_method_id')
+      .references('payment_method_id')
+      .inTable(Tables.PAYMENT_METHOD)
+  );
+
   table.timestamps({ defaultToNow: true });
 }
 
@@ -48,7 +57,9 @@ function createTableFeatured(table: Knex.CreateTableBuilder) {
   table.text('description').nullable();
   table.integer('product_id').nullable();
   table.text('banner_img_url').nullable();
+  table.float('offer_price').nullable();
   table.float('price').notNullable();
+  table.boolean('is_offer').nullable();
 }
 
 function createTableOrderStatus(table: Knex.CreateTableBuilder) {
@@ -62,8 +73,14 @@ function createTablePaymentMethod(table: Knex.CreateTableBuilder) {
 }
 
 function createTableOrderProduct(table: Knex.CreateTableBuilder) {
-  table.integer('product_id').references('product_id').inTable(Tables.PRODUCT);
-  table.uuid('order_id').references('order_id').inTable(Tables.ORDER);
+  deleteWithCascadeDev(
+    table.integer('product_id').references('product_id').inTable(Tables.PRODUCT)
+  )
+  
+  deleteWithCascadeDev(
+    table.uuid('order_id').references('order_id').inTable(Tables.ORDER)
+  )
+  
   table.integer('quantity');
   table.primary(['product_id', 'order_id']);
 }

@@ -1,6 +1,6 @@
 import { Suspense } from 'react';
 import { RouterProvider } from 'react-router-dom';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+// import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { DataProvider } from 'data_providers';
 import { routes } from './routes';
 
@@ -21,6 +21,9 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false,
+      refetchOnMount: true,
+      cacheTime: 0.1,
+      staleTime: 0
     },
   },
 });
@@ -39,7 +42,7 @@ function App() {
             <RouterProvider router={routes} />
           </Suspense>
         </ThemeProvider>
-        <ReactQueryDevtools initialIsOpen />
+        {/* <ReactQueryDevtools initialIsOpen /> */}
       </QueryClientProvider>
     </DataProvider>
   );

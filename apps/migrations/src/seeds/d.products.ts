@@ -28,6 +28,7 @@ export async function seed(knex: Knex) {
       img_url: faker.image.urlLoremFlickr({ category: 'games' }),
       is_visible: faker.datatype.boolean(),
       is_offer: faker.datatype.boolean(),
+      discount_price: Number(faker.commerce.price())
     })
   );
   await knex(Tables.PRODUCT).insert(products);

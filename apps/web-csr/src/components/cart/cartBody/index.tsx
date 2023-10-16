@@ -1,23 +1,36 @@
-import { Box, Button, List, Stack, Typography } from "@mui/material";
+import { Box, Button, CircularProgress, List, Stack, Typography } from "@mui/material";
 import { ProviderNames } from "../../../types/providers";
-import { useGetList } from "data_providers";
+import { useDeleteOne, useGetList } from "data_providers";
 import { useQuery } from "@tanstack/react-query";
-import { Loading } from "./loading";
-import { CardStateOrder, LabelStepStatus } from "../../../../../../packages/ui/src";
+
+import {
+  CardStateOrder,
+  LabelStepStatus,
+} from "../../../../../../packages/ui/src";
 import { Image } from "./image";
 import { CardQty } from "./quantity";
 import { useMemo } from "react";
 import { reduceTotalPrice } from "../../../utils";
-import { setIsCartOpen, setIsPickupStore, setIsYourData } from "../../../observables";
+import {
+  setIsCartOpen,
+  setIsPickupStore,
+  setIsYourData,
+} from "../../../observables";
 
-import totalMoney from '../../common/total.svg'
+import totalMoney from "../../common/total.svg";
+import { ICartProduct } from "../../../data/indexedDB";
 
 export function BodyCart() {
-  const getCartProducts = useGetList(ProviderNames.CART)
-  const { data, isFetching, refetch } = useQuery(['productsCart'], async ()=> await getCartProducts() )
+  const getCartProducts = useGetList<ICartProduct>(ProviderNames.CART);
+  const deleteCartProduct = useDeleteOne(ProviderNames.CART);
+  const { data, isFetching, refetch } = useQuery(
+    ["productsCart"],
+    async () => await getCartProducts()
+  );
 
-  const total = useMemo(()=> reduceTotalPrice(data) ?? 0, [data])
-  
+  console.log(data)
+  const total = useMemo(() => reduceTotalPrice(data) ?? 0, [data]);
+
   return (
     <>
       <Box
@@ -27,17 +40,13 @@ export function BodyCart() {
         height={"60vh"}
         sx={{ overflowY: "scroll" }}
       >
-        
-      <List
-        sx={{
-          padding: "0",
-          width: "100%",
-        }}
-      >
-        {isFetching ? (
-          <Loading />
-        ) : (
-          data?.map(({ imageUrl, name, price, quantity, id }) => (
+        <List
+          sx={{
+            padding: "0",
+            width: "100%",
+          }}
+        >
+          {data?.map(({ imageUrl, name, price, quantity, id }) => (
             <CardStateOrder
               key={id}
               img={<Image url={imageUrl} />}
@@ -47,26 +56,32 @@ export function BodyCart() {
                 <CardQty
                   onChangeQty={() => refetch().then(() => {})}
                   price={price}
-                  onDeleteTotal={() => refetch().then(() => {})
-                  }
+                  onDeleteTotal={async () => {
+                    await deleteCartProduct(id);
+                    await refetch();
+                  }}
                   initialQty={quantity}
                   indexedId={id!}
                 />
               }
             />
-          ))
-        )}
-      </List>
+          ))}
+        </List>
       </Box>
-      <LabelStepStatus
-        property="Total"
-        value={`S/. ${total?.toFixed(2)}`}
-        icon={<img src={totalMoney} alt="money" />}
-        sx={{
-          fontSize: "1rem !important",
-          marginTop: "1.5rem",
-        }}
-      />
+      {isFetching ? (
+        <CircularProgress />
+      ) : (
+        <LabelStepStatus
+          property="Total"
+          value={`S/. ${total?.toFixed(2)}`}
+          icon={<img src={totalMoney} alt="money" />}
+          sx={{
+            fontSize: "1rem !important",
+            marginTop: "1.5rem",
+          }}
+        />
+      )}
+
       <Stack>
         <Typography
           textAlign="center"
@@ -86,7 +101,9 @@ export function BodyCart() {
             fullWidth
             variant="outlined"
             sx={{ height: "2.8rem", fontSize: { xs: ".7rem !important" } }}
-          >Recojo en tienda</Button>
+          >
+            Recojo en tienda
+          </Button>
           <Button
             onClick={() => {
               setIsYourData(true);
@@ -95,7 +112,9 @@ export function BodyCart() {
             fullWidth
             variant="contained"
             sx={{ height: "2.8rem", fontSize: { xs: ".7rem !important" } }}
-          >Entrega a domicilio</Button>
+          >
+            Entrega a domicilio
+          </Button>
         </Box>
       </Stack>
     </>
