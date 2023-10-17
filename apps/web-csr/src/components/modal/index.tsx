@@ -13,7 +13,7 @@ const modals = {
   
 }
 
-export const Modal = ()=>{
+export const Modal = () => {
   const modalState = useModalState()
 
   return (<ModalMUI

@@ -107,7 +107,7 @@ export const GET_CATEGORIES = gql`
 
 export const GET_ORDERS = gql`
   query GET_ORDERS($limit: Int!, $offset: Int!) {
-    Orders(limit: $limit, offset: $offset, order_by: { create_date: desc }) {
+    orderers(limit: $limit, offset: $offset, order_by: { create_date: desc }) {
       ...ORDER_DATA
     }
   }

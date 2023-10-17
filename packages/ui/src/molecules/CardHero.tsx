@@ -21,7 +21,7 @@ const CardHero = ({ image, alt, onClick, description }: CardHeroProps) => (
       maxWidth: 400,
       boxShadow: "none",
       margin: "0 auto !important",
-      backgroundColor : (theme)=>theme.palette.background.default
+      backgroundColor: (theme) => theme.palette.background.default
     }}
   >
     <CardMedia
@@ -49,7 +49,13 @@ const CardHero = ({ image, alt, onClick, description }: CardHeroProps) => (
       <Button
         fullWidth
         variant="outlined"
-        sx={{ "&:hover": { background: "#7339FF", color: "#E3E9FF" } }}
+        sx={{
+          "&:hover": {
+            background: "primary.main",
+            color: "text.action"
+          },
+          color: "action.active"
+        }}
         onClick={onClick}
       >
         Agregar al carrito
