@@ -59,3 +59,6 @@ export const {
   setNextState,
   setPrevState
 } = orderControlsLense<ModalData>(modalState$)
+
+export const [anchorElMenu$, setAnchorElMenu] = createSignal<null | HTMLElement>();
+export const [useAnchorElMenu, anchorElMenuDefault$] = bind(anchorElMenu$, null);

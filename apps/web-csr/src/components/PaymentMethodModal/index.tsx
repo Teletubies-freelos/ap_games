@@ -8,8 +8,14 @@ import PaymentMethodBody from './PaymentMethodBody';
 export default function PaymentMethodModal() {
   const handleBack = () => {
     setModalState({
-      prevModal: ModalState.DELIVERY_CENTRAL_PAYMENT_METHOD,
-      currentModal: ModalState.DELIVERY_CENTRAL_CLIENT_DATA
+      data: {
+        name: ModalState.DELIVERY_CENTRAL_CLIENT_DATA
+      },
+      previousState: {
+        data: {
+          name: ModalState.DELIVERY_CENTRAL_PAYMENT_METHOD
+        }
+      },
     })
   };
 
@@ -17,7 +23,7 @@ export default function PaymentMethodModal() {
     <ModalLayout
       headerModal={
         <HeadModal
-          onClose={()=> setModalState({})}
+          onClose={()=> setModalState(undefined)}
           title={<Typography variant='h5'>Medio de Pago</Typography>}
           icon={
             <IconButton onClick={handleBack}>

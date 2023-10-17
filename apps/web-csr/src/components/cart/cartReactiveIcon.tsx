@@ -10,7 +10,7 @@ export const CartIconReactive = () => {
   const productsCount = useLiveQuery(async ()=> (await getCartList()).length)
 
   const handleOnClick = useCallback(()=>{
-    setModalState({currentModal: ModalState.CART})
+    setModalState({ data: { name: ModalState.CART} })
   },[])
 
   return(

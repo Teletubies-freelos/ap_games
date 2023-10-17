@@ -22,7 +22,7 @@ export default function ProductDetailBody({ productId }: Readonly<ProductDetailP
     if(!product) return
   
     await createCartProduct()
-    setModalState({});
+    setModalState(undefined);
     setIsWishList(true);
   };
 

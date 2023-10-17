@@ -7,8 +7,14 @@ import SelectModals from '../common/SelectModals';
 export default function PaymentMethodBody() {
   const handleFinish = () => {
     setModalState({
-      prevModal: ModalState.DELIVERY_CENTRAL_PAYMENT_METHOD,
-      currentModal: ModalState.DELIVERY_CENTRAL_CONFIRMATION
+      data: {
+        name: ModalState.DELIVERY_CENTRAL_CONFIRMATION
+      },
+      previousState: {
+        data: {
+          name: ModalState.DELIVERY_CENTRAL_PAYMENT_METHOD
+        }
+      },
     })
   };
 

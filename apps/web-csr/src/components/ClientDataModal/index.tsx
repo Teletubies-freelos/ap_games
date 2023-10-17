@@ -17,7 +17,7 @@ export default function ClientDataModal() {
     <ModalLayout
       headerModal={
         <HeadModal
-          onClose={()=> setModalState({})}
+          onClose={()=> setModalState(undefined)}
           title={<Typography variant='h5'>Tus datos</Typography>}
           icon={
             <IconButton onClick={handleBack}>

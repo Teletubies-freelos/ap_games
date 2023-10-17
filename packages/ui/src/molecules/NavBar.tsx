@@ -1,4 +1,5 @@
 import { Box, Toolbar } from "@mui/material";
+import React from "react";
 
 interface NavBarProps {
   cartComponent?: JSX.Element;
@@ -6,6 +7,7 @@ interface NavBarProps {
   navigatorLinks?: JSX.Element;
   searchBar?: JSX.Element;
   actionsComponent?: JSX.Element;
+  menu?: React.ReactNode;
 }
 
 const sxMainBar = {
@@ -14,6 +16,7 @@ const sxMainBar = {
   gap: { xs: "1rem", sm: "3rem" },
   justifyContent: "space-between",
   alignItems: "center",
+  maxWidth: 1200
 };
 
 export default function NavBar({
@@ -22,16 +25,18 @@ export default function NavBar({
   navigatorLinks,
   actionsComponent,
   searchBar,
+  menu
 }: NavBarProps) {
   return (
     <Toolbar
       sx={{
         flexDirection: "column",
-        marginBottom: "3rem",
+        margin: "1.5rem 0",
         gap: { xs: "2rem", sm: "0" },
       }}
     >
       <Box sx={sxMainBar}>
+        {menu}
         {mainLogo}
         <Box
           sx={{
