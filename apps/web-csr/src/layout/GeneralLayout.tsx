@@ -11,6 +11,7 @@ import Payments from '../components/Payments/Payments'; */
 
 
 import { Modal } from '../components/modal';
+import Menu from '../components/Menu';
 
 interface GeneralLayoutProps {
   navBar: JSX.Element;
@@ -56,6 +57,7 @@ export function GeneralLayout({
       {/* Curar modales y luego pasarlos a la maquina estado */}
       <Modal />
       <CartFloat />
+      <Menu />
       {/* <PickupStore content={<BodyPickup />} />
       <MyData />
       <Payments /> */}

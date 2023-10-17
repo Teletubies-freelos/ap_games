@@ -1,4 +1,4 @@
-import { Stack, Button } from '@mui/material';
+import { Stack, Button, IconButton } from '@mui/material';
 import { Link } from 'react-router-dom';
 import {
   ColorSwitch,
@@ -23,7 +23,8 @@ import { render } from './render';
 import { useGetList } from 'data_providers';
 import { ProviderNames } from '../../types/providers';
 import { useQuery } from '@tanstack/react-query';
-
+import { Menu as MenuIcon } from '@mui/icons-material';
+import { setAnchorElMenu, useAnchorElMenu } from '../../observables';
 
 export default function Home() {
   const getFeaturedProducts = useGetList(ProviderNames.FEATURED);
@@ -31,6 +32,12 @@ export default function Home() {
   const { data } = useQuery(['home featured'], async () => await getFeaturedProducts())
 
   const toggleColor = useToggleColor();
+
+  const anchorEl = useAnchorElMenu();
+
+  const _handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorElMenu(anchorEl ? null : event.currentTarget);
+  }
 
   return (
     <GeneralLayout
@@ -52,10 +59,15 @@ export default function Home() {
               buttonSearch={<Button variant='contained' >Buscar</Button>}
             />
           }
+          menu={
+            <IconButton onClick={_handleOpenMenu} size="small">
+              <MenuIcon />
+            </IconButton>
+          }
         />
       }
     >
-      <ResponsiveCarousel data={data ?? []} itemRender={render} />
+      { !!data?.length && <ResponsiveCarousel data={data ?? []} itemRender={render} /> }
       <Stack
         direction='row'
         gap={{ sm: 6 }}

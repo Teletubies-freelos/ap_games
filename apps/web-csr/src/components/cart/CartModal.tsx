@@ -15,7 +15,7 @@ export function CartModal({ content }: CartProps) {
         sx={{ maxWidth: "40rem" }}
         headerModal={
           <HeadModal
-            onClose={()=> setModalState({})}
+            onClose={()=> setModalState(undefined)}
             title={<Typography variant="h5">Carrito</Typography>}
             icon={<ShoppingCartOutlinedIcon />}
           />

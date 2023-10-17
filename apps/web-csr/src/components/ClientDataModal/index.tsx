@@ -1,23 +1,20 @@
 import { IconButton, Typography } from '@mui/material';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { ModalLayout } from '../../../../../packages/ui/src';
-import { ModalState, setModalState } from '../../observables';
+import { ModalState, setModalState, setPrevState } from '../../observables';
 import HeadModal from '../common/HeadModal';
 import ClientDataBody from './ClientDataBody';
 
 export default function ClientDataModal() {
   const handleBack = () => {
-    setModalState({
-      prevModal: ModalState.DELIVERY_CENTRAL_CLIENT_DATA,
-      currentModal: ModalState.CART
-    })
+    setPrevState();
   };
 
   return (
     <ModalLayout
       headerModal={
         <HeadModal
-          onClose={()=> setModalState({})}
+          onClose={() => setModalState(undefined)}
           title={<Typography variant='h5'>Tus datos</Typography>}
           icon={
             <IconButton onClick={handleBack}>

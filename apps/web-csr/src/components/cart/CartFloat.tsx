@@ -27,7 +27,7 @@ export function CartFloat() {
 
   const _handleOpenCart = useCallback(()=>{
     setIsWishList(false)
-    setModalState({ currentModal: ModalState.CART })
+    setModalState({ data: { name: ModalState.CART} })
   }, [])
 
   return (
