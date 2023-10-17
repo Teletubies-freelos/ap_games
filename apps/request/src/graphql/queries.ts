@@ -122,6 +122,7 @@ export const GET_FEATURED_PRODUCTS = gql`
       description
       title
       featured_id
+      price
     }
   }
 `;
