@@ -15,7 +15,7 @@ export const Label = styled(Link)`
   text-decoration: none;
 `;
 
-function LiItem({ label }: LiItemProps) {
+function LiItem({ label }: Readonly<LiItemProps>) {
   return (
     <Typography
       variant="h3"
