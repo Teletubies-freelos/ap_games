@@ -2,6 +2,7 @@ import { bind } from '@react-rxjs/core';
 import { createSignal } from '@react-rxjs/utils';
 import { BehaviorSubject } from 'rxjs';
 import { ControlState, orderControlsLense } from '../utils';
+import { isObserverDebugOn } from '../config/debug';
 
 export const [isCartOpenChange$, setIsCartOpen] = createSignal<boolean>();
 export const [isWishList$, setIsWishList] = createSignal<boolean | undefined>();
@@ -62,3 +63,7 @@ export const {
 
 export const [anchorElMenu$, setAnchorElMenu] = createSignal<null | HTMLElement>();
 export const [useAnchorElMenu, anchorElMenuDefault$] = bind(anchorElMenu$, null);
+
+if(import.meta.env.DEV && isObserverDebugOn){
+  modalState$.subscribe(next => console.log('modalState', next))
+}
