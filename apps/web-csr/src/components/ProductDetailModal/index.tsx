@@ -5,7 +5,11 @@ import HeadModal from '../common/HeadModal';
 import { ShoppingBag } from '@mui/icons-material';
 import ProductDetailBody from './ProductDetailBody';
 
-export default function ProductDetailModal() {
+export interface ProductDetailPorps {
+  productId: string
+}
+
+export default function ProductDetailModal(props: Readonly<ProductDetailPorps>) {
   return (
     <ModalLayout
       headerModal={
@@ -18,7 +22,7 @@ export default function ProductDetailModal() {
         />
       }
     >
-      <ProductDetailBody />
+      <ProductDetailBody {...props} />
     </ModalLayout>
   );
 }

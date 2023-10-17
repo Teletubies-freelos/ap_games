@@ -1,29 +1,28 @@
 import { Box, Button, Stack, Typography } from "@mui/material";
-import { cartProvider } from "../../modules";
-import { setIsWishList, setModalState, setProductDetail, useProductDetail } from "../../observables";
+import { setIsWishList, setModalState } from "../../observables";
 import { Discount, Tag } from "../../../../../packages/ui/src";
+import { useCreateOne } from "data_providers";
+import { ProviderNames } from "../../types/providers";
+import { useQueryClient } from "@tanstack/react-query";
+import { CardProductProps } from "../../../../../packages/ui/src/molecules/CardProduct";
+import { ProductDetailPorps } from ".";
 
-export default function ProductDetailBody() {
-  const product = useProductDetail();
-
-  const _handleCloseDetail = () => {
-    setModalState({})
-    setProductDetail(null)
-  }
+export default function ProductDetailBody({ productId }: Readonly<ProductDetailPorps>) {
+  const queryclient = useQueryClient()
+  const products = queryclient.getQueryData<CardProductProps[]>([ProviderNames.PRODUCTS])
+  const product = products?.find((product) => product.productId === productId );
+  
+  const createCartProduct = useCreateOne(ProviderNames.CART, {
+    payload: {
+      ...product
+    },
+  });
 
   const _handleAddProduct = async () => {
     if(!product) return
   
-    await cartProvider.createOne({
-      imageUrl: product.src,
-      name: product.title,
-      price: product.price,
-      quantity: 1,
-      priceDiscount: 0,
-      productId: product.productId,
-    });
-
-    _handleCloseDetail();
+    await createCartProduct()
+    setModalState({});
     setIsWishList(true);
   };
 
