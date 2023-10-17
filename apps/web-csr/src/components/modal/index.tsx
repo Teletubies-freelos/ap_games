@@ -1,27 +1,33 @@
-import { ModalState, setModalState, useModalState } from "../../observables"
-import { BodyCart, CartModal } from "../cart"
 import { Modal as ModalMUI } from '@mui/material'
+import { ModalState, setModalState, useModalState } from "../../observables"
+import ProductDetailModal from "../ProductDetailModal"
+import { BodyCart, CartModal } from "../cart"
 
 const modals = {
-  [ModalState.CART]: <CartModal content={<BodyCart />} />,
-  [ModalState.DETAIL]: <CartModal content={<BodyCart />} />,
-  [ModalState.DELIVERY_CENTRAL_CLIENT_DATA]: <CartModal content={<BodyCart />} />,
-  [ModalState.DELIVERY_CENTRAL_CONFIRMATION]: <CartModal content={<BodyCart />} />,
-  [ModalState.DELIVERY_CENTRAL_PAYMENT_METHOD]: <CartModal content={<BodyCart />} />,
-  [ModalState.IN_STORE_CONFIRMATION]: <CartModal content={<BodyCart />} />,
-  [ModalState.IN_STORE_SUMMARY]: <CartModal content={<BodyCart />} />,
+  [ModalState.CART]: () => <CartModal content={<BodyCart />} />,
+  [ModalState.DETAIL]: (props?: any) => <ProductDetailModal {...props} />,
+  [ModalState.DELIVERY_CENTRAL_CLIENT_DATA]: () => <CartModal content={<BodyCart />} />,
+  [ModalState.DELIVERY_CENTRAL_CONFIRMATION]: () => <CartModal content={<BodyCart />} />,
+  [ModalState.DELIVERY_CENTRAL_PAYMENT_METHOD]: () => <CartModal content={<BodyCart />} />,
+  [ModalState.IN_STORE_CONFIRMATION]: () => <CartModal content={<BodyCart />} />,
+  [ModalState.IN_STORE_SUMMARY]: () => <CartModal content={<BodyCart />} />,
   
 }
 
 export const Modal = () => {
   const modalState = useModalState()
 
-  return (<ModalMUI
-      onClose={()=> setModalState({})}
-      open={!!modalState.currentModal}
+  return (
+    <ModalMUI
+      onClose={() => setModalState(undefined)}
+      open={!!modalState?.data}
       sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}
     >
-      {modals[modalState.currentModal ?? ModalState.CART]}
+      <>
+        {
+          !!modalState?.data && modals[modalState?.data?.name]({ data: modalState.data.meta })
+        }
+      </>
     </ModalMUI>
   )
 }

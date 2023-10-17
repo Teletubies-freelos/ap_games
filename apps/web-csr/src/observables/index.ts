@@ -1,5 +1,7 @@
 import { bind } from '@react-rxjs/core';
 import { createSignal } from '@react-rxjs/utils';
+import { BehaviorSubject } from 'rxjs';
+import { ControlState, orderControlsLense } from '../utils';
 
 export const [isCartOpenChange$, setIsCartOpen] = createSignal<boolean>();
 export const [isWishList$, setIsWishList] = createSignal<boolean | undefined>();
@@ -44,6 +46,16 @@ export interface IModalState{
   prevModal?: ModalState;
 }
 
-export const [modalStateChange$, setModalState] = createSignal<IModalState>()
-export const [useModalState, modalState$] = bind(modalStateChange$, {})
+export interface ModalData {
+  name: ModalState;
+  meta?: Record<string, unknown>
+}
 
+export const modalState$ = new BehaviorSubject<ControlState<ModalData> | undefined>(undefined)
+
+export const {
+  setState: setModalState,
+  useObserverState: useModalState,
+  setNextState,
+  setPrevState
+} = orderControlsLense<ModalData>(modalState$)
