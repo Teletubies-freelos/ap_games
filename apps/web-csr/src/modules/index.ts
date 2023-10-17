@@ -6,6 +6,7 @@ import { appGamesDbSingleton } from '../data/indexedDB';
 import { Featured } from '../services/Featured';
 import { Categories } from '../services/Cateogries';
 import { SessionStorage } from '../services/SessionStorage';
+import { Orders } from '../services/Orders';
 
 const headers = new Headers({
   'x-hasura-admin-secret': masterToken,
@@ -24,3 +25,5 @@ export const featuredProvider = new Featured(graphqlClient)
 export const categoriesProvider = new Categories(graphqlClient)
 
 export const sessionStorageProvider = new SessionStorage();
+
+export const ordersProvider = new Orders(graphqlClient)

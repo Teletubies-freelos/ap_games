@@ -26,9 +26,7 @@ export default function PaymentMethodBody() {
 
       <TextField
         id='outlined-multiline-flexible'
-        sx={(theme) => ({
-          backgroundColor: theme.palette.background.default,
-        })}
+        sx={{ backgroundColor: "background.default" }}
         placeholder='Agregar comentario (opcional)'
         multiline
         minRows={4}
@@ -44,7 +42,7 @@ export default function PaymentMethodBody() {
         <Typography
           component='p'
           variant='body2'
-          sx={(theme) => ({ color: theme.palette.text.secondary })}
+          sx={{ color: "text.secondary" }}
         >
           S/ 20.00
         </Typography>
@@ -59,7 +57,7 @@ export default function PaymentMethodBody() {
         <Typography
           component='p'
           variant='body2'
-          sx={(theme) => ({ color: theme.palette.text.secondary })}
+          sx={{ color: "text.secondary" }}
         >
           S/ 480.00
         </Typography>
@@ -71,11 +69,11 @@ export default function PaymentMethodBody() {
         alignItems='center'
       >
         <InfoOutlinedIcon
-          sx={(theme) => ({ color: theme.palette.primary.main })}
+          sx={{ color: "primary.main" }}
         />
         <Typography
           textAlign='center'
-          sx={(theme) => ({ color: theme.palette.primary.main })}
+          sx={{ color: "primary.main" }}
         >
           El pago lo realizarás al momento de la entrega en el caso de efectivo
         </Typography>
@@ -87,10 +85,10 @@ export default function PaymentMethodBody() {
         sx={{ width: '100%', margin: '0 auto' }}
       />
       <Typography
-        sx={(theme) => ({
-          color: theme.palette.text.secondary,
+        sx={{
+          color: "text.secondary",
           textAlign: 'center',
-        })}
+        }}
       >
         Al hacer click en confirmar, acepto los términos de uso y Políticas de
         privacidad
