@@ -14,7 +14,7 @@ export default function ProductDetailModal(props: Readonly<ProductDetailPorps>) 
     <ModalLayout
       headerModal={
         <HeadModal
-          onClose={()=> setModalState({})}
+          onClose={()=> setModalState(undefined)}
           title={<Typography variant='h5'>Detalle</Typography>}
           icon={
             <ShoppingBag />

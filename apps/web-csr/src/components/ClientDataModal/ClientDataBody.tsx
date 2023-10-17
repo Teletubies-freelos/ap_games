@@ -31,8 +31,14 @@ export default function ClientDataBody() {
     await createToSession(data)
 
     setModalState({
-      prevModal: ModalState.DELIVERY_CENTRAL_CLIENT_DATA,
-      currentModal: ModalState.DELIVERY_CENTRAL_PAYMENT_METHOD
+      data: {
+        name: ModalState.DELIVERY_CENTRAL_PAYMENT_METHOD
+      },
+      previousState: {
+        data: {
+          name: ModalState.DELIVERY_CENTRAL_CLIENT_DATA
+        }
+      },
     })
   }
 

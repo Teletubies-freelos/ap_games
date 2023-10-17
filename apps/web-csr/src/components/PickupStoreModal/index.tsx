@@ -20,8 +20,14 @@ export default function PickupStoreModal({ content }: Readonly<PickupStoreProps>
 
   const handleBack = () => {
     setModalState({
-      prevModal: ModalState.IN_STORE_SUMMARY,
-      currentModal: ModalState.CART
+      data: {
+        name: ModalState.CART
+      },
+      previousState: {
+        data: {
+          name: ModalState.IN_STORE_SUMMARY
+        }
+      },
     })
   };
 
@@ -29,9 +35,15 @@ export default function PickupStoreModal({ content }: Readonly<PickupStoreProps>
     mutate({ address: "" });
 
     setModalState({
-      prevModal: ModalState.IN_STORE_SUMMARY,
-      currentModal: ModalState.IN_STORE_CONFIRMATION
-    });
+      data: {
+        name: ModalState.IN_STORE_CONFIRMATION
+      },
+      previousState: {
+        data: {
+          name: ModalState.IN_STORE_SUMMARY
+        }
+      },
+    })
   };
 
   return (
@@ -39,7 +51,7 @@ export default function PickupStoreModal({ content }: Readonly<PickupStoreProps>
       sx={{ maxWidth: '40rem' }}
       headerModal={
         <HeadModal
-          onClose={() => setModalState({})}
+          onClose={() => setModalState(undefined)}
           title={<Typography variant='h5'>Recojo en Tienda</Typography>}
           icon={
             <IconButton onClick={handleBack}>
