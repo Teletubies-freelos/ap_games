@@ -1,5 +1,7 @@
 import { bind } from '@react-rxjs/core';
 import { createSignal } from '@react-rxjs/utils';
+import { CardProductProps } from '../../../../packages/ui/src/molecules/CardProduct';
+import { Maybe } from '../types';
 
 export const [isCartOpenChange$, setIsCartOpen] = createSignal<boolean>();
 export const [isWishList$, setIsWishList] = createSignal<boolean | undefined>();
@@ -47,3 +49,5 @@ export interface IModalState{
 export const [modalStateChange$, setModalState] = createSignal<IModalState>()
 export const [useModalState, modalState$] = bind(modalStateChange$, {})
 
+export const [productDetail$, setProductDetail] = createSignal<Maybe<CardProductProps>>();
+export const [useProductDetail, productDetailDefault$] = bind(productDetail$, null);
