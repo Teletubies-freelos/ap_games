@@ -67,7 +67,7 @@ export default function Home() {
         />
       }
     >
-      <ResponsiveCarousel data={data ?? []} itemRender={render} />
+      { !!data?.length && <ResponsiveCarousel data={data ?? []} itemRender={render} /> }
       <Stack
         direction='row'
         gap={{ sm: 6 }}
