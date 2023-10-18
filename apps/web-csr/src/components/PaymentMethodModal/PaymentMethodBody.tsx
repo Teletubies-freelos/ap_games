@@ -52,7 +52,7 @@ const useConfirmRequest = () => {
 };
 
 export default function PaymentMethodBody() {
-  const { handleSubmit, register } = useForm<PaymentMethodData>();
+  const { handleSubmit } = useForm<PaymentMethodData>();
   const confirmRequest = useConfirmRequest();
 
   const handleFinish = async (data: PaymentMethodData) => {
@@ -66,7 +66,7 @@ export default function PaymentMethodBody() {
 
   const getCartProducts = useGetList<ICartProduct>(ProviderNames.CART);
   const getPaymentMethods = useGetList(ProviderNames.PAYMENT_METHODS);
-  const { data, isFetching } = useQuery(
+  const { data } = useQuery(
     ['cart'],
     async () => await getCartProducts()
   );

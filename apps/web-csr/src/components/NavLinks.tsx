@@ -1,4 +1,4 @@
-import { Link as MUILink, styled } from "@mui/material";
+import { Typography, styled } from "@mui/material";
 import { Link } from "react-router-dom";
 
 export default function NavLinks() {
@@ -9,7 +9,7 @@ export default function NavLinks() {
   return (
     <>
       <CustomLink to="/estado-pedido">
-        <MUILink
+        <Typography
           sx={({ palette }) => ({
             display: { xs: "block", md: "none" },
             textDecoration: "none",
@@ -19,10 +19,10 @@ export default function NavLinks() {
           })}
         >
           Pedidos
-        </MUILink>
+        </Typography>
       </CustomLink>
       <CustomLink to="/estado-pedido">
-        <MUILink
+        <Typography
           sx={({ palette }) => ({
             display: { xs: "none", md: "block" },
             textDecoration: "none",
@@ -33,10 +33,10 @@ export default function NavLinks() {
           })}
         >
           Estado de Pedido
-        </MUILink>
+        </Typography>
       </CustomLink>
       <CustomLink to="/estado-pedido">
-        <MUILink
+        <Typography
           sx={({ palette }) => ({
             display: { xs: "none", md: "block" },
             textDecoration: "none",
@@ -46,7 +46,7 @@ export default function NavLinks() {
           })}
         >
           Tienda
-        </MUILink>
+        </Typography>
       </CustomLink>
     </>
   );

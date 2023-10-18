@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { Accordion, AccordionDetails, AccordionSummary, Box, Paper, Popover, Stack, Typography, styled } from "@mui/material";
 import { ExpandMore as ExpandMoreIcon } from "@mui/icons-material";
 import { FacebookLogo, InstagramLogo } from "../../../../packages/ui/src";
-import { setAnchorElMenu, useAnchorElMenu } from "../observables";
+import { setAnchorElMenu, setCategoryIdSelected, useAnchorElMenu } from "../observables";
 import { useGetList } from "data_providers";
 import { ProviderNames } from "../types/providers";
 import { useQuery } from "@tanstack/react-query";
@@ -94,17 +94,18 @@ export default function Menu() {
                   <Box
                     component="a"
                     key={`category-${category_id}`}
-                    href="#product-list"
+                    href="/#product-list"
                     sx={{ textDecoration: "none" }}
-                    onClick={() => {
-                      handleClose()
-                    }}
                   >
                     <Typography
                       variant="h3"
                       sx={{
                         fontWeight: 400,
                         color: "text.primary"
+                      }}
+                      onClick={() => {
+                        handleClose()
+                        setCategoryIdSelected(category_id);
                       }}
                     >
                       {name || category_id}
