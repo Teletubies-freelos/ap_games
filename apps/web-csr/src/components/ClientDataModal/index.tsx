@@ -1,7 +1,7 @@
 import { IconButton, Typography } from '@mui/material';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { ModalLayout } from '../../../../../packages/ui/src';
-import { ModalState, setModalState, setPrevState } from '../../observables';
+import { setModalState, setPrevState } from '../../observables';
 import HeadModal from '../common/HeadModal';
 import ClientDataBody from './ClientDataBody';
 
