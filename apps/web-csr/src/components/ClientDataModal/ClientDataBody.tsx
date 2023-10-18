@@ -11,7 +11,7 @@ import CustomTextField from '../common/CustomTextField';
 import SelectModals from '../common/SelectModals';
 import { Button } from '../../../../../packages/ui/src';
 
-import { ModalState, setModalState } from '../../observables';
+import { ModalState, setNextState } from '../../observables';
 import { useCreateOne } from 'data_providers';
 import { ProviderNames } from '../../types/providers';
 
@@ -30,11 +30,10 @@ export default function ClientDataBody() {
   const _handleSubmit: SubmitHandler<UserInfo> = async (data) => {
     await createToSession(data);
 
-    setModalState({
-      data: {
+    setNextState( {
         name: ModalState.DELIVERY_CENTRAL_PAYMENT_METHOD,
       },
-    });
+    );
   };
 
   return (

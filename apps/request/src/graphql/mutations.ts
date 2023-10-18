@@ -1,4 +1,4 @@
-import { gql } from "graphql-request";
+import { gql } from 'graphql-request';
 
 export const CREATE_PRODUCT = gql`
   mutation CREATE_PRODUCT(
@@ -73,17 +73,17 @@ export const CREATE_CATEGORY = gql`
 
 export const CREATE_ORDER = gql`
   mutation CREATE_ORDER(
-    $address: String,
-    $client_name: String,
-    $email: String,
+    $address: String
+    $client_name: String
+    $email: String
     $phone: Int
   ) {
     insert_orderers(
       objects: {
-        address: $address,
-        client_name: $client_name,
-        email: $email,
-        order_id: $order_id,
+        address: $address
+        client_name: $client_name
+        email: $email
+        order_id: $order_id
         phone: $phone
       }
     ) {
@@ -92,4 +92,26 @@ export const CREATE_ORDER = gql`
       }
     }
   }
-`
+`;
+
+export const CREATE_ORDER_PRODUCT_ONE = gql`
+  mutation CREATE_ORDER_PRODUCT_ONE($order_id: String!, $product_id: Int!) {
+    insert_order_products_one(
+      object: { order_id: $order_id, product_id: $product_id }
+    ) {
+      returning {
+        order_id
+      }
+    }
+  }
+`;
+
+export const CREATE_ORDER_PRODUCTS = gql`
+  mutation CREATE_ORDER_PRODUCT($objects: [order_products_insert_input!]!) {
+    insert_order_products(objects: $objects) {
+      returning {
+        order_id
+      }
+    }
+  }
+`;
