@@ -1,4 +1,4 @@
-import { PropsWithChildren, useCallback, useState } from "react";
+import { PropsWithChildren, useCallback, useState } from 'react';
 import {
   Select as MUISelect,
   FormControl,
@@ -7,9 +7,9 @@ import {
   SxProps,
   SelectChangeEvent,
   SelectProps,
-} from "@mui/material";
+} from '@mui/material';
 
-import { ArrowDropDown as ArrowDropDownIcon } from "@mui/icons-material";
+import { ArrowDropDown as ArrowDropDownIcon } from '@mui/icons-material';
 
 export interface IOption {
   value: string | number;
@@ -21,7 +21,7 @@ export interface SelectFilterProps<T extends IOption = IOption> {
   sxForm?: SxProps;
   sxSelect?: Record<string, unknown>;
   onChange?: (event: SelectChangeEvent) => void;
-  selectProps?: SelectProps
+  selectProps?: SelectProps;
 }
 
 export default function SelectFilter({
@@ -30,7 +30,7 @@ export default function SelectFilter({
   sxSelect,
   children,
   onChange,
-  selectProps
+  selectProps,
 }: PropsWithChildren<SelectFilterProps>) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -39,17 +39,17 @@ export default function SelectFilter({
       <Box
         onClick={() => setIsOpen((prev) => !prev)}
         sx={{
-          cursor: "pointer",
+          cursor: 'pointer',
           marginRight: 1,
           paddingLeft: 1,
-          borderLeftStyle: "solid",
+          borderLeftStyle: 'solid',
           borderLeftWidth: 0.5,
         }}
       >
         <ArrowDropDownIcon />
       </Box>
     ),
-    [],
+    []
   );
 
   return (

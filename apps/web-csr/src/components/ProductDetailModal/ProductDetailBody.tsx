@@ -3,18 +3,33 @@ import { setIsWishList, setModalState } from "../../observables";
 import { Discount, Tag } from "../../../../../packages/ui/src";
 import { useCreateOne } from "data_providers";
 import { ProviderNames } from "../../types/providers";
-import { useQueryClient } from "@tanstack/react-query";
 import { CardProductProps } from "../../../../../packages/ui/src/molecules/CardProduct";
 import { ProductDetailPorps } from ".";
+import { useQueryClient } from "@tanstack/react-query";
+import { useMemo } from "react";
+import { serializeGames } from "../ProductList/hooks/useFeaturedProducts";
+import { Maybe } from "../../types";
+import { IProduct } from "../../services/Products";
 
 export default function ProductDetailBody({ productId }: Readonly<ProductDetailPorps>) {
-  const queryclient = useQueryClient()
-  const products = queryclient.getQueryData<CardProductProps[]>([ProviderNames.PRODUCTS])
-  const product = products?.find((product) => product.productId === productId );
-  
+  const queryClient = useQueryClient()
+
+  const query = queryClient.getQueryData<{pages: IProduct[][]}>(["list_games", null, null, null])
+
+  const product: Maybe<CardProductProps> = useMemo(
+    () => query?.pages.flat().map(serializeGames)?.find(( product: CardProductProps) => product.productId === productId ),
+    [productId, query?.pages]
+  );
+
   const createCartProduct = useCreateOne(ProviderNames.CART, {
     payload: {
-      ...product
+      imageUrl: product?.src,
+      name: product?.title,
+      description: product?.description,
+      product_id: productId,
+      price: product?.price,
+      quantity: 1,
+      priceDiscount: 0,
     },
   });
 

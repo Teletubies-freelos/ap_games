@@ -17,9 +17,9 @@ export const GET_PRODUCTS = gql`
 `;
 
 export const GET_PRODUCTS_BY_CATEGORY = gql`
- query GET_PRODUCTS_BY_CATEGORY($limit: Int, $offset: Int, $categoryId: Int) {
+  query GET_PRODUCTS_BY_CATEGORY($limit: Int, $offset: Int, $categoryId: Int) {
     products(
-      where: { is_visible: { _eq: true }, category_id: {_eq: $categoryId} }
+      where: { is_visible: { _eq: true }, category_id: { _eq: $categoryId } }
       limit: $limit
       offset: $offset
       order_by: { updated_at: desc }
@@ -29,12 +29,12 @@ export const GET_PRODUCTS_BY_CATEGORY = gql`
   }
 
   ${PRODUCT_DATA}
-`
+`;
 
 export const GET_PRODUCT_DATA_IS_OFFER = gql`
   query GET_PRODUCT_DATA_IS_OFFER($limit: Int, $offset: Int) {
     products(
-      where: { is_visible: { _eq: true }, is_offer: {_eq: true} }
+      where: { is_visible: { _eq: true }, is_offer: { _eq: true } }
       limit: $limit
       offset: $offset
       order_by: { updated_at: desc }
@@ -44,12 +44,20 @@ export const GET_PRODUCT_DATA_IS_OFFER = gql`
   }
 
   ${PRODUCT_DATA}
-`
+`;
 
 export const GET_PRODUCT_DATA_IS_OFFER_BY_CATEGORY_ID = gql`
-  query GET_PRODUCT_DATA_IS_OFFER_BY_CATEGORY_ID($limit: Int, $offset: Int, $categoryId: Int) {
+  query GET_PRODUCT_DATA_IS_OFFER_BY_CATEGORY_ID(
+    $limit: Int
+    $offset: Int
+    $categoryId: Int
+  ) {
     products(
-      where: { is_visible: { _eq: true }, is_offer: {_eq: true}, category_id: {_eq: $categoryId} }
+      where: {
+        is_visible: { _eq: true }
+        is_offer: { _eq: true }
+        category_id: { _eq: $categoryId }
+      }
       limit: $limit
       offset: $offset
       order_by: { updated_at: desc }
@@ -59,23 +67,26 @@ export const GET_PRODUCT_DATA_IS_OFFER_BY_CATEGORY_ID = gql`
   }
 
   ${PRODUCT_DATA}
-`
-
+`;
 
 export const GET_PRODUCT_DATA_LOW_PRICE_BY_CATEGORY = gql`
-  query GET_PRODUCT_DATA_LOW_PRICE_BY_CATEGORY($limit: Int, $offset: Int, $categoryId: Int) {
+  query GET_PRODUCT_DATA_LOW_PRICE_BY_CATEGORY(
+    $limit: Int
+    $offset: Int
+    $categoryId: Int
+  ) {
     products(
-      where: { is_visible: { _eq: true }, category_id: { _eq : $categoryId} }
+      where: { is_visible: { _eq: true }, category_id: { _eq: $categoryId } }
       limit: $limit
       offset: $offset
-      order_by: { updated_at: desc,  price: asc }
+      order_by: { updated_at: desc, price: asc }
     ) {
       ...PRODUCT_DATA
     }
   }
 
   ${PRODUCT_DATA}
-`
+`;
 
 export const GET_PRODUCT_DATA_LOW_PRICE = gql`
   query GET_PRODUCT_DATA_LOW_PRICE($limit: Int, $offset: Int) {
@@ -83,14 +94,14 @@ export const GET_PRODUCT_DATA_LOW_PRICE = gql`
       where: { is_visible: { _eq: true } }
       limit: $limit
       offset: $offset
-      order_by: { updated_at: desc,  price: asc }
+      order_by: { updated_at: desc, price: asc }
     ) {
       ...PRODUCT_DATA
     }
   }
 
   ${PRODUCT_DATA}
-`
+`;
 
 export const GET_CATEGORIES = gql`
   query GET_CATEGORIES($limit: Int!, $offset: Int!) {
@@ -123,6 +134,15 @@ export const GET_FEATURED_PRODUCTS = gql`
       title
       featured_id
       price
+    }
+  }
+`;
+
+export const GET_PAYMENT_METHODS = gql`
+  query GET_PAYMENT_METHODS($limit: Int!, $offset: Int!) {
+    payment_methods(limit: $limit, offset: $offset) {
+      payment_method_id
+      name
     }
   }
 `;

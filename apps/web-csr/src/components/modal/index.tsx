@@ -9,7 +9,7 @@ import PaymentMethodModal from '../PaymentMethodModal';
 
 const modals = {
   [ModalState.CART]: () => <CartModal content={<BodyCart />} />,
-  [ModalState.DETAIL]: (props?: any) => <ProductDetailModal {...props} />,
+  [ModalState.DETAIL]: (props?: any) => <ProductDetailModal productId={props.data.productId} />,
   [ModalState.DELIVERY_CENTRAL_CLIENT_DATA]: () => <ClientDataModal />,
   [ModalState.DELIVERY_CENTRAL_CONFIRMATION]: () => (
     <CartModal content={<BodyCart />} />

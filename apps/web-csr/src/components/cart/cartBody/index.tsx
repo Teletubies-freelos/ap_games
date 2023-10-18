@@ -20,16 +20,19 @@ import { useMemo } from 'react';
 import { reduceTotalPrice } from '../../../utils';
 import {
   ModalState,
-  setIsCartOpen,
-  setIsPickupStore,
-  setIsYourData,
   setNextState,
 } from '../../../observables';
 
 import totalMoney from '../../common/total.svg';
 import { ICartProduct } from '../../../data/indexedDB';
 
-export function BodyCart() {
+interface BodyCartProps{
+  listPriceCb?: (quantity: number, price: number, taxOrDiscount?: number)=> number;
+}
+
+const defaultPriceCb = (quantity: number, price: number)=> quantity*price
+
+export function BodyCart({listPriceCb = defaultPriceCb }: BodyCartProps) {
   const getCartProducts = useGetList<ICartProduct>(ProviderNames.CART);
   const deleteCartProduct = useDeleteOne(ProviderNames.CART);
   const { data, isFetching, refetch } = useQuery(
@@ -59,7 +62,7 @@ export function BodyCart() {
               key={id}
               img={<Image url={imageUrl} />}
               title={name}
-              price={price}
+              price={listPriceCb(quantity, price)}
               quantity={
                 <CardQty
                   onChangeQty={() => refetch().then(() => {})}
@@ -108,6 +111,7 @@ export function BodyCart() {
             fullWidth
             variant='outlined'
             sx={{ height: '2.8rem', fontSize: { xs: '.7rem !important' } }}
+            data-testid='pickupStore'
           >
             Recojo en tienda
           </Button>
@@ -118,6 +122,7 @@ export function BodyCart() {
             fullWidth
             variant='contained'
             sx={{ height: '2.8rem', fontSize: { xs: '.7rem !important' } }}
+            data-testid='deliveryHome'
           >
             Entrega a domicilio
           </Button>
