@@ -30,10 +30,9 @@ export default function ClientDataBody() {
   const _handleSubmit: SubmitHandler<UserInfo> = async (data) => {
     await createToSession(data);
 
-    setNextState( {
-        name: ModalState.DELIVERY_CENTRAL_PAYMENT_METHOD,
-      },
-    );
+    setNextState({
+      name: ModalState.DELIVERY_CENTRAL_PAYMENT_METHOD,
+    });
   };
 
   return (
@@ -48,17 +47,20 @@ export default function ClientDataBody() {
           textfieldProps={register('fullName')}
           width='50%'
           label='Nombres y Apellidos'
+          data-testid='fullname'
         />
         <CustomTextField
           textfieldProps={register('phone')}
           width='50%'
           label='Teléfono'
+          data-testid='numberPhone'
         />
       </Box>
       <CustomTextField
         textfieldProps={register('email')}
         width='100%'
         label='Correo electrónico'
+        data-testid='email'
       />
       <FormControl>
         <RadioGroup
@@ -69,6 +71,7 @@ export default function ClientDataBody() {
             display: 'flex',
             flexDirection: 'row',
           }}
+          data-testid='selectProvince'
         >
           <FormControlLabel
             value='female'
@@ -87,17 +90,20 @@ export default function ClientDataBody() {
         textfieldProps={register('address')}
         width='100%'
         label='Dirección'
+        data-testid='address'
       />
       <CustomTextField
         textfieldProps={register('reference')}
         width='100%'
         label='Referencia'
+        data-testid='reference'
       />
       <Button
         type={'submit'}
         variant='contained'
         label='Siguiente'
         sx={{ textTransform: 'capitalize', marginTop: '2.25rem' }}
+        data-testid='nextPayment'
       />
     </Stack>
   );

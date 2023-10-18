@@ -1,8 +1,7 @@
-import { Box, TextField, Typography, Button } from '@mui/material';
+import { Box, TextField, Typography, Button, Stack } from '@mui/material';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { DropDown } from '../../../../../packages/ui/src';
 import { ModalState, setModalState } from '../../observables';
-import SelectModals from '../common/SelectModals';
 import {
   useCreateMany,
   useCreateOne,
@@ -12,13 +11,16 @@ import {
 import { ProviderNames } from '../../types/providers';
 import { UserInfo } from '../../services/SessionStorage';
 import { useForm } from 'react-hook-form';
+import CustomAcordion from '../common/CustomAcordion';
+import { ICartProduct } from '../../data/indexedDB';
+import { useQuery } from '@tanstack/react-query';
 
 interface PaymentMethodData {
   paymentMethod: string;
 }
 
-const useConfirmRequest = ()=>{
-  // 1. Traer toda la info necesaria del cliente (puede ser que de los otros 
+const useConfirmRequest = () => {
+  // 1. Traer toda la info necesaria del cliente (puede ser que de los otros
   // modales aun no este implentado un lugar donde guardar la info, sugiero Session Storage)
   // 2. Traer la info del pedido
   // 3. sacar del formulario actual los medios de pago
@@ -32,7 +34,6 @@ const useConfirmRequest = ()=>{
 
   return async (data: PaymentMethodData) => {
     const clientData = await getClientData();
-    console.log(clientData);
     const products = await getCartProducts();
 
     const { orderId } =
@@ -63,6 +64,22 @@ export default function PaymentMethodBody() {
     });
   };
 
+  const getCartProducts = useGetList<ICartProduct>(ProviderNames.CART);
+  const getPaymentMethods = useGetList(ProviderNames.PAYMENT_METHODS);
+  const { data, isFetching } = useQuery(
+    ['cart'],
+    async () => await getCartProducts()
+  );
+  const { data: paymentMethods } = useQuery(
+    ['payment_methods'],
+    async () => await getPaymentMethods()
+  );
+
+  const parsedPaymentMethods = paymentMethods?.map((method) => ({
+    value: method.payment_method_id,
+    label: method.name,
+  }));
+
   return (
     <Box
       component={'form'}
@@ -72,15 +89,33 @@ export default function PaymentMethodBody() {
       gap='.75rem'
       padding='1.4rem'
     >
-      <SelectModals
-        label='Tu pedido'
-        groupOptions={[
-          { id: 1, name: '2 Productos' },
-          { id: 2, name: 'opcion 2' },
-        ]}
+      <CustomAcordion
+        header={
+          <Stack>
+            <Typography>Tu Pedido</Typography>
+            <Typography>3 productos</Typography>
+          </Stack>
+        }
+        content={
+          <Box>
+            {data?.map((product) => (
+              <Box
+                display='flex'
+                justifyContent='space-between'
+                padding='.5rem 0'
+                key={product.id}
+              >
+                <Typography>{product.name}</Typography>
+                <Typography>{product.price}</Typography>
+              </Box>
+            ))}
+          </Box>
+        }
       />
-      <DropDown items={[{ value: '1', label: 'primera opcion' }]}></DropDown>
-      <DropDown items={[{ value: '1', label: 'primera opcion' }]}></DropDown>
+      <DropDown
+        items={[{ value: '1', label: 'Informacion de entrega' }]}
+      ></DropDown>
+      <DropDown items={parsedPaymentMethods}></DropDown>
 
       <TextField
         id='outlined-multiline-flexible'
