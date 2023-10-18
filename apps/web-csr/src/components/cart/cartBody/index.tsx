@@ -108,6 +108,7 @@ export function BodyCart() {
             fullWidth
             variant='outlined'
             sx={{ height: '2.8rem', fontSize: { xs: '.7rem !important' } }}
+            data-testid='pickupStore'
           >
             Recojo en tienda
           </Button>
@@ -118,6 +119,7 @@ export function BodyCart() {
             fullWidth
             variant='contained'
             sx={{ height: '2.8rem', fontSize: { xs: '.7rem !important' } }}
+            data-testid='deliveryHome'
           >
             Entrega a domicilio
           </Button>

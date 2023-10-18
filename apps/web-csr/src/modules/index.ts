@@ -8,6 +8,7 @@ import { Categories } from '../services/Cateogries';
 import { SessionClientStorage } from '../services/SessionStorage';
 import { Orders } from '../services/Orders';
 import { OrdersProducts } from '../services/OrdersProducts';
+import { PaymentMethods } from '../services/PaymentMethods';
 
 const headers = new Headers({
   'x-hasura-admin-secret': masterToken,
@@ -30,3 +31,5 @@ export const sessionStorageProvider = new SessionClientStorage();
 export const ordersProvider = new Orders(graphqlClient);
 
 export const ordersProductsProvider = new OrdersProducts(graphqlClient);
+
+export const paymentMethodsProvider = new PaymentMethods(graphqlClient);

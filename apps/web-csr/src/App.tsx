@@ -13,6 +13,7 @@ import {
   ordersProvider,
   productsProvider,
   sessionStorageProvider,
+  paymentMethodsProvider,
 } from './modules';
 import { ProviderNames } from './types/providers';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -25,7 +26,8 @@ const providers = {
   [ProviderNames.CATEGORIES]: categoriesProvider,
   [ProviderNames.SESSION_STORAGE]: sessionStorageProvider,
   [ProviderNames.ORDERS]: ordersProvider,
-  [ProviderNames.ORDERS_PRODUCTS]: ordersProductsProvider,
+  [ProviderNames.ORDER_PRODUCTS]: ordersProductsProvider,
+  [ProviderNames.PAYMENT_METHODS]: paymentMethodsProvider,
 };
 
 const queryClient = new QueryClient({
