@@ -17,8 +17,9 @@ interface PaymentMethodData {
   paymentMethod: string;
 }
 
-const useConfirmRequest = () => {
-  // 1. Traer toda la info necesaria del cliente (puede ser que de los otros modales aun no este implentado un lugar donde guardar la info, sugiero Session Storage)
+const useConfirmRequest = ()=>{
+  // 1. Traer toda la info necesaria del cliente (puede ser que de los otros 
+  // modales aun no este implentado un lugar donde guardar la info, sugiero Session Storage)
   // 2. Traer la info del pedido
   // 3. sacar del formulario actual los medios de pago
   // 3. Crear una nueva orden en el back (se tiene q usar uuidv4)
