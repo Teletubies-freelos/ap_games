@@ -27,7 +27,6 @@ export class Config {
     const { isRequired, prefix = '' } = this.mergeOptions(options)
     const envCompleteName = `${prefix}${envName}`
 
-    //@ts-expect-error dev just
     const value = import.meta.env[envCompleteName]
 
     if (isRequired && !value)
