@@ -1,25 +1,77 @@
-import { Box, TextField, Typography } from '@mui/material';
+import { Box, TextField, Typography, Button } from '@mui/material';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import { Button, DropDown } from '../../../../../packages/ui/src';
+import { DropDown } from '../../../../../packages/ui/src';
 import { ModalState, setModalState } from '../../observables';
 import SelectModals from '../common/SelectModals';
+import {
+  useCreateMany,
+  useCreateOne,
+  useGetList,
+  useGetOne,
+} from 'data_providers';
+import { ProviderNames } from '../../types/providers';
+import { UserInfo } from '../../services/SessionStorage';
+import { useForm } from 'react-hook-form';
+
+interface PaymentMethodData {
+  paymentMethod: string;
+}
+
+const useConfirmRequest = ()=>{
+  // 1. Traer toda la info necesaria del cliente (puede ser que de los otros 
+  // modales aun no este implentado un lugar donde guardar la info, sugiero Session Storage)
+  // 2. Traer la info del pedido
+  // 3. sacar del formulario actual los medios de pago
+  // 3. Crear una nueva orden en el back (se tiene q usar uuidv4)
+  // 4. Crear nuevas filas en la base de datos de order_products
+
+  const getClientData = useGetOne<UserInfo>(ProviderNames.SESSION_STORAGE);
+  const getCartProducts = useGetList(ProviderNames.CART);
+  const createOrder = useCreateOne(ProviderNames.ORDERS);
+  const createOrderProducts = useCreateMany(ProviderNames.ORDER_PRODUCTS);
+
+  return async (data: PaymentMethodData) => {
+    const clientData = await getClientData();
+    console.log(clientData);
+    const products = await getCartProducts();
+
+    const { orderId } =
+      (await createOrder({
+        ...clientData,
+        ...data,
+      })) ?? {};
+
+    await createOrderProducts(
+      products.map(({ productId }) => ({
+        productId,
+        orderId,
+      }))
+    );
+  };
+};
 
 export default function PaymentMethodBody() {
-  const handleFinish = () => {
+  const { handleSubmit, register } = useForm<PaymentMethodData>();
+  const confirmRequest = useConfirmRequest();
+
+  const handleFinish = async (data: PaymentMethodData) => {
+    await confirmRequest(data);
     setModalState({
       data: {
-        name: ModalState.DELIVERY_CENTRAL_CONFIRMATION
+        name: ModalState.DELIVERY_CENTRAL_CONFIRMATION,
       },
-      previousState: {
-        data: {
-          name: ModalState.DELIVERY_CENTRAL_PAYMENT_METHOD
-        }
-      },
-    })
+    });
   };
 
   return (
-    <Box display='flex' flexDirection='column' gap='.75rem' padding='1.4rem'>
+    <Box
+      component={'form'}
+      onClick={handleSubmit(handleFinish)}
+      display='flex'
+      flexDirection='column'
+      gap='.75rem'
+      padding='1.4rem'
+    >
       <SelectModals
         label='Tu pedido'
         groupOptions={[
@@ -32,7 +84,7 @@ export default function PaymentMethodBody() {
 
       <TextField
         id='outlined-multiline-flexible'
-        sx={{ backgroundColor: "background.default" }}
+        sx={{ backgroundColor: 'background.default' }}
         placeholder='Agregar comentario (opcional)'
         multiline
         minRows={4}
@@ -48,7 +100,7 @@ export default function PaymentMethodBody() {
         <Typography
           component='p'
           variant='body2'
-          sx={{ color: "text.secondary" }}
+          sx={{ color: 'text.secondary' }}
         >
           S/ 20.00
         </Typography>
@@ -63,7 +115,7 @@ export default function PaymentMethodBody() {
         <Typography
           component='p'
           variant='body2'
-          sx={{ color: "text.secondary" }}
+          sx={{ color: 'text.secondary' }}
         >
           S/ 480.00
         </Typography>
@@ -74,25 +126,21 @@ export default function PaymentMethodBody() {
         gap='.5rem'
         alignItems='center'
       >
-        <InfoOutlinedIcon
-          sx={{ color: "primary.main" }}
-        />
-        <Typography
-          textAlign='center'
-          sx={{ color: "primary.main" }}
-        >
+        <InfoOutlinedIcon sx={{ color: 'primary.main' }} />
+        <Typography textAlign='center' sx={{ color: 'primary.main' }}>
           El pago lo realizarás al momento de la entrega en el caso de efectivo
         </Typography>
       </Box>
       <Button
-        onClick={handleFinish}
+        type='submit'
         variant='contained'
-        label='Confirmar pedido'
         sx={{ width: '100%', margin: '0 auto' }}
-      />
+      >
+        Confirmar pedido
+      </Button>
       <Typography
         sx={{
-          color: "text.secondary",
+          color: 'text.secondary',
           textAlign: 'center',
         }}
       >

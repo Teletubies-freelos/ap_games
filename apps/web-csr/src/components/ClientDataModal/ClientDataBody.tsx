@@ -11,7 +11,7 @@ import CustomTextField from '../common/CustomTextField';
 import SelectModals from '../common/SelectModals';
 import { Button } from '../../../../../packages/ui/src';
 
-import { ModalState, setModalState } from '../../observables';
+import { ModalState, setNextState } from '../../observables';
 import { useCreateOne } from 'data_providers';
 import { ProviderNames } from '../../types/providers';
 
@@ -21,48 +21,43 @@ type UserInfo = {
   address: string;
   reference: string;
   email: string;
-}
+};
 
 export default function ClientDataBody() {
-  const {register, handleSubmit} = useForm<UserInfo>()
+  const { register, handleSubmit } = useForm<UserInfo>();
   const createToSession = useCreateOne(ProviderNames.SESSION_STORAGE);
 
   const _handleSubmit: SubmitHandler<UserInfo> = async (data) => {
-    await createToSession(data)
+    await createToSession(data);
 
-    setModalState({
-      data: {
-        name: ModalState.DELIVERY_CENTRAL_PAYMENT_METHOD
+    setNextState( {
+        name: ModalState.DELIVERY_CENTRAL_PAYMENT_METHOD,
       },
-      previousState: {
-        data: {
-          name: ModalState.DELIVERY_CENTRAL_CLIENT_DATA
-        }
-      },
-    })
-  }
+    );
+  };
 
   return (
     <Stack
-      onSubmit={handleSubmit(_handleSubmit)} 
-      component={'form'} 
-      gap='.75rem' 
+      onSubmit={handleSubmit(_handleSubmit)}
+      component={'form'}
+      gap='.75rem'
       padding='1.4rem'
     >
       <Box display='flex' gap='1rem'>
-        <CustomTextField 
+        <CustomTextField
           textfieldProps={register('fullName')}
-          width='50%' 
-          label='Nombres y Apellidos' 
+          width='50%'
+          label='Nombres y Apellidos'
         />
         <CustomTextField
           textfieldProps={register('phone')}
-          width='50%' 
-          label='Teléfono' />
+          width='50%'
+          label='Teléfono'
+        />
       </Box>
-      <CustomTextField 
+      <CustomTextField
         textfieldProps={register('email')}
-        width='100%' 
+        width='100%'
         label='Correo electrónico'
       />
       <FormControl>
@@ -89,14 +84,14 @@ export default function ClientDataBody() {
       </FormControl>
       <SelectModals groupOptions={[{ id: 1, name: 'hola' }]} label='Distrito' />
       <CustomTextField
-        textfieldProps={register('address')} 
-        width='100%' 
-        label='Dirección' 
+        textfieldProps={register('address')}
+        width='100%'
+        label='Dirección'
       />
-      <CustomTextField 
+      <CustomTextField
         textfieldProps={register('reference')}
         width='100%'
-        label='Referencia' 
+        label='Referencia'
       />
       <Button
         type={'submit'}

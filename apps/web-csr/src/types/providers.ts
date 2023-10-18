@@ -5,4 +5,5 @@ export enum ProviderNames {
   CATEGORIES = 'categories',
   ORDERS = 'orders',
   SESSION_STORAGE = 'sessionStorage',
+  ORDER_PRODUCTS = 'orderProducts'
 }

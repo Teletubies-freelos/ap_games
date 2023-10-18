@@ -5,7 +5,15 @@ import { DataProvider } from 'data_providers';
 import { routes } from './routes';
 
 import { LoadingPage } from '../../../packages/ui/src';
-import { cartProvider, categoriesProvider, featuredProvider, ordersProvider, productsProvider, sessionStorageProvider } from './modules';
+import {
+  cartProvider,
+  categoriesProvider,
+  featuredProvider,
+  ordersProductsProvider,
+  ordersProvider,
+  productsProvider,
+  sessionStorageProvider,
+} from './modules';
 import { ProviderNames } from './types/providers';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from './providers/theme';
@@ -17,6 +25,7 @@ const providers = {
   [ProviderNames.CATEGORIES]: categoriesProvider,
   [ProviderNames.SESSION_STORAGE]: sessionStorageProvider,
   [ProviderNames.ORDERS]: ordersProvider,
+  [ProviderNames.ORDERS_PRODUCTS]: ordersProductsProvider,
 };
 
 const queryClient = new QueryClient({
@@ -25,7 +34,7 @@ const queryClient = new QueryClient({
       refetchOnWindowFocus: false,
       refetchOnMount: true,
       cacheTime: 0.1,
-      staleTime: 0
+      staleTime: 0,
     },
   },
 });

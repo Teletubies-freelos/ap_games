@@ -5,8 +5,9 @@ import { Cart } from '../services/Cart';
 import { appGamesDbSingleton } from '../data/indexedDB';
 import { Featured } from '../services/Featured';
 import { Categories } from '../services/Cateogries';
-import { SessionStorage } from '../services/SessionStorage';
+import { SessionClientStorage } from '../services/SessionStorage';
 import { Orders } from '../services/Orders';
+import { OrdersProducts } from '../services/OrdersProducts';
 
 const headers = new Headers({
   'x-hasura-admin-secret': masterToken,
@@ -20,10 +21,12 @@ export const productsProvider = new Products(graphqlClient);
 
 export const cartProvider = new Cart(appGamesDbSingleton.products);
 
-export const featuredProvider = new Featured(graphqlClient)
+export const featuredProvider = new Featured(graphqlClient);
 
-export const categoriesProvider = new Categories(graphqlClient)
+export const categoriesProvider = new Categories(graphqlClient);
 
-export const sessionStorageProvider = new SessionStorage();
+export const sessionStorageProvider = new SessionClientStorage();
 
-export const ordersProvider = new Orders(graphqlClient)
+export const ordersProvider = new Orders(graphqlClient);
+
+export const ordersProductsProvider = new OrdersProducts(graphqlClient);
