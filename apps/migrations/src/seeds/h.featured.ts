@@ -4,7 +4,7 @@ import { faker } from '@faker-js/faker';
 
 export async function seed(knex: Knex) {
   try {
-    await knex(Tables.ORDER_PRODUCT).del();
+    await knex(Tables.FEATURED).del();
   } catch (error) {
     console.log(error);
   }

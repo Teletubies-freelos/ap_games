@@ -9,7 +9,7 @@ import { ProviderNames } from '../../../types/providers';
 import { CardProductProps } from '../../../../../../packages/ui/src/molecules/CardProduct';
 import { IProduct } from '../../../services/Products';
 
-const serializeGames = ({
+export const serializeGames = ({
   name = '',
   description = '',
   img_url: src = '',
