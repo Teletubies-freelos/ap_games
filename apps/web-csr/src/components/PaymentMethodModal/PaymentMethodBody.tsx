@@ -106,7 +106,7 @@ export default function PaymentMethodBody() {
                 key={product.id}
               >
                 <Typography>{product.name}</Typography>
-                <Typography>{product.price}</Typography>
+                <Typography>S/.{product.price}.00</Typography>
               </Box>
             ))}
           </Box>
