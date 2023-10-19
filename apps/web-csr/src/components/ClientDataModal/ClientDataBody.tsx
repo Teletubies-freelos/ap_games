@@ -14,6 +14,11 @@ import { Button } from '../../../../../packages/ui/src';
 import { ModalState, setNextState } from '../../observables';
 import { useCreateOne } from 'data_providers';
 import { ProviderNames } from '../../types/providers';
+import { useCallback, useState } from 'react';
+
+import districts from '../../assets/districts.json';
+import provincies from '../../assets/provincies.json';
+import departments from '../../assets/departments.json';
 
 type UserInfo = {
   fullName: string;
@@ -21,19 +26,32 @@ type UserInfo = {
   address: string;
   reference: string;
   email: string;
+  department?: string;
+  province?: string;
+  district: string;
 };
+
+const capitalDistricts  = districts
+  ?.filter(({province_id})=> province_id === "1501")
+
+
+type Destination = 'capital'| 'province'
 
 export default function ClientDataBody() {
   const { register, handleSubmit } = useForm<UserInfo>();
   const createToSession = useCreateOne(ProviderNames.SESSION_STORAGE);
 
-  const _handleSubmit: SubmitHandler<UserInfo> = async (data) => {
+  const [ destination, setDestination ] = useState<Destination>('capital')
+  const [ department , setDeparment] = useState<string>()
+  const [ province , setProvince] = useState<string>()
+
+  const _handleSubmit: SubmitHandler<UserInfo> = useCallback(async (data) => {
     await createToSession(data);
 
     setNextState({
       name: ModalState.DELIVERY_CENTRAL_PAYMENT_METHOD,
     });
-  };
+  }, []);
 
   return (
     <Stack
@@ -64,8 +82,9 @@ export default function ClientDataBody() {
       />
       <FormControl>
         <RadioGroup
-          aria-labelledby='demo-radio-buttons-group-label'
-          defaultValue='female'
+          aria-labelledby='destination-radio-buttons-group-label'
+          value={destination}
+          onChange={({target})=> setDestination(target.value as Destination)}
           name='radio-buttons-group'
           sx={{
             display: 'flex',
@@ -74,18 +93,44 @@ export default function ClientDataBody() {
           data-testid='selectProvince'
         >
           <FormControlLabel
-            value='female'
+            value='capital'
             control={<Radio />}
             label='Soy de Lima Metropolitana'
           />
           <FormControlLabel
-            value='male'
+            value='province'
             control={<Radio />}
             label='Soy de Provincia'
           />
         </RadioGroup>
       </FormControl>
-      <SelectModals groupOptions={[{ id: 1, name: 'hola' }]} label='Distrito' />
+      {
+        destination === 'province' &&
+          <>
+            <SelectModals
+              {...register('department')} 
+              groupOptions={departments ?? []} 
+              label='Departamento' 
+              onChange={({target})=> setDeparment(target.value as string)}
+            />
+            <SelectModals 
+              {...register('province')} 
+              groupOptions={provincies.filter(({department_id})=> department_id === department) ?? []} 
+              label='Pronvincia' 
+              onChange={({target})=> setProvince(target.value as string)}
+            />
+          </>
+      }
+      <SelectModals
+       {...register('district')}  
+        groupOptions={(
+          destination === 'capital'? 
+            capitalDistricts : 
+            districts.filter(({province_id})=> province_id === province)
+          ) ?? []
+        } 
+        label='Distrito' 
+      />
       <CustomTextField
         textfieldProps={register('address')}
         width='100%'

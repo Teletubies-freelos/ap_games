@@ -14,6 +14,7 @@ import { useForm } from 'react-hook-form';
 import CustomAcordion from '../common/CustomAcordion';
 import { ICartProduct } from '../../data/indexedDB';
 import { useQuery } from '@tanstack/react-query';
+import { reduceTotalPrice } from '../../utils';
 
 interface PaymentMethodData {
   paymentMethod: string;
@@ -52,7 +53,7 @@ const useConfirmRequest = () => {
 };
 
 export default function PaymentMethodBody() {
-  const { handleSubmit, register } = useForm<PaymentMethodData>();
+  const { handleSubmit } = useForm<PaymentMethodData>();
   const confirmRequest = useConfirmRequest();
 
   const handleFinish = async (data: PaymentMethodData) => {
@@ -66,7 +67,7 @@ export default function PaymentMethodBody() {
 
   const getCartProducts = useGetList<ICartProduct>(ProviderNames.CART);
   const getPaymentMethods = useGetList(ProviderNames.PAYMENT_METHODS);
-  const { data, isFetching } = useQuery(
+  const { data } = useQuery(
     ['cart'],
     async () => await getCartProducts()
   );
@@ -74,6 +75,8 @@ export default function PaymentMethodBody() {
     ['payment_methods'],
     async () => await getPaymentMethods()
   );
+
+  const totalPrice = reduceTotalPrice(data);
 
   const parsedPaymentMethods = paymentMethods?.map((method) => ({
     value: method.payment_method_id,
@@ -83,7 +86,7 @@ export default function PaymentMethodBody() {
   return (
     <Box
       component={'form'}
-      onClick={handleSubmit(handleFinish)}
+      onSubmit={handleSubmit(handleFinish)}
       display='flex'
       flexDirection='column'
       gap='.75rem'
@@ -152,7 +155,7 @@ export default function PaymentMethodBody() {
           variant='body2'
           sx={{ color: 'text.secondary' }}
         >
-          S/ 480.00
+          S/ {totalPrice?.toFixed(2)}
         </Typography>
       </Box>
       <Box
