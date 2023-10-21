@@ -6,6 +6,9 @@ export enum Tables {
   ORDER_PRODUCT = 'order_products',
   ORDER_STATUS = 'order_statuses',
   PAYMENT_METHOD = 'payment_methods',
+  DISTRICT = 'district',
+  DEPARTMENT = 'department',
+  PROVINCE = 'province',
 }
 
 export interface ProductDTO {

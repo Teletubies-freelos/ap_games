@@ -24,7 +24,7 @@ function createTableProduct(table: Knex.CreateTableBuilder) {
       .integer('category_id')
       .references('category_id')
       .inTable(Tables.CATEGORY)
-  )
+  );
   table.timestamps({ defaultToNow: true });
 }
 
@@ -34,12 +34,16 @@ function createTableOrder(table: Knex.CreateTableBuilder) {
   table.text('client_name');
   table.integer('phone');
   table.text('email');
+  table.integer('district_id');
+  table.integer('province_id');
+  table.integer('department_id');
 
-  deleteWithCascadeDev(table
-    .integer('order_status_id')
-    .references('order_status_id')
-    .inTable(Tables.ORDER_STATUS)
-  )
+  deleteWithCascadeDev(
+    table
+      .integer('order_status_id')
+      .references('order_status_id')
+      .inTable(Tables.ORDER_STATUS)
+  );
 
   deleteWithCascadeDev(
     table
@@ -75,14 +79,32 @@ function createTablePaymentMethod(table: Knex.CreateTableBuilder) {
 function createTableOrderProduct(table: Knex.CreateTableBuilder) {
   deleteWithCascadeDev(
     table.integer('product_id').references('product_id').inTable(Tables.PRODUCT)
-  )
-  
+  );
+
   deleteWithCascadeDev(
     table.uuid('order_id').references('order_id').inTable(Tables.ORDER)
-  )
-  
+  );
+
   table.integer('quantity');
   table.primary(['product_id', 'order_id']);
+}
+
+function createTableDistrict(table: Knex.CreateTableBuilder) {
+  table.increments('district_id').primary();
+  table.text('name').notNullable();
+  table.integer('province_id').notNullable();
+  table.integer('department_id').notNullable();
+}
+
+function createTableProvince(table: Knex.CreateTableBuilder) {
+  table.increments('province_id').primary();
+  table.text('name').notNullable();
+  table.integer('department_id').notNullable();
+}
+
+function createTableDepartment(table: Knex.CreateTableBuilder) {
+  table.increments('department_id').primary();
+  table.text('name').notNullable();
 }
 
 export async function up(knex: Knex) {
@@ -93,7 +115,10 @@ export async function up(knex: Knex) {
     .createTable(Tables.ORDER_STATUS, createTableOrderStatus)
     .createTable(Tables.PAYMENT_METHOD, createTablePaymentMethod)
     .createTable(Tables.ORDER, createTableOrder)
-    .createTable(Tables.ORDER_PRODUCT, createTableOrderProduct);
+    .createTable(Tables.ORDER_PRODUCT, createTableOrderProduct)
+    .createTable(Tables.DEPARTMENT, createTableDepartment)
+    .createTable(Tables.PROVINCE, createTableProvince)
+    .createTable(Tables.DISTRICT, createTableDistrict);
 }
 
 export async function down(knex: Knex) {
@@ -104,5 +129,8 @@ export async function down(knex: Knex) {
     .dropTableIfExists(Tables.PAYMENT_METHOD)
     .dropTableIfExists(Tables.FEATURED)
     .dropTableIfExists(Tables.PRODUCT)
-    .dropTableIfExists(Tables.CATEGORY);
+    .dropTableIfExists(Tables.CATEGORY)
+    .dropTableIfExists(Tables.DEPARTMENT)
+    .dropTableIfExists(Tables.PROVINCE)
+    .dropTableIfExists(Tables.DISTRICT);
 }
