@@ -19,14 +19,14 @@ interface PaymentMethodData {
   paymentMethod: string;
 }
 
-const useConfirmRequest = () => {
-  // 1. Traer toda la info necesaria del cliente (puede ser que de los otros
-  // modales aun no este implentado un lugar donde guardar la info, sugiero Session Storage)
-  // 2. Traer la info del pedido
-  // 3. sacar del formulario actual los medios de pago
-  // 3. Crear una nueva orden en el back (se tiene q usar uuidv4)
-  // 4. Crear nuevas filas en la base de datos de order_products
+interface PaymentMethodBodyProps {
+  reduceQuantity: (products: ICartProduct[] | undefined) => number | undefined;
+  reduceTotalPrice: (
+    products: ICartProduct[] | undefined
+  ) => number | undefined;
+}
 
+const useConfirmRequest = () => {
   const getClientData = useGetOne<UserInfo>(ProviderNames.SESSION_STORAGE);
   const getCartProducts = useGetList(ProviderNames.CART);
   const createOrder = useCreateOne(ProviderNames.ORDERS);
@@ -51,7 +51,10 @@ const useConfirmRequest = () => {
   };
 };
 
-export default function PaymentMethodBody() {
+export default function PaymentMethodBody({
+  reduceQuantity,
+  reduceTotalPrice,
+}: PaymentMethodBodyProps) {
   const { handleSubmit } = useForm<PaymentMethodData>();
   const confirmRequest = useConfirmRequest();
 
@@ -66,24 +69,25 @@ export default function PaymentMethodBody() {
 
   const getCartProducts = useGetList<ICartProduct>(ProviderNames.CART);
   const getPaymentMethods = useGetList(ProviderNames.PAYMENT_METHODS);
-  const { data } = useQuery(
-    ['cart'],
-    async () => await getCartProducts()
-  );
+  const { data } = useQuery(['cart'], async () => await getCartProducts());
   const { data: paymentMethods } = useQuery(
     ['payment_methods'],
     async () => await getPaymentMethods()
   );
+
+  const totalPrice = reduceTotalPrice(data);
 
   const parsedPaymentMethods = paymentMethods?.map((method) => ({
     value: method.payment_method_id,
     label: method.name,
   }));
 
+  const totalQunatity = reduceQuantity(data);
+
   return (
     <Box
       component={'form'}
-      onClick={handleSubmit(handleFinish)}
+      onSubmit={handleSubmit(handleFinish)}
       display='flex'
       flexDirection='column'
       gap='.75rem'
@@ -93,7 +97,7 @@ export default function PaymentMethodBody() {
         header={
           <Stack>
             <Typography>Tu Pedido</Typography>
-            <Typography>3 productos</Typography>
+            <Typography>{totalQunatity} productos</Typography>
           </Stack>
         }
         content={
@@ -105,8 +109,10 @@ export default function PaymentMethodBody() {
                 padding='.5rem 0'
                 key={product.id}
               >
-                <Typography>{product.name}</Typography>
-                <Typography>{product.price}</Typography>
+                <Typography>
+                  {product.name} x {product.quantity}
+                </Typography>
+                <Typography>S/.{product.price}.00</Typography>
               </Box>
             ))}
           </Box>
@@ -152,7 +158,7 @@ export default function PaymentMethodBody() {
           variant='body2'
           sx={{ color: 'text.secondary' }}
         >
-          S/ 480.00
+          S/ {totalPrice?.toFixed(2)}
         </Typography>
       </Box>
       <Box
