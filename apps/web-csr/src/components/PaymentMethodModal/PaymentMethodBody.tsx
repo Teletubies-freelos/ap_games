@@ -15,6 +15,7 @@ import CustomAcordion from '../common/CustomAcordion';
 import { ICartProduct } from '../../data/indexedDB';
 import { useQuery } from '@tanstack/react-query';
 import { reduceTotalPrice } from '../../utils';
+import { useMemo } from 'react';
 
 interface PaymentMethodData {
   paymentMethod: string;
@@ -60,10 +61,7 @@ export default function PaymentMethodBody() {
 
   const getCartProducts = useGetList<ICartProduct>(ProviderNames.CART);
   const getPaymentMethods = useGetList(ProviderNames.PAYMENT_METHODS);
-  const { data } = useQuery(
-    ['cart'],
-    async () => await getCartProducts()
-  );
+  const { data } = useQuery(['cart'], async () => await getCartProducts());
   const { data: paymentMethods } = useQuery(
     ['payment_methods'],
     async () => await getPaymentMethods()
@@ -75,6 +73,10 @@ export default function PaymentMethodBody() {
     value: method.payment_method_id,
     label: method.name,
   }));
+
+  const calcTotalQuantity = useMemo(() => {
+    return data?.reduce((acc, { quantity }) => acc + quantity, 0);
+  }, [data]);
 
   return (
     <Box
@@ -89,7 +91,7 @@ export default function PaymentMethodBody() {
         header={
           <Stack>
             <Typography>Tu Pedido</Typography>
-            <Typography>3 productos</Typography>
+            <Typography>{calcTotalQuantity} productos</Typography>
           </Stack>
         }
         content={
@@ -101,7 +103,9 @@ export default function PaymentMethodBody() {
                 padding='.5rem 0'
                 key={product.id}
               >
-                <Typography>{product.name}</Typography>
+                <Typography>
+                  {product.name} x {product.quantity}
+                </Typography>
                 <Typography>S/.{product.price}.00</Typography>
               </Box>
             ))}
