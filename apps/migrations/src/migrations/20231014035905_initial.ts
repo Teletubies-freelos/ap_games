@@ -124,12 +124,12 @@ function createTableDepartment(table: Knex.CreateTableBuilder) {
 
 export async function up(knex: Knex) {
   return await knex.schema
+    .createTable(Tables.DEPARTMENT, createTableDepartment)
     .createTable(Tables.CATEGORY, createTableCategory)
     .createTable(Tables.PRODUCT, createTableProduct)
     .createTable(Tables.FEATURED, createTableFeatured)
     .createTable(Tables.ORDER_STATUS, createTableOrderStatus)
     .createTable(Tables.PAYMENT_METHOD, createTablePaymentMethod)
-    .createTable(Tables.DEPARTMENT, createTableDepartment)
     .createTable(Tables.PROVINCE, createTableProvince)
     .createTable(Tables.DISTRICT, createTableDistrict)
     .createTable(Tables.ORDER, createTableOrder)

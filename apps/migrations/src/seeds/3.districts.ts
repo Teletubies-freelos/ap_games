@@ -7,11 +7,18 @@ export async function seed(knex: Knex): Promise<void> {
     .del()
     .catch(() => {});
 
-  await knex(Tables.DISTRICT).insert(
-    districts.map(({ id, name, province_id }) => ({
-      district_id: id,
-      name,
-      province_id,
-    }))
-  );
+  const parsedDistricts =  districts
+    .map(({ id, name, province_id }) => ({
+    district_id: id,
+    name,
+    province_id,
+  }))
+
+  const totalChunks = districts.length/100;
+
+  for (let index = 0; index < totalChunks; index++) {
+    const chunk = parsedDistricts.splice(0, 100);
+
+    await knex(Tables.DISTRICT).insert(chunk);
+  }
 }
