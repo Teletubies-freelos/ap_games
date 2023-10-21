@@ -1,19 +1,20 @@
-import { Select } from "@mui/material";
+import { Select, SelectProps } from "@mui/material";
 import { FormControl, InputLabel, MenuItem } from "@mui/material";
 
-interface SelectModalsProps {
-  groupOptions: objectOption[];
+interface SelectModalsProps extends SelectProps {
+  groupOptions: ObjectOption[];
   label?: string;
 }
 
-interface objectOption {
-  id: number;
+interface ObjectOption {
+  id: number | string;
   name: string;
 }
 
 export default function SelectModals({
   groupOptions,
   label,
+  ...rest
 }: SelectModalsProps) {
   return (
     <FormControl
@@ -49,6 +50,7 @@ export default function SelectModals({
         sx={{
           lineHeight: 2.5,
         }}
+        {...rest}
       >
         {groupOptions.map(({ id, name }) => (
           <MenuItem key={id} value={id}>

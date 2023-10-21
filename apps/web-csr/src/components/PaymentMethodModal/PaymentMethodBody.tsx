@@ -14,19 +14,13 @@ import { useForm } from 'react-hook-form';
 import CustomAcordion from '../common/CustomAcordion';
 import { ICartProduct } from '../../data/indexedDB';
 import { useQuery } from '@tanstack/react-query';
+import { reduceTotalPrice } from '../../utils';
 
 interface PaymentMethodData {
   paymentMethod: string;
 }
 
 const useConfirmRequest = () => {
-  // 1. Traer toda la info necesaria del cliente (puede ser que de los otros
-  // modales aun no este implentado un lugar donde guardar la info, sugiero Session Storage)
-  // 2. Traer la info del pedido
-  // 3. sacar del formulario actual los medios de pago
-  // 3. Crear una nueva orden en el back (se tiene q usar uuidv4)
-  // 4. Crear nuevas filas en la base de datos de order_products
-
   const getClientData = useGetOne<UserInfo>(ProviderNames.SESSION_STORAGE);
   const getCartProducts = useGetList(ProviderNames.CART);
   const createOrder = useCreateOne(ProviderNames.ORDERS);
@@ -52,7 +46,7 @@ const useConfirmRequest = () => {
 };
 
 export default function PaymentMethodBody() {
-  const { handleSubmit, register } = useForm<PaymentMethodData>();
+  const { handleSubmit } = useForm<PaymentMethodData>();
   const confirmRequest = useConfirmRequest();
 
   const handleFinish = async (data: PaymentMethodData) => {
@@ -66,7 +60,7 @@ export default function PaymentMethodBody() {
 
   const getCartProducts = useGetList<ICartProduct>(ProviderNames.CART);
   const getPaymentMethods = useGetList(ProviderNames.PAYMENT_METHODS);
-  const { data, isFetching } = useQuery(
+  const { data } = useQuery(
     ['cart'],
     async () => await getCartProducts()
   );
@@ -74,6 +68,8 @@ export default function PaymentMethodBody() {
     ['payment_methods'],
     async () => await getPaymentMethods()
   );
+
+  const totalPrice = reduceTotalPrice(data);
 
   const parsedPaymentMethods = paymentMethods?.map((method) => ({
     value: method.payment_method_id,
@@ -83,7 +79,7 @@ export default function PaymentMethodBody() {
   return (
     <Box
       component={'form'}
-      onClick={handleSubmit(handleFinish)}
+      onSubmit={handleSubmit(handleFinish)}
       display='flex'
       flexDirection='column'
       gap='.75rem'
@@ -152,7 +148,7 @@ export default function PaymentMethodBody() {
           variant='body2'
           sx={{ color: 'text.secondary' }}
         >
-          S/ 480.00
+          S/ {totalPrice?.toFixed(2)}
         </Typography>
       </Box>
       <Box

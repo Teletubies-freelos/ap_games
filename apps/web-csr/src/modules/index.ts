@@ -9,6 +9,7 @@ import { SessionClientStorage } from '../services/SessionStorage';
 import { Orders } from '../services/Orders';
 import { OrdersProducts } from '../services/OrdersProducts';
 import { PaymentMethods } from '../services/PaymentMethods';
+import { GeolocationProvider } from '../services/Geolocation';
 
 const headers = new Headers({
   'x-hasura-admin-secret': masterToken,
@@ -33,3 +34,5 @@ export const ordersProvider = new Orders(graphqlClient);
 export const ordersProductsProvider = new OrdersProducts(graphqlClient);
 
 export const paymentMethodsProvider = new PaymentMethods(graphqlClient);
+
+export const geolocationProvider = new GeolocationProvider("1501");

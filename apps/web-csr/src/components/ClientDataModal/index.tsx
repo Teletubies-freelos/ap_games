@@ -5,11 +5,12 @@ import { setModalState, setPrevState } from '../../observables';
 import HeadModal from '../common/HeadModal';
 import ClientDataBody from './ClientDataBody';
 
-export default function ClientDataModal() {
-  const handleBack = () => {
-    setPrevState();
-  };
+const handleBack = () => {
+  setPrevState();
+};
 
+
+export default function ClientDataModal() {
   return (
     <ModalLayout
       headerModal={

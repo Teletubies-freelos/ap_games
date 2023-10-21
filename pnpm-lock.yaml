@@ -90,10 +90,17 @@ importers:
         version: 0.34.6(jsdom@22.1.0)
 
   apps/testing:
+    dependencies:
+      dotenv:
+        specifier: ^16.3.1
+        version: 16.3.1
     devDependencies:
       cypress:
         specifier: ^13.3.1
         version: 13.3.2
+      typescript:
+        specifier: ^5.2.2
+        version: 5.2.2
 
   apps/web-csr:
     dependencies:
@@ -119,8 +126,8 @@ importers:
         specifier: 4.30.0
         version: 4.30.0(react-dom@18.2.0)(react@18.2.0)
       data_providers:
-        specifier: ^1.0.3
-        version: 1.0.3(react-dom@18.2.0)(react@18.2.0)
+        specifier: ^2.0.2
+        version: 2.0.2(react-dom@18.2.0)(react@18.2.0)
       dexie:
         specifier: ^3.2.4
         version: 3.2.4
@@ -2834,8 +2841,8 @@ packages:
       whatwg-url: 12.0.1
     dev: true
 
-  /data_providers@1.0.3(react-dom@18.2.0)(react@18.2.0):
-    resolution: {integrity: sha512-ZToQG0FIz15mpEXs46wRHbMQIGKAS4vSEOajFbnY22luBnTWY79ulME+phe3nHtSHob8rGxF8QTEhukPWJFERw==}
+  /data_providers@2.0.2(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-LM5S3lfJAeB1lh8ps80cdyTLJmAAw61EdUPpx3REkGJqVBxhRy4zIFR0UHn/+zo79HQG0X4NP3V+bwjk3VoVfw==}
     peerDependencies:
       react: '>=16.9.0'
       react-dom: '>=16.9.0'
