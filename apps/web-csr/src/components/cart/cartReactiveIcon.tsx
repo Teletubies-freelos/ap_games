@@ -4,10 +4,12 @@ import { ModalState, setModalState } from '../../observables';
 import { CartIcon } from '../../../../../packages/ui/src';
 import { useGetList } from 'data_providers';
 import { ProviderNames } from '../../types/providers';
+import { reduceQuantity } from '../../utils';
 
 export const CartIconReactive = () => {
   const getCartList = useGetList(ProviderNames.CART);
-  const productsCount = useLiveQuery(async () => (await getCartList()).length);
+  const products = useLiveQuery(async () => await getCartList());
+  const totalQuantity = reduceQuantity(products);
 
   const handleOnClick = useCallback(() => {
     setModalState({ data: { name: ModalState.CART } });
@@ -16,7 +18,7 @@ export const CartIconReactive = () => {
   return (
     <CartIcon
       onClick={handleOnClick}
-      qty={productsCount}
+      qty={totalQuantity}
       size='medium'
       data-testid='cartButton'
     />

@@ -14,7 +14,7 @@ import { useForm } from 'react-hook-form';
 import CustomAcordion from '../common/CustomAcordion';
 import { ICartProduct } from '../../data/indexedDB';
 import { useQuery } from '@tanstack/react-query';
-import { reduceTotalPrice } from '../../utils';
+import { reduceQuantity, reduceTotalPrice } from '../../utils';
 import { useMemo } from 'react';
 
 interface PaymentMethodData {
@@ -74,9 +74,7 @@ export default function PaymentMethodBody() {
     label: method.name,
   }));
 
-  const totalQunatity = useMemo(() => {
-    return data?.reduce((acc, { quantity }) => acc + quantity, 0);
-  }, [data]);
+  const totalQunatity = reduceQuantity(data);
 
   return (
     <Box
