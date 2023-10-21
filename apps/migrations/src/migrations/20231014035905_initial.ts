@@ -34,9 +34,6 @@ function createTableOrder(table: Knex.CreateTableBuilder) {
   table.text('client_name');
   table.integer('phone');
   table.text('email');
-  table.integer('district_id');
-  table.integer('province_id');
-  table.integer('department_id');
 
   onDeleteWithCascadeWhenDev(
     table
@@ -57,7 +54,7 @@ function createTableOrder(table: Knex.CreateTableBuilder) {
       .integer('district_id')
       .references('district_id')
       .inTable(Tables.DISTRICT)
-  )
+  );
 
   table.timestamps({ defaultToNow: true });
 }
@@ -100,12 +97,12 @@ function createTableDistrict(table: Knex.CreateTableBuilder) {
   table.increments('district_id').primary();
   table.text('name').notNullable();
   onDeleteWithCascadeWhenDev(
-    table.
-      integer('province_id')
+    table
+      .integer('province_id')
       .references('province_id')
       .inTable(Tables.PROVINCE)
       .notNullable()
-  )
+  );
 }
 
 function createTableProvince(table: Knex.CreateTableBuilder) {
