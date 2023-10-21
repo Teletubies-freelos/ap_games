@@ -14,11 +14,16 @@ import { useForm } from 'react-hook-form';
 import CustomAcordion from '../common/CustomAcordion';
 import { ICartProduct } from '../../data/indexedDB';
 import { useQuery } from '@tanstack/react-query';
-import { reduceQuantity, reduceTotalPrice } from '../../utils';
-import { useMemo } from 'react';
 
 interface PaymentMethodData {
   paymentMethod: string;
+}
+
+interface PaymentMethodBodyProps {
+  reduceQuantity: (products: ICartProduct[] | undefined) => number | undefined;
+  reduceTotalPrice: (
+    products: ICartProduct[] | undefined
+  ) => number | undefined;
 }
 
 const useConfirmRequest = () => {
@@ -46,7 +51,10 @@ const useConfirmRequest = () => {
   };
 };
 
-export default function PaymentMethodBody() {
+export default function PaymentMethodBody({
+  reduceQuantity,
+  reduceTotalPrice,
+}: PaymentMethodBodyProps) {
   const { handleSubmit } = useForm<PaymentMethodData>();
   const confirmRequest = useConfirmRequest();
 

@@ -1,6 +1,6 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 import { Menu as MenuIcon } from '@mui/icons-material';
-import { Box, Button, IconButton, Stack, Typography } from "@mui/material";
+import { Box, Button, IconButton, Stack, Typography } from '@mui/material';
 
 import {
   ColorSwitch,
@@ -10,13 +10,14 @@ import {
   InstagramLogo,
   Isotype,
   SearchBar,
-} from "../../../../../packages/ui/src";
-import { GeneralLayout } from "../../layout/GeneralLayout";
+} from '../../../../../packages/ui/src';
+import { GeneralLayout } from '../../layout/GeneralLayout';
 
-import { useToggleColor } from "../../providers/theme";
-import NavLinks from "../../components/NavLinks";
-import { setAnchorElMenu, useAnchorElMenu } from "../../observables";
-import { CartIconReactive } from "../../components/cart/cartReactiveIcon";
+import { useToggleColor } from '../../providers/theme';
+import NavLinks from '../../components/NavLinks';
+import { setAnchorElMenu, useAnchorElMenu } from '../../observables';
+import { CartIconReactive } from '../../components/cart/cartReactiveIcon';
+import { reduceQuantity } from '../../utils';
 
 export default function Terminos() {
   const toggleColor = useToggleColor();
@@ -24,7 +25,7 @@ export default function Terminos() {
 
   const _handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElMenu(anchorEl ? null : event.currentTarget);
-  }
+  };
 
   return (
     <GeneralLayout
@@ -33,21 +34,21 @@ export default function Terminos() {
           actionsComponent={
             <ColorSwitch onChange={toggleColor} overrideCheckBg />
           }
-          cartComponent={<CartIconReactive />}
+          cartComponent={<CartIconReactive reduceQuantity={reduceQuantity} />}
           navigatorLinks={<NavLinks />}
           mainLogo={
-            <Link to="/">
-              <MainLogo sx={{ width: { xs: "60%" } }} />
+            <Link to='/'>
+              <MainLogo sx={{ width: { xs: '60%' } }} />
             </Link>
           }
           searchBar={
             <SearchBar
               onSubmit={() => 4}
-              buttonSearch={<Button variant='contained' >Buscar</Button>}
+              buttonSearch={<Button variant='contained'>Buscar</Button>}
             />
           }
           menu={
-            <IconButton onClick={_handleOpenMenu} size="small">
+            <IconButton onClick={_handleOpenMenu} size='small'>
               <MenuIcon />
             </IconButton>
           }
@@ -56,23 +57,23 @@ export default function Terminos() {
     >
       <Box
         sx={{
-          width: "100%",
-          display: "flex",
-          justifyContent: "center",
-          padding: "4rem 2rem",
-          backgroundColor: (theme) => theme.palette.background.paper
+          width: '100%',
+          display: 'flex',
+          justifyContent: 'center',
+          padding: '4rem 2rem',
+          backgroundColor: (theme) => theme.palette.background.paper,
         }}
       >
-        <Stack sx={{ maxWidth: "60rem" }}>
-          <Typography variant="h3" fontSize="1.75rem" fontWeight="400">
+        <Stack sx={{ maxWidth: '60rem' }}>
+          <Typography variant='h3' fontSize='1.75rem' fontWeight='400'>
             Términos y condiciones
           </Typography>
           {Array.from({ length: 3 }).map((_, i) => (
             <Typography
               key={`${i.toString()}`}
-              fontSize=".9rem"
-              fontWeight="400"
-              marginTop="2.25rem"
+              fontSize='.9rem'
+              fontWeight='400'
+              marginTop='2.25rem'
             >
               Sed ut perspiciatis unde omnis iste natus error sit voluptatem
               accusantium doloremque laudantium, totam rem aperiam, eaque ipsa
@@ -93,16 +94,29 @@ export default function Terminos() {
         </Stack>
       </Box>
 
-      <Stack sx={{ padding: "50px 0" }}>
-        <Box sx={{ height: "78px", display: "flex", justifyContent: "center", alignItems: "center", gap: "37px" }}>
-          <Isotype sx={{ height: "100%", width: "fit-content" }} />
-          <Box sx={{ display: "flex", alignItems: "center" }}>
-            <Typography variant="body1" sx={{ fontSize: "1rem", marginRight: "1.5rem" }}>Síguenos</Typography>
-            
-            <Link to="https://www.facebook.com" target="_blank">
+      <Stack sx={{ padding: '50px 0' }}>
+        <Box
+          sx={{
+            height: '78px',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            gap: '37px',
+          }}
+        >
+          <Isotype sx={{ height: '100%', width: 'fit-content' }} />
+          <Box sx={{ display: 'flex', alignItems: 'center' }}>
+            <Typography
+              variant='body1'
+              sx={{ fontSize: '1rem', marginRight: '1.5rem' }}
+            >
+              Síguenos
+            </Typography>
+
+            <Link to='https://www.facebook.com' target='_blank'>
               <FacebookLogo />
             </Link>
-            <Link to="https://www.instagram.com" target="_blank">
+            <Link to='https://www.instagram.com' target='_blank'>
               <InstagramLogo />
             </Link>
           </Box>

@@ -4,9 +4,13 @@ import { ModalState, setModalState } from '../../observables';
 import { CartIcon } from '../../../../../packages/ui/src';
 import { useGetList } from 'data_providers';
 import { ProviderNames } from '../../types/providers';
-import { reduceQuantity } from '../../utils';
+import { ICartProduct } from '../../data/indexedDB';
 
-export const CartIconReactive = () => {
+interface CartIconReactiveProps {
+  reduceQuantity: (products: ICartProduct[] | undefined) => number | undefined;
+}
+
+export const CartIconReactive = ({ reduceQuantity }: CartIconReactiveProps) => {
   const getCartList = useGetList(ProviderNames.CART);
   const products = useLiveQuery(async () => await getCartList());
   const totalQuantity = reduceQuantity(products);
