@@ -1,6 +1,6 @@
 import { Knex } from 'knex';
 import { Tables } from '../types/tables';
-import { deleteWithCascadeDev } from '../utils';
+import { onDeleteWithCascadeWhenDev } from '../utils';
 
 function createTableCategory(table: Knex.CreateTableBuilder) {
   table.increments('category_id').primary();
@@ -19,7 +19,7 @@ function createTableProduct(table: Knex.CreateTableBuilder) {
   table.text('secondary_img_url').nullable();
   table.text('banner_img_url').nullable();
   table.integer('quantity').notNullable();
-  deleteWithCascadeDev(
+  onDeleteWithCascadeWhenDev(
     table
       .integer('category_id')
       .references('category_id')
@@ -38,19 +38,26 @@ function createTableOrder(table: Knex.CreateTableBuilder) {
   table.integer('province_id');
   table.integer('department_id');
 
-  deleteWithCascadeDev(
+  onDeleteWithCascadeWhenDev(
     table
       .integer('order_status_id')
       .references('order_status_id')
       .inTable(Tables.ORDER_STATUS)
   );
 
-  deleteWithCascadeDev(
+  onDeleteWithCascadeWhenDev(
     table
       .integer('payment_method_id')
       .references('payment_method_id')
       .inTable(Tables.PAYMENT_METHOD)
   );
+
+  onDeleteWithCascadeWhenDev(
+    table
+      .integer('district_id')
+      .references('district_id')
+      .inTable(Tables.DISTRICT)
+  )
 
   table.timestamps({ defaultToNow: true });
 }
@@ -77,11 +84,11 @@ function createTablePaymentMethod(table: Knex.CreateTableBuilder) {
 }
 
 function createTableOrderProduct(table: Knex.CreateTableBuilder) {
-  deleteWithCascadeDev(
+  onDeleteWithCascadeWhenDev(
     table.integer('product_id').references('product_id').inTable(Tables.PRODUCT)
   );
 
-  deleteWithCascadeDev(
+  onDeleteWithCascadeWhenDev(
     table.uuid('order_id').references('order_id').inTable(Tables.ORDER)
   );
 
@@ -92,14 +99,26 @@ function createTableOrderProduct(table: Knex.CreateTableBuilder) {
 function createTableDistrict(table: Knex.CreateTableBuilder) {
   table.increments('district_id').primary();
   table.text('name').notNullable();
-  table.integer('province_id').notNullable();
-  table.integer('department_id').notNullable();
+  onDeleteWithCascadeWhenDev(
+    table.
+      integer('province_id')
+      .references('province_id')
+      .inTable(Tables.PROVINCE)
+      .notNullable()
+
+  )
 }
 
 function createTableProvince(table: Knex.CreateTableBuilder) {
   table.increments('province_id').primary();
   table.text('name').notNullable();
-  table.integer('department_id').notNullable();
+  onDeleteWithCascadeWhenDev(
+    table
+      .integer('department_id')
+      .references('department_id')
+      .inTable(Tables.DEPARTMENT)
+      .notNullable()
+  );
 }
 
 function createTableDepartment(table: Knex.CreateTableBuilder) {
@@ -114,23 +133,23 @@ export async function up(knex: Knex) {
     .createTable(Tables.FEATURED, createTableFeatured)
     .createTable(Tables.ORDER_STATUS, createTableOrderStatus)
     .createTable(Tables.PAYMENT_METHOD, createTablePaymentMethod)
-    .createTable(Tables.ORDER, createTableOrder)
-    .createTable(Tables.ORDER_PRODUCT, createTableOrderProduct)
     .createTable(Tables.DEPARTMENT, createTableDepartment)
     .createTable(Tables.PROVINCE, createTableProvince)
-    .createTable(Tables.DISTRICT, createTableDistrict);
+    .createTable(Tables.DISTRICT, createTableDistrict)
+    .createTable(Tables.ORDER, createTableOrder)
+    .createTable(Tables.ORDER_PRODUCT, createTableOrderProduct);
 }
 
 export async function down(knex: Knex) {
   return await knex.schema
     .dropTableIfExists(Tables.ORDER_PRODUCT)
     .dropTableIfExists(Tables.ORDER)
-    .dropTableIfExists(Tables.ORDER_STATUS)
+    .dropTableIfExists(Tables.DISTRICT)
+    .dropTableIfExists(Tables.PROVINCE)
+    .dropTableIfExists(Tables.DEPARTMENT)
     .dropTableIfExists(Tables.PAYMENT_METHOD)
+    .dropTableIfExists(Tables.ORDER_STATUS)
     .dropTableIfExists(Tables.FEATURED)
     .dropTableIfExists(Tables.PRODUCT)
-    .dropTableIfExists(Tables.CATEGORY)
-    .dropTableIfExists(Tables.DEPARTMENT)
-    .dropTableIfExists(Tables.PROVINCE)
-    .dropTableIfExists(Tables.DISTRICT);
+    .dropTableIfExists(Tables.CATEGORY);
 }

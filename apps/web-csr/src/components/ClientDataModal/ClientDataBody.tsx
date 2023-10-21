@@ -16,9 +16,9 @@ import { useCreateOne } from 'data_providers';
 import { ProviderNames } from '../../types/providers';
 import { useCallback, useState } from 'react';
 
-import districts from '../../assets/districts.json';
-import provincies from '../../assets/provincies.json';
-import departments from '../../assets/departments.json';
+import districts from '../../../../../packages/geolocation/districts.json';
+import provincies from '../../../../../packages/geolocation/provincies.json';
+import departments from '../../../../../packages/geolocation/departments.json';
 
 type UserInfo = {
   fullName: string;
