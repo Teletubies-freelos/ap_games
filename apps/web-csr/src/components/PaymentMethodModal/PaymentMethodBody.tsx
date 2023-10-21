@@ -74,7 +74,7 @@ export default function PaymentMethodBody() {
     label: method.name,
   }));
 
-  const calcTotalQuantity = useMemo(() => {
+  const totalQunatity = useMemo(() => {
     return data?.reduce((acc, { quantity }) => acc + quantity, 0);
   }, [data]);
 
@@ -91,7 +91,7 @@ export default function PaymentMethodBody() {
         header={
           <Stack>
             <Typography>Tu Pedido</Typography>
-            <Typography>{calcTotalQuantity} productos</Typography>
+            <Typography>{totalQunatity} productos</Typography>
           </Stack>
         }
         content={
