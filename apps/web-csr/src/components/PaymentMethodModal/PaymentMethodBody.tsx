@@ -21,13 +21,6 @@ interface PaymentMethodData {
 }
 
 const useConfirmRequest = () => {
-  // 1. Traer toda la info necesaria del cliente (puede ser que de los otros
-  // modales aun no este implentado un lugar donde guardar la info, sugiero Session Storage)
-  // 2. Traer la info del pedido
-  // 3. sacar del formulario actual los medios de pago
-  // 3. Crear una nueva orden en el back (se tiene q usar uuidv4)
-  // 4. Crear nuevas filas en la base de datos de order_products
-
   const getClientData = useGetOne<UserInfo>(ProviderNames.SESSION_STORAGE);
   const getCartProducts = useGetList(ProviderNames.CART);
   const createOrder = useCreateOne(ProviderNames.ORDERS);

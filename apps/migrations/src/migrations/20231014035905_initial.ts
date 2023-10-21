@@ -105,7 +105,6 @@ function createTableDistrict(table: Knex.CreateTableBuilder) {
       .references('province_id')
       .inTable(Tables.PROVINCE)
       .notNullable()
-
   )
 }
 

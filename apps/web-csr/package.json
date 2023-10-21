@@ -17,7 +17,7 @@
     "@react-rxjs/core": "^0.10.7",
     "@react-rxjs/utils": "^0.9.7",
     "@tanstack/react-query": "4.30.0",
-    "data_providers": "^1.0.4",
+    "data_providers": "^2.0.1",
     "dexie": "^3.2.4",
     "dexie-react-hooks": "^1.1.6",
     "graphql": "^16.8.1",

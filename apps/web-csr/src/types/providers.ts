@@ -8,3 +8,8 @@ export enum ProviderNames {
   ORDER_PRODUCTS = 'orderProducts',
   PAYMENT_METHODS = 'paymentMethods',
 }
+
+
+export enum SyncProviderNames {
+  GEOLOCATION = 'geolocation'
+}

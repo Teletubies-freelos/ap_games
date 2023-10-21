@@ -14,8 +14,9 @@ import {
   productsProvider,
   sessionStorageProvider,
   paymentMethodsProvider,
+  geolocationProvider,
 } from './modules';
-import { ProviderNames } from './types/providers';
+import { ProviderNames, SyncProviderNames } from './types/providers';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from './providers/theme';
 
@@ -29,6 +30,10 @@ const providers = {
   [ProviderNames.ORDER_PRODUCTS]: ordersProductsProvider,
   [ProviderNames.PAYMENT_METHODS]: paymentMethodsProvider,
 };
+
+const syncProviders = {
+  [SyncProviderNames.GEOLOCATION]: geolocationProvider
+}
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -48,7 +53,7 @@ if (import.meta.env.DEV) {
 
 function App() {
   return (
-    <DataProvider providers={providers}>
+    <DataProvider providers={providers} syncProviders={syncProviders}>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider>
           <Suspense fallback={<LoadingPage />}>

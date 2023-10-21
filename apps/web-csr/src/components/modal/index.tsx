@@ -9,6 +9,7 @@ import PaymentMethodModal from '../PaymentMethodModal';
 
 const modals = {
   [ModalState.CART]: () => <CartModal content={<BodyCart />} />,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   [ModalState.DETAIL]: (props?: any) => <ProductDetailModal productId={props.data.productId} />,
   [ModalState.DELIVERY_CENTRAL_CLIENT_DATA]: () => <ClientDataModal />,
   [ModalState.DELIVERY_CENTRAL_CONFIRMATION]: () => (

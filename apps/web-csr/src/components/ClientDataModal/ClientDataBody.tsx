@@ -12,13 +12,12 @@ import SelectModals from '../common/SelectModals';
 import { Button } from '../../../../../packages/ui/src';
 
 import { ModalState, setNextState } from '../../observables';
-import { useCreateOne } from 'data_providers';
-import { ProviderNames } from '../../types/providers';
+import { useCreateOne, useSyncGetList } from 'data_providers';
+import { ProviderNames, SyncProviderNames } from '../../types/providers';
 import { useCallback, useState } from 'react';
 
-import districts from '../../../../../packages/geolocation/districts.json';
-import provincies from '../../../../../packages/geolocation/provincies.json';
-import departments from '../../../../../packages/geolocation/departments.json';
+import { ResourceNames, type GeolocationProvider } from '../../services/Geolocation'
+
 
 type UserInfo = {
   fullName: string;
@@ -26,24 +25,24 @@ type UserInfo = {
   address: string;
   reference: string;
   email: string;
-  department?: string;
-  province?: string;
   district: string;
 };
-
-const capitalDistricts  = districts
-  ?.filter(({province_id})=> province_id === "1501")
 
 
 type Destination = 'capital'| 'province'
 
+const parseDestination = (destination: Destination)=> destination === 'capital'? '1501' : undefined
+
 export default function ClientDataBody() {
+  const getGeolocation: typeof GeolocationProvider.prototype.getList = useSyncGetList(
+    SyncProviderNames.GEOLOCATION
+  )
   const { register, handleSubmit } = useForm<UserInfo>();
   const createToSession = useCreateOne(ProviderNames.SESSION_STORAGE);
 
   const [ destination, setDestination ] = useState<Destination>('capital')
-  const [ department , setDeparment] = useState<string>()
-  const [ province , setProvince] = useState<string>()
+  const [ department , setDepartment] = useState<string>()
+  const [ province , setProvince] = useState<string | undefined>('1501')
 
   const _handleSubmit: SubmitHandler<UserInfo> = useCallback(async (data) => {
     await createToSession(data);
@@ -84,7 +83,10 @@ export default function ClientDataBody() {
         <RadioGroup
           aria-labelledby='destination-radio-buttons-group-label'
           value={destination}
-          onChange={({target})=> setDestination(target.value as Destination)}
+          onChange={({target})=> {
+            setDestination(target.value as Destination);
+            setProvince(parseDestination(target.value as Destination))
+          }}
           name='radio-buttons-group'
           sx={{
             display: 'flex',
@@ -108,14 +110,18 @@ export default function ClientDataBody() {
         destination === 'province' &&
           <>
             <SelectModals
-              {...register('department')} 
-              groupOptions={departments ?? []} 
+              groupOptions={getGeolocation({}, {resource: ResourceNames.DEPARTMENT})} 
               label='Departamento' 
-              onChange={({target})=> setDeparment(target.value as string)}
+              onChange={({target})=> setDepartment(target.value as string)}
             />
             <SelectModals 
-              {...register('province')} 
-              groupOptions={provincies.filter(({department_id})=> department_id === department) ?? []} 
+              groupOptions={getGeolocation({
+                filter:{
+                  department_id: department
+                }
+              }, {
+                resource: ResourceNames.PROVINCE
+              })} 
               label='Pronvincia' 
               onChange={({target})=> setProvince(target.value as string)}
             />
@@ -123,12 +129,13 @@ export default function ClientDataBody() {
       }
       <SelectModals
        {...register('district')}  
-        groupOptions={(
-          destination === 'capital'? 
-            capitalDistricts : 
-            districts.filter(({province_id})=> province_id === province)
-          ) ?? []
-        } 
+        groupOptions={getGeolocation({
+          filter:{
+            province_id: province
+          }
+        }, {
+          resource: ResourceNames.DISTRICT
+        })} 
         label='Distrito' 
       />
       <CustomTextField
