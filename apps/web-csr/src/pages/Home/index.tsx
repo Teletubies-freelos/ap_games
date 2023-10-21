@@ -25,11 +25,15 @@ import { ProviderNames } from '../../types/providers';
 import { useQuery } from '@tanstack/react-query';
 import { Menu as MenuIcon } from '@mui/icons-material';
 import { setAnchorElMenu, useAnchorElMenu } from '../../observables';
+import { reduceQuantity } from '../../utils';
 
 export default function Home() {
   const getFeaturedProducts = useGetList(ProviderNames.FEATURED);
 
-  const { data } = useQuery(['home featured'], async () => await getFeaturedProducts())
+  const { data } = useQuery(
+    ['home featured'],
+    async () => await getFeaturedProducts()
+  );
 
   const toggleColor = useToggleColor();
 
@@ -37,7 +41,7 @@ export default function Home() {
 
   const _handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElMenu(anchorEl ? null : event.currentTarget);
-  }
+  };
 
   return (
     <GeneralLayout
@@ -46,7 +50,7 @@ export default function Home() {
           actionsComponent={
             <ColorSwitch onChange={toggleColor} overrideCheckBg />
           }
-          cartComponent={<CartIconReactive />}
+          cartComponent={<CartIconReactive reduceQuantity={reduceQuantity} />}
           navigatorLinks={<NavLinks />}
           mainLogo={
             <Link to='/'>
@@ -56,18 +60,20 @@ export default function Home() {
           searchBar={
             <SearchBar
               onSubmit={() => 4}
-              buttonSearch={<Button variant='contained' >Buscar</Button>}
+              buttonSearch={<Button variant='contained'>Buscar</Button>}
             />
           }
           menu={
-            <IconButton onClick={_handleOpenMenu} size="small">
+            <IconButton onClick={_handleOpenMenu} size='small'>
               <MenuIcon />
             </IconButton>
           }
         />
       }
     >
-      { !!data?.length && <ResponsiveCarousel data={data ?? []} itemRender={render} /> }
+      {!!data?.length && (
+        <ResponsiveCarousel data={data ?? []} itemRender={render} />
+      )}
       <Stack
         direction='row'
         gap={{ sm: 6 }}
