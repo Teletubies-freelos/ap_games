@@ -77,6 +77,9 @@ export const {
 export const [anchorElMenu$, setAnchorElMenu] = createSignal<null | HTMLElement>();
 export const [useAnchorElMenu, anchorElMenuDefault$] = bind(anchorElMenu$, null);
 
+export const [categoryIdSelected$, setCategoryIdSelected] = createSignal<number>();
+export const [useCategoryIdSelected, categoryIdSelectedDefault$] = bind(categoryIdSelected$, Number.NaN);
+
 if(import.meta.env.DEV && isObserverDebugOn){
   modalState$.subscribe(next => console.log('modalState', next))
 }
