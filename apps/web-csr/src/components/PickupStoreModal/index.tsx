@@ -18,7 +18,7 @@ export default function PickupStoreModal({
   content,
 }: Readonly<PickupStoreProps>) {
   const createOrder = useCreateOne(ProviderNames.ORDERS);
-  const { mutate, isLoading } = useMutation(
+  const { isLoading } = useMutation(
     ['orders'],
     async (orders: CreateOrderDTO) => await createOrder(orders)
   );
