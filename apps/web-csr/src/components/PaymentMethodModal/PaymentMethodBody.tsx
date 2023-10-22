@@ -1,7 +1,7 @@
 import { Box, TextField, Typography, Button, Stack } from '@mui/material';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { DropDown } from '../../../../../packages/ui/src';
-import { ModalState, setModalState } from '../../observables';
+import { ModalState, setModalState, setOrderId } from '../../observables';
 import {
   useCreateMany,
   useCreateOne,
@@ -17,6 +17,9 @@ import { useQuery } from '@tanstack/react-query';
 
 interface PaymentMethodData {
   paymentMethod: string;
+  payment_method_id: number;
+  order_status_id: number;
+  comment: string;
 }
 
 interface PaymentMethodBodyProps {
@@ -36,7 +39,7 @@ const useConfirmRequest = () => {
     const clientData = await getClientData();
     const products = await getCartProducts();
 
-    const { orderId } =
+    const { order_id } =
       (await createOrder({
         ...clientData,
         ...data,
@@ -44,10 +47,12 @@ const useConfirmRequest = () => {
 
     await createOrderProducts(
       products.map(({ productId }) => ({
-        productId,
-        orderId,
+        product_id: productId,
+        order_id,
       }))
     );
+
+    order_id && setOrderId(order_id);
   };
 };
 
@@ -55,11 +60,17 @@ export default function PaymentMethodBody({
   reduceQuantity,
   reduceTotalPrice,
 }: PaymentMethodBodyProps) {
-  const { handleSubmit } = useForm<PaymentMethodData>();
+  const { register, handleSubmit } = useForm<PaymentMethodData>();
+  const createToSession = useCreateOne(ProviderNames.SESSION_STORAGE);
   const confirmRequest = useConfirmRequest();
 
   const handleFinish = async (data: PaymentMethodData) => {
-    await confirmRequest(data);
+    const newDataPayment = {
+      ...data,
+      order_status_id: 1,
+    };
+    await createToSession(newDataPayment);
+    await confirmRequest(newDataPayment);
     setModalState({
       data: {
         name: ModalState.DELIVERY_CENTRAL_CONFIRMATION,
@@ -121,9 +132,13 @@ export default function PaymentMethodBody({
       <DropDown
         items={[{ value: '1', label: 'Informacion de entrega' }]}
       ></DropDown>
-      <DropDown items={parsedPaymentMethods}></DropDown>
+      <DropDown
+        textFieldProps={register('payment_method_id')}
+        items={parsedPaymentMethods}
+      ></DropDown>
 
       <TextField
+        {...register('comment')}
         id='outlined-multiline-flexible'
         sx={{ backgroundColor: 'background.default' }}
         placeholder='Agregar comentario (opcional)'

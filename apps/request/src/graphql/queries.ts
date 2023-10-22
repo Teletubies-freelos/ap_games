@@ -143,6 +143,22 @@ export const GET_PAYMENT_METHODS = gql`
     payment_methods(limit: $limit, offset: $offset) {
       payment_method_id
       name
+      owner
+      number
+      alternative_number
+      meta
+      type
     }
   }
 `;
+
+export const GET_CONFIG_CMS = gql`
+  query GET_CONFIG_CMS{
+    configs{
+      config_id
+      name
+      value
+      meta
+    }
+  }
+`

@@ -6,15 +6,16 @@ import PickupStoreModal from '../PickupStoreModal';
 import PickupStoreBody from '../PickupStoreModal/PickupStoreBody';
 import ClientDataModal from '../ClientDataModal';
 import PaymentMethodModal from '../PaymentMethodModal';
+import ConfirmOrderDelivery from '../ConfirmOrder/ConfirmOrderDelivery';
 
 const modals = {
   [ModalState.CART]: () => <CartModal content={<BodyCart />} />,
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  [ModalState.DETAIL]: (props?: any) => <ProductDetailModal productId={props.data.productId} />,
-  [ModalState.DELIVERY_CENTRAL_CLIENT_DATA]: () => <ClientDataModal />,
-  [ModalState.DELIVERY_CENTRAL_CONFIRMATION]: () => (
-    <CartModal content={<BodyCart />} />
+  [ModalState.DETAIL]: (props?: any) => (
+    <ProductDetailModal productId={props.data.productId} />
   ),
+  [ModalState.DELIVERY_CENTRAL_CLIENT_DATA]: () => <ClientDataModal />,
+  [ModalState.DELIVERY_CENTRAL_CONFIRMATION]: () => <ConfirmOrderDelivery />,
   [ModalState.DELIVERY_CENTRAL_PAYMENT_METHOD]: () => <PaymentMethodModal />,
   [ModalState.IN_STORE_CONFIRMATION]: () => (
     <CartModal content={<BodyCart />} />

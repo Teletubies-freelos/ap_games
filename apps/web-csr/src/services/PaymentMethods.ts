@@ -5,6 +5,9 @@ import { GET_PAYMENT_METHODS } from '../../../request/src/graphql/queries';
 export interface IPaymentMethod {
   payment_method_id: number;
   name: string;
+  owner: string;
+  number: string;
+  alternative_number: string;
 }
 
 export class PaymentMethods implements IDataProvider {

@@ -7,9 +7,10 @@ export enum ProviderNames {
   SESSION_STORAGE = 'sessionStorage',
   ORDER_PRODUCTS = 'orderProducts',
   PAYMENT_METHODS = 'paymentMethods',
+  CONFIG_CMS = 'configCms',
 }
 
-
 export enum SyncProviderNames {
-  GEOLOCATION = 'geolocation'
+  GEOLOCATION = 'geolocation',
+  LOCAL_CONFIG = 'localConfig',
 }

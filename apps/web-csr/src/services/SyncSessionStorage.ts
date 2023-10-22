@@ -1,4 +1,4 @@
-import { IDataProvider } from 'data_providers';
+import { IDataSyncProvider } from "data_providers";
 
 export type UserInfo = {
   client_name: string;
@@ -13,7 +13,7 @@ export type UserInfo = {
   reference: string;
 };
 
-export class SessionClientStorage implements IDataProvider {
+export class SyncSessionClientStorage implements IDataSyncProvider {
   static userInfoAttributes: (keyof UserInfo)[] = [
     'address',
     'email',
@@ -25,14 +25,14 @@ export class SessionClientStorage implements IDataProvider {
     'payment_method_id',
   ];
 
-  async createOne(object: UserInfo) {
+   createOne(object: UserInfo) {
     Object.keys(object).forEach((key) =>
       sessionStorage.setItem(key, String(object[key as keyof UserInfo]))
     );
   }
 
-  async getOne() {
-    return SessionClientStorage.userInfoAttributes.reduce((acm, next) => {
+   getOne() {
+    return SyncSessionClientStorage.userInfoAttributes.reduce((acm, next) => {
       return {
         ...acm,
         [next]: sessionStorage.getItem(next),
