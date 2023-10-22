@@ -7,13 +7,15 @@ import {
 } from "../../../../packages/ui/src";
 import { useGetOne, useSyncGetOne } from "data_providers";
 import { ProviderNames, SyncProviderNames } from "../types/providers";
-import { useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { OrdersByIdResponse } from "../services/Orders";
 
 import totalMoney from "./common/total.svg";
 import { InfoBanner, Title } from "./InfoBanner";
 import dayjs from "dayjs";
 import { DeliveryPriceLocal } from "./DeliveryPrice";
+import { validate } from 'uuid'
+import { useNavigate, useParams } from "react-router-dom";
 
 const translateStatus: Record<string, string> = {
   canceled: "En camino",
@@ -23,8 +25,14 @@ const translateStatus: Record<string, string> = {
 const stepStatus = ["En tienda", "En camino", "Entregado"];
 
 export default function OrderStatus() {
+  const { id: paramId } = useParams()
+
+  const navigate = useNavigate()
+
   const syncGetPriceDelivery = useSyncGetOne(SyncProviderNames.LOCAL_CONFIG)
   const { deliveryPrice } = syncGetPriceDelivery()
+
+  const coolDownRef = useRef<Date | undefined>()
 
   const [orderStatus, setOrderStatus] = useState<string | undefined>();
   const refProducts = useRef<
@@ -38,9 +46,29 @@ export default function OrderStatus() {
     0
   );
 
-  const _handleSearchOrder = async ({ search: id }: { search: string }) => {
+  const _handleSearchOrder = ({ search: id }: { search: string }) => {
+    if(coolDownRef.current && dayjs(new Date()).diff(coolDownRef.current, 'second') <= 30)
+      throw new Error('Espere un momento')
+
+    if(!validate(id))
+      throw new Error('Identificador no valido')
+
+    
+    coolDownRef.current = new Date();
+
+
+    navigate(`./${id}`, {
+      relative: "path"
+    })
+
+  };
+
+  const loadOrderResume = useCallback(async ()=>{
+    if(!validate(String(paramId)))
+      throw new Error('Identificador no valido')
+
     const { order_status, ...rest } = await getOrder({
-      id,
+      id: paramId,
       filter: {
         status: true,
       },
@@ -48,13 +76,20 @@ export default function OrderStatus() {
 
     refProducts.current = {
       ...rest,
-      id,
+      id: paramId,
     };
 
-    setOrderStatus(translateStatus[order_status.name as string] ?? "En tienda");
-  };
 
-  if (orderStatus)
+
+    setOrderStatus(translateStatus[order_status.name as string] ?? "En tienda");
+  }, [getOrder, paramId])
+
+  useEffect(()=>{
+    if(paramId)
+      loadOrderResume();
+  }, [paramId, loadOrderResume])
+
+  if (paramId)
     return (
       <Stack maxWidth={"32rem"} margin={"auto"} spacing={2}>
         <StepStatus

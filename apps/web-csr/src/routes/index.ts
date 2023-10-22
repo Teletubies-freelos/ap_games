@@ -15,6 +15,15 @@ export const routes = routerFn([
   },
   {
     path: "estado-pedido",
-    Component: lazy(() => import("../pages/estado-pedido"))
+    children:[
+      {
+        index: true,
+        Component: lazy(() => import("../pages/estado-pedido")),
+      },
+      {
+        path: ':id',
+        Component: lazy(() => import("../pages/estado-pedido"))
+      }
+    ]
   },
 ])

@@ -167,6 +167,9 @@ importers:
       short-unique-id:
         specifier: ^5.0.3
         version: 5.0.3
+      uuid:
+        specifier: ^9.0.1
+        version: 9.0.1
     devDependencies:
       '@tanstack/react-query-devtools':
         specifier: ^4.36.1
@@ -183,6 +186,9 @@ importers:
       '@types/react-dom':
         specifier: ^18.2.7
         version: 18.2.13
+      '@types/uuid':
+        specifier: ^9.0.6
+        version: 9.0.6
       '@typescript-eslint/eslint-plugin':
         specifier: ^6.0.0
         version: 6.5.0(@typescript-eslint/parser@6.5.0)(eslint@8.48.0)(typescript@5.2.2)
@@ -1851,6 +1857,10 @@ packages:
 
   /@types/sizzle@2.3.5:
     resolution: {integrity: sha512-tAe4Q+OLFOA/AMD+0lq8ovp8t3ysxAOeaScnfNdZpUxaGl51ZMDEITxkvFl1STudQ58mz6gzVGl9VhMKhwRnZQ==}
+    dev: true
+
+  /@types/uuid@9.0.6:
+    resolution: {integrity: sha512-BT2Krtx4xaO6iwzwMFUYvWBWkV2pr37zD68Vmp1CDV196MzczBRxuEpD6Pr395HAgebC/co7hOphs53r8V7jew==}
     dev: true
 
   /@types/yauzl@2.10.2:
@@ -6252,6 +6262,11 @@ packages:
     resolution: {integrity: sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==}
     hasBin: true
     dev: true
+
+  /uuid@9.0.1:
+    resolution: {integrity: sha512-b+1eJOlsR9K8HJpow9Ok3fiWOWSIcIzXodvv0rQjVoOVNpWMpxf1wZNpt4y9h10odCNrqnYp1OBzRktckBe3sA==}
+    hasBin: true
+    dev: false
 
   /v8-compile-cache-lib@3.0.1:
     resolution: {integrity: sha512-wa7YjyUGfNZngI/vtK0UHAN+lgDCxBPCylVXGp0zu59Fz5aiGtNXaq3DhIov063MorB+VfufLh3JlF2KdTK3xg==}
