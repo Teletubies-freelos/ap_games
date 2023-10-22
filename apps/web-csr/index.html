@@ -1,19 +1,75 @@
 <!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite + React + TS</title>
+    
+    <!-- Start of Woopra Code -->
+    <script type="module">
+      if(!import.meta.env.DEV && import.meta.env.VITE_WOOPRA_DOMAIN){      
+        !(function () {
+          var t,
+            o,
+            c,
+            e = window,
+            n = document,
+            r = arguments,
+            a = "script",
+            i = [
+              "call",
+              "cancelAction",
+              "config",
+              "identify",
+              "push",
+              "track",
+              "trackClick",
+              "trackForm",
+              "update",
+              "visit",
+            ],
+            s = function () {
+              var t,
+                o = this,
+                c = function (t) {
+                  o[t] = function () {
+                    return (
+                      o._e.push(
+                        [t].concat(Array.prototype.slice.call(arguments, 0))
+                      ),
+                      o
+                    );
+                  };
+                };
+              for (o._e = [], t = 0; t < i.length; t++) c(i[t]);
+            };
+          for (e.__woo = e.__woo || {}, t = 0; t < r.length; t++)
+            e.__woo[r[t]] = e[r[t]] = e[r[t]] || new s();
+          ((o = n.createElement(a)).async = 1),
+            (o.src = "https://static.woopra.com/js/w.js"),
+            (c = n.getElementsByTagName(a)[0]).parentNode.insertBefore(o, c);
+        })("woopra");
 
-<head>
-  <meta charset="UTF-8" />
-  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
-  <link
-    href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&family=Roboto:wght@300;400;500;700&display=swap"
-    rel="stylesheet">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Vite + React + TS</title>
-</head>
+        woopra.config({
+          domain: import.meta.env.VITE_WOOPRA_DOMAIN,
+          outgoing_tracking: true,
+          download_tracking: true,
+          click_tracking: true,
+        });
 
-<body>
-  <div id="root"></div>
-  <script type="module" src="/src/main.tsx"></script>
-</body>
+        woopra.track();
+      }
+    </script>
+    <!-- End of Woopra Code -->
+  </head>
 
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
