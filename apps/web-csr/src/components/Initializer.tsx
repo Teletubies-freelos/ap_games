@@ -1,6 +1,6 @@
 import { PropsWithChildren, useEffect } from "react"
 import { ProviderNames, SyncProviderNames } from "../types/providers";
-import { useGetList, useGetOne, useSyncCreateOne, useSyncGetOne } from "data_providers";
+import { useGetList, useSyncCreateOne, useSyncGetOne } from "data_providers";
 import { useQuery } from "@tanstack/react-query";
 import { IConfig } from "../services/LocalConfig";
 import dayjs from "dayjs";

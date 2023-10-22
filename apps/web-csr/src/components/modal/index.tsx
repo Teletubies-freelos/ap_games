@@ -1,4 +1,4 @@
-import { Modal as ModalMUI, Typography } from '@mui/material';
+import { Modal as ModalMUI } from '@mui/material';
 import { ModalState, setModalState, useModalState } from '../../observables';
 import ProductDetailModal from '../ProductDetailModal';
 import { BodyCart, CartModal } from '../cart';

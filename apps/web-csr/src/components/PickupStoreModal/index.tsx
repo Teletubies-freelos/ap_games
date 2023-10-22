@@ -8,7 +8,7 @@ import FooterModal from '../common/FooterModal';
 import { ModalLayout } from '../../../../../packages/ui/src';
 import { ModalState, setModalState } from '../../observables';
 import { ProviderNames } from '../../types/providers';
-import { CreateOrdersDTO } from '../../services/Orders';
+import { CreateOrderDTO } from '../../services/Orders';
 
 interface PickupStoreProps {
   content?: JSX.Element;
@@ -20,7 +20,7 @@ export default function PickupStoreModal({
   const createOrder = useCreateOne(ProviderNames.ORDERS);
   const { mutate, isLoading } = useMutation(
     ['orders'],
-    async (orders: CreateOrdersDTO) => await createOrder(orders)
+    async (orders: CreateOrderDTO) => await createOrder(orders)
   );
 
   const handleBack = () => {
