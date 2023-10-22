@@ -149,3 +149,14 @@ export const GET_PAYMENT_METHODS = gql`
     }
   }
 `;
+
+export const GET_CONFIG_CMS = gql`
+  query GET_CONFIG_CMS{
+    configs{
+      config_id
+      name
+      value
+      meta
+    }
+  }
+`

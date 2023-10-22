@@ -10,6 +10,7 @@ import { Orders } from '../services/Orders';
 import { OrdersProducts } from '../services/OrdersProducts';
 import { PaymentMethods } from '../services/PaymentMethods';
 import { GeolocationProvider } from '../services/Geolocation';
+import { CmsConfig } from '../services/CmsConfig';
 
 const headers = new Headers({
   'x-hasura-admin-secret': masterToken,
@@ -36,3 +37,5 @@ export const ordersProductsProvider = new OrdersProducts(graphqlClient);
 export const paymentMethodsProvider = new PaymentMethods(graphqlClient);
 
 export const geolocationProvider = new GeolocationProvider("1501");
+
+export const configCmsProvider = new CmsConfig(graphqlClient);

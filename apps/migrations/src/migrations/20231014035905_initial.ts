@@ -129,8 +129,17 @@ function createTableDepartment(table: Knex.CreateTableBuilder) {
   table.text('name').notNullable();
 }
 
+function createTableConfig(table: Knex.CreateTableBuilder) {
+  table.increments('config_id').primary();
+  table.text('name').notNullable();
+  table.text('name_es').nullable();
+  table.text('value').notNullable();
+  table.text('meta').nullable();
+}
+
 export async function up(knex: Knex) {
   return await knex.schema
+    .createTable(Tables.CONFIG, createTableConfig)
     .createTable(Tables.DEPARTMENT, createTableDepartment)
     .createTable(Tables.CATEGORY, createTableCategory)
     .createTable(Tables.PRODUCT, createTableProduct)
@@ -140,7 +149,7 @@ export async function up(knex: Knex) {
     .createTable(Tables.PROVINCE, createTableProvince)
     .createTable(Tables.DISTRICT, createTableDistrict)
     .createTable(Tables.ORDER, generateTableOrderCreation(knex))
-    .createTable(Tables.ORDER_PRODUCT, createTableOrderProduct);
+    .createTable(Tables.ORDER_PRODUCT, createTableOrderProduct)
 }
 
 export async function down(knex: Knex) {
@@ -154,5 +163,6 @@ export async function down(knex: Knex) {
     .dropTableIfExists(Tables.ORDER_STATUS)
     .dropTableIfExists(Tables.FEATURED)
     .dropTableIfExists(Tables.PRODUCT)
-    .dropTableIfExists(Tables.CATEGORY);
+    .dropTableIfExists(Tables.CATEGORY)
+    .dropTableIfExists(Tables.CONFIG);
 }

@@ -10,6 +10,7 @@ export enum Tables {
   DEPARTMENT = 'department',
   PROVINCE = 'province',
   PAYMENT_ACCOUNT = 'payment_account',
+  CONFIG = 'configs',
 }
 
 export interface ProductDTO {
