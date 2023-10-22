@@ -85,6 +85,8 @@ function createTablePaymentMethod(table: Knex.CreateTableBuilder) {
   table.text('owner').notNullable();
   table.bigint('number').notNullable();
   table.bigint('alternative_number').nullable();
+  table.text('meta').nullable();
+  table.text('type').notNullable();
 }
 
 function createTableOrderProduct(table: Knex.CreateTableBuilder) {

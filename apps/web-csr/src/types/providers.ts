@@ -12,4 +12,5 @@ export enum ProviderNames {
 
 export enum SyncProviderNames {
   GEOLOCATION = 'geolocation',
+  LOCAL_CONFIG = 'localConfig',
 }

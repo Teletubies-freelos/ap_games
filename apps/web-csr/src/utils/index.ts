@@ -51,3 +51,10 @@ export function orderControlsLense<T>(
       }),
   };
 }
+
+export async function getConfig(){
+  //paso 1 : buscar config desde localstorage
+  //paso 2 : verificar q la configuracion no se vencio
+  // paso 3 : si la configuracion no existe o esta vencida traerla del backend
+  //paso 4: con el resultado poblar la cache de react query
+}

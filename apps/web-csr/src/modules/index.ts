@@ -10,7 +10,9 @@ import { Orders } from '../services/Orders';
 import { OrdersProducts } from '../services/OrdersProducts';
 import { PaymentMethods } from '../services/PaymentMethods';
 import { GeolocationProvider } from '../services/Geolocation';
-import { CmsConfig } from '../services/CmsConfig';
+import { ConfigCms } from '../services/ConfigCms';
+import { LocalConfig } from '../services/LocalConfig';
+import { SyncSessionClientStorage } from '../services/SyncSessionStorage';
 
 const headers = new Headers({
   'x-hasura-admin-secret': masterToken,
@@ -38,4 +40,8 @@ export const paymentMethodsProvider = new PaymentMethods(graphqlClient);
 
 export const geolocationProvider = new GeolocationProvider("1501");
 
-export const configCmsProvider = new CmsConfig(graphqlClient);
+export const configCmsProvider = new ConfigCms(graphqlClient);
+
+export const localConfigProvider = new LocalConfig();
+
+export const syncSessionStorageProvider = new SyncSessionClientStorage()

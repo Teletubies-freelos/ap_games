@@ -146,6 +146,8 @@ export const GET_PAYMENT_METHODS = gql`
       owner
       number
       alternative_number
+      meta
+      type
     }
   }
 `;

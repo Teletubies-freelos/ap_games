@@ -16,10 +16,13 @@ import {
   paymentMethodsProvider,
   geolocationProvider,
   configCmsProvider,
+  localConfigProvider,
+  syncSessionStorageProvider,
 } from './modules';
 import { ProviderNames, SyncProviderNames } from './types/providers';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from './providers/theme';
+import { Initializer } from './components/Initializer';
 
 const providers = {
   [ProviderNames.PRODUCTS]: productsProvider,
@@ -30,11 +33,13 @@ const providers = {
   [ProviderNames.ORDERS]: ordersProvider,
   [ProviderNames.ORDER_PRODUCTS]: ordersProductsProvider,
   [ProviderNames.PAYMENT_METHODS]: paymentMethodsProvider,
-  [ProviderNames.CONFIG_CMS]: configCmsProvider
+  [ProviderNames.CONFIG_CMS]: configCmsProvider,
 };
 
 const syncProviders = {
-  [SyncProviderNames.GEOLOCATION]: geolocationProvider
+  [SyncProviderNames.GEOLOCATION]: geolocationProvider,
+  [SyncProviderNames.LOCAL_CONFIG] : localConfigProvider,
+  [ProviderNames.SESSION_STORAGE]: syncSessionStorageProvider,
 }
 
 const queryClient = new QueryClient({
@@ -58,9 +63,11 @@ function App() {
     <DataProvider providers={providers} syncProviders={syncProviders}>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider>
-          <Suspense fallback={<LoadingPage />}>
-            <RouterProvider router={routes} />
-          </Suspense>
+          <Initializer>
+            <Suspense fallback={<LoadingPage />}>
+              <RouterProvider router={routes} />
+            </Suspense>
+          </Initializer>
         </ThemeProvider>
         {/* <ReactQueryDevtools initialIsOpen /> */}
       </QueryClientProvider>

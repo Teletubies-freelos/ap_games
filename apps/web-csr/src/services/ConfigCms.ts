@@ -2,7 +2,7 @@ import { IDataProvider } from "data_providers";
 import { GraphQLClient } from "graphql-request";
 import { GET_CONFIG_CMS } from "../../../request/src/graphql/queries";
 
-export class CmsConfig implements IDataProvider {
+export class ConfigCms implements IDataProvider {
   constructor(private client: GraphQLClient) {}
 
   async getList() {
