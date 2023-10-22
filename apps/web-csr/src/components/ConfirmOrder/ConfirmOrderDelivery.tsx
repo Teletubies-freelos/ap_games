@@ -4,7 +4,7 @@ import { LabelStepStatus, StepStatus } from '../../../../../packages/ui/src';
 import FooterModal from '../common/FooterModal';
 import InfoPayment from '../common/InfoPayment';
 import {  useQueryClient } from '@tanstack/react-query';
-import {  useGetOne, useSyncGetOne } from 'data_providers';
+import {  useSyncGetOne } from 'data_providers';
 import { UserInfo } from '../../services/SessionStorage';
 import { ProviderNames, SyncProviderNames } from '../../types/providers';
 
@@ -16,13 +16,6 @@ import { ProviderNames, SyncProviderNames } from '../../types/providers';
   alternative_number: number
   meta?: string
   type: string
-}
-
-interface IDataConfig{
-  config_id: number
-  value: number
-  name: string
-  meta?: string
 }
 
 const useGetPaymentInfo = () => {
