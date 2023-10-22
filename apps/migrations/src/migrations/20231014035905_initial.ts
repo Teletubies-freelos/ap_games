@@ -28,35 +28,39 @@ function createTableProduct(table: Knex.CreateTableBuilder) {
   table.timestamps({ defaultToNow: true });
 }
 
-function createTableOrder(table: Knex.CreateTableBuilder) {
-  table.uuid('order_id').primary();
-  table.text('address');
-  table.text('client_name');
-  table.integer('phone');
-  table.text('email');
+function generateTableOrderCreation(knex: Knex) {
+  return function createTableOrder(table: Knex.CreateTableBuilder) {
+    table.uuid('order_id').primary().defaultTo(knex.raw('gen_random_uuid()'));
+    table.text('address');
+    table.text('client_name');
+    table.integer('phone');
+    table.text('email');
+    table.text('reference').nullable();
+    table.text('comment').nullable();
 
-  onDeleteWithCascadeWhenDev(
-    table
-      .integer('order_status_id')
-      .references('order_status_id')
-      .inTable(Tables.ORDER_STATUS)
-  );
+    onDeleteWithCascadeWhenDev(
+      table
+        .integer('order_status_id')
+        .references('order_status_id')
+        .inTable(Tables.ORDER_STATUS)
+    );
 
-  onDeleteWithCascadeWhenDev(
-    table
-      .integer('payment_method_id')
-      .references('payment_method_id')
-      .inTable(Tables.PAYMENT_METHOD)
-  );
+    onDeleteWithCascadeWhenDev(
+      table
+        .integer('payment_method_id')
+        .references('payment_method_id')
+        .inTable(Tables.PAYMENT_METHOD)
+    );
 
-  onDeleteWithCascadeWhenDev(
-    table
-      .integer('district_id')
-      .references('district_id')
-      .inTable(Tables.DISTRICT)
-  );
+    onDeleteWithCascadeWhenDev(
+      table
+        .integer('district_id')
+        .references('district_id')
+        .inTable(Tables.DISTRICT)
+    );
 
-  table.timestamps({ defaultToNow: true });
+    table.timestamps({ defaultToNow: true });
+  };
 }
 
 function createTableFeatured(table: Knex.CreateTableBuilder) {
@@ -78,6 +82,9 @@ function createTableOrderStatus(table: Knex.CreateTableBuilder) {
 function createTablePaymentMethod(table: Knex.CreateTableBuilder) {
   table.increments('payment_method_id');
   table.text('name').notNullable();
+  table.text('owner').notNullable();
+  table.bigint('number').notNullable();
+  table.bigint('alternative_number').nullable();
 }
 
 function createTableOrderProduct(table: Knex.CreateTableBuilder) {
@@ -132,7 +139,7 @@ export async function up(knex: Knex) {
     .createTable(Tables.PAYMENT_METHOD, createTablePaymentMethod)
     .createTable(Tables.PROVINCE, createTableProvince)
     .createTable(Tables.DISTRICT, createTableDistrict)
-    .createTable(Tables.ORDER, createTableOrder)
+    .createTable(Tables.ORDER, generateTableOrderCreation(knex))
     .createTable(Tables.ORDER_PRODUCT, createTableOrderProduct);
 }
 

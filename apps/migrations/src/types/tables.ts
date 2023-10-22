@@ -9,6 +9,7 @@ export enum Tables {
   DISTRICT = 'district',
   DEPARTMENT = 'department',
   PROVINCE = 'province',
+  PAYMENT_ACCOUNT = 'payment_account',
 }
 
 export interface ProductDTO {

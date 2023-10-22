@@ -74,9 +74,16 @@ export const {
   setPrevState,
 } = orderControlsLense<ModalData>(modalState$);
 
-export const [anchorElMenu$, setAnchorElMenu] = createSignal<null | HTMLElement>();
-export const [useAnchorElMenu, anchorElMenuDefault$] = bind(anchorElMenu$, null);
+export const [anchorElMenu$, setAnchorElMenu] =
+  createSignal<null | HTMLElement>();
+export const [useAnchorElMenu, anchorElMenuDefault$] = bind(
+  anchorElMenu$,
+  null
+);
 
-if(import.meta.env.DEV && isObserverDebugOn){
-  modalState$.subscribe(next => console.log('modalState', next))
+export const [orderId$, setOrderId] = createSignal<string>();
+export const [useOrderId, orderIdDefault$] = bind(orderId$, '');
+
+if (import.meta.env.DEV && isObserverDebugOn) {
+  modalState$.subscribe((next) => console.log('modalState', next));
 }

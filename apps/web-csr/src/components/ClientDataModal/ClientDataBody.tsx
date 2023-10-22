@@ -16,33 +16,34 @@ import { useCreateOne, useSyncGetList } from 'data_providers';
 import { ProviderNames, SyncProviderNames } from '../../types/providers';
 import { useCallback, useState } from 'react';
 
-import { ResourceNames, type GeolocationProvider } from '../../services/Geolocation'
-
+import {
+  ResourceNames,
+  type GeolocationProvider,
+} from '../../services/Geolocation';
 
 type UserInfo = {
-  fullName: string;
+  client_name: string;
   phone: number;
   address: string;
   reference: string;
   email: string;
-  district: string;
+  district_id: string;
 };
 
+type Destination = 'capital' | 'province';
 
-type Destination = 'capital'| 'province'
-
-const parseDestination = (destination: Destination)=> destination === 'capital'? '1501' : undefined
+const parseDestination = (destination: Destination) =>
+  destination === 'capital' ? '1501' : undefined;
 
 export default function ClientDataBody() {
-  const getGeolocation: typeof GeolocationProvider.prototype.getList = useSyncGetList(
-    SyncProviderNames.GEOLOCATION
-  )
+  const getGeolocation: typeof GeolocationProvider.prototype.getList =
+    useSyncGetList(SyncProviderNames.GEOLOCATION);
   const { register, handleSubmit } = useForm<UserInfo>();
   const createToSession = useCreateOne(ProviderNames.SESSION_STORAGE);
 
-  const [ destination, setDestination ] = useState<Destination>('capital')
-  const [ department , setDepartment] = useState<string>()
-  const [ province , setProvince] = useState<string | undefined>('1501')
+  const [destination, setDestination] = useState<Destination>('capital');
+  const [department, setDepartment] = useState<string>();
+  const [province, setProvince] = useState<string | undefined>('1501');
 
   const _handleSubmit: SubmitHandler<UserInfo> = useCallback(async (data) => {
     await createToSession(data);
@@ -61,7 +62,7 @@ export default function ClientDataBody() {
     >
       <Box display='flex' gap='1rem'>
         <CustomTextField
-          textfieldProps={register('fullName')}
+          textfieldProps={register('client_name')}
           width='50%'
           label='Nombres y Apellidos'
           data-testid='fullname'
@@ -83,9 +84,9 @@ export default function ClientDataBody() {
         <RadioGroup
           aria-labelledby='destination-radio-buttons-group-label'
           value={destination}
-          onChange={({target})=> {
+          onChange={({ target }) => {
             setDestination(target.value as Destination);
-            setProvince(parseDestination(target.value as Destination))
+            setProvince(parseDestination(target.value as Destination));
           }}
           name='radio-buttons-group'
           sx={{
@@ -106,37 +107,45 @@ export default function ClientDataBody() {
           />
         </RadioGroup>
       </FormControl>
-      {
-        destination === 'province' &&
-          <>
-            <SelectModals
-              groupOptions={getGeolocation({}, {resource: ResourceNames.DEPARTMENT})} 
-              label='Departamento' 
-              onChange={({target})=> setDepartment(target.value as string)}
-            />
-            <SelectModals 
-              groupOptions={getGeolocation({
-                filter:{
-                  department_id: department
-                }
-              }, {
-                resource: ResourceNames.PROVINCE
-              })} 
-              label='Pronvincia' 
-              onChange={({target})=> setProvince(target.value as string)}
-            />
-          </>
-      }
+      {destination === 'province' && (
+        <>
+          <SelectModals
+            groupOptions={getGeolocation(
+              {},
+              { resource: ResourceNames.DEPARTMENT }
+            )}
+            label='Departamento'
+            onChange={({ target }) => setDepartment(target.value as string)}
+          />
+          <SelectModals
+            groupOptions={getGeolocation(
+              {
+                filter: {
+                  department_id: department,
+                },
+              },
+              {
+                resource: ResourceNames.PROVINCE,
+              }
+            )}
+            label='Pronvincia'
+            onChange={({ target }) => setProvince(target.value as string)}
+          />
+        </>
+      )}
       <SelectModals
-       {...register('district')}  
-        groupOptions={getGeolocation({
-          filter:{
-            province_id: province
+        {...register('district_id')}
+        groupOptions={getGeolocation(
+          {
+            filter: {
+              province_id: province,
+            },
+          },
+          {
+            resource: ResourceNames.DISTRICT,
           }
-        }, {
-          resource: ResourceNames.DISTRICT
-        })} 
-        label='Distrito' 
+        )}
+        label='Distrito'
       />
       <CustomTextField
         textfieldProps={register('address')}

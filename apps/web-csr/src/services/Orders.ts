@@ -11,15 +11,27 @@ export interface IOrders {
   payment_method?: string;
 }
 
+export interface CreateOrderDTO {
+  address: string;
+  client_name: string;
+  district_id: number;
+  email: string;
+  phone: number;
+  reference: string;
+  comment: string;
+  payment_method_id: number;
+  order_status_id: number;
+}
+
 export class Orders implements IDataProvider {
   constructor(private client: GraphQLClient) {}
 
-  async createOne(payload: IOrders) {
-    const { insert_orderers } = await this.client.request<{
-      insert_orderers: { id: string | number };
+  async createOne(payload: CreateOrderDTO) {
+    const { insert_orderers_one } = await this.client.request<{
+      insert_orderers_one: { id: string | number };
     }>(CREATE_ORDER, { ...payload });
 
-    return insert_orderers;
+    return insert_orderers_one;
   }
 
   async getList({ pagination }: IGetListParams = {}) {

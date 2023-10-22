@@ -9,7 +9,6 @@ export enum ProviderNames {
   PAYMENT_METHODS = 'paymentMethods',
 }
 
-
 export enum SyncProviderNames {
-  GEOLOCATION = 'geolocation'
+  GEOLOCATION = 'geolocation',
 }

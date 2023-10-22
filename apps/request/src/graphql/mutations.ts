@@ -77,19 +77,26 @@ export const CREATE_ORDER = gql`
     $client_name: String
     $email: String
     $phone: Int
+    $district_id: Int
+    $payment_method_id: Int
+    $order_status_id: Int
+    $comment: String
+    $reference: String
   ) {
-    insert_orderers(
-      objects: {
+    insert_orderers_one(
+      object: {
         address: $address
         client_name: $client_name
         email: $email
-        order_id: $order_id
         phone: $phone
+        district_id: $district_id
+        payment_method_id: $payment_method_id
+        order_status_id: $order_status_id
+        comment: $comment
+        reference: $reference
       }
     ) {
-      returning {
-        order_id
-      }
+      order_id
     }
   }
 `;

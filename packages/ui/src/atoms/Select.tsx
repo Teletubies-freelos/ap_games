@@ -7,6 +7,7 @@ import {
   SxProps,
   SelectChangeEvent,
   SelectProps,
+  TextFieldProps,
 } from '@mui/material';
 
 import { ArrowDropDown as ArrowDropDownIcon } from '@mui/icons-material';
@@ -22,6 +23,7 @@ export interface SelectFilterProps<T extends IOption = IOption> {
   sxSelect?: Record<string, unknown>;
   onChange?: (event: SelectChangeEvent) => void;
   selectProps?: SelectProps;
+  textFieldProps?: TextFieldProps;
 }
 
 export default function SelectFilter({
@@ -31,6 +33,7 @@ export default function SelectFilter({
   children,
   onChange,
   selectProps,
+  textFieldProps,
 }: PropsWithChildren<SelectFilterProps>) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -66,6 +69,7 @@ export default function SelectFilter({
           ...sxSelect,
         })}
         {...selectProps}
+        {...textFieldProps}
       >
         {items?.map(({ label, value }) => (
           <MenuItem value={value} key={label + value}>
