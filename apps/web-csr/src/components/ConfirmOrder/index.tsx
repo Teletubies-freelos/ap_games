@@ -55,7 +55,7 @@ export default function ConfirmedOrder({
           />
           <Typography
             variant='h6'
-            sx={(theme) => ({ color: theme.palette.primary.main })}
+            sx={{ color: 'primary.main' }}
           >
             ¡Pedido Confirmado!
           </Typography>

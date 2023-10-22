@@ -126,6 +126,26 @@ export const GET_ORDERS = gql`
   ${ORDER_DATA}
 `;
 
+export const GET_ORDER_STATUS_BY_ID = gql`
+  query GET_ORDER_STATUS_BY_ID($id: uuid!){
+    orderers_by_pk(order_id: $id){
+      order_status {
+        name
+      }
+      order_products {
+        quantity
+        product {
+          price
+          discount_price
+          name
+        }
+      }
+      created_at
+    }
+  }
+`
+
+
 export const GET_FEATURED_PRODUCTS = gql`
   query GET_FEATURED_PRODUCTS {
     featureds {

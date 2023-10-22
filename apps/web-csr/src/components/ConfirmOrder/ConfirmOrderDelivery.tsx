@@ -41,7 +41,7 @@ const ConfirmOrderDelivery = () => {
     <ConfirmedOrder
       stepStatus={
         <StepStatus
-          steps={['En tienda', 'Entregado']}
+          steps={[{label: 'En tienda', isActive: true}, {label:'Entregado'}]}
           sx={{ width: '13rem', marginTop: '1.5rem' }}
         />
       }

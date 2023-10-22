@@ -1,6 +1,6 @@
-import { IDataProvider, IGetListParams } from 'data_providers';
+import { IDataProvider, IGetListParams, IGetOneParams } from 'data_providers';
 import { GraphQLClient } from 'graphql-request';
-import { GET_ORDERS } from '../../../request/src/graphql/queries';
+import { GET_ORDERS, GET_ORDER_STATUS_BY_ID } from '../../../request/src/graphql/queries';
 import { CREATE_ORDER } from '../../../request/src/graphql/mutations';
 
 export interface IOrders {
@@ -23,6 +23,19 @@ export interface CreateOrderDTO {
   order_status_id: number;
 }
 
+export interface OrdersByIdResponse {
+  order_status: {name : string};
+  order_products: {
+    quantity: number;
+    product:{
+      price: number;
+      discount_price?: number;
+      name: string;
+    }
+  }[]
+}
+
+
 export class Orders implements IDataProvider {
   constructor(private client: GraphQLClient) {}
 
@@ -36,7 +49,9 @@ export class Orders implements IDataProvider {
 
   async getList({ pagination }: IGetListParams = {}) {
     const { limit = 20, page = 0 } = pagination ?? {};
-    const { orderers } = await this.client.request<{ orderers: IOrders[] }>(
+    const { orderers } = await this.client.request<{ 
+      orderers: IOrders[];
+    }>(
       GET_ORDERS,
       {
         limit,
@@ -45,5 +60,22 @@ export class Orders implements IDataProvider {
     );
 
     return orderers;
+  }
+
+  async getOne({filter, id}: IGetOneParams){
+    if(filter?.status){
+      const { orderers_by_pk } = await this.client
+        .request<{
+          orderers_by_pk: OrdersByIdResponse}
+        >(
+          GET_ORDER_STATUS_BY_ID, 
+          {id}
+        )
+
+      return orderers_by_pk
+
+    }
+
+    throw new Error('Not implemented')
   }
 }
