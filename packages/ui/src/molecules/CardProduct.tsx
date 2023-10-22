@@ -8,7 +8,7 @@ import {
   Typography,
 } from "@mui/material";
 import { MouseEventHandler } from "react";
-import TagIcon from "../atoms/TagIcon";
+import { Discount, Tag } from "..";
 
 export interface CardProductProps {
   alt: string;
@@ -91,16 +91,16 @@ export default function CardProduct({
               {description}
             </Typography>
           </Box>
-          <Box>
-            {!!previousPrice && (
-              <Typography
-                variant="body2"
-                sx={{ textDecoration: "line-through" }}
-              >
-                S/ {previousPrice}
-              </Typography>
-            )}
-            <Box display='flex' gap={2}>
+          <Box display='flex' alignItems="flex-end" gap={2}>
+            <Box display='flex' flexDirection="column">
+              {!!previousPrice && (
+                <Typography
+                  variant="body2"
+                  sx={{ textDecoration: "line-through" }}
+                >
+                  S/ {previousPrice}
+                </Typography>
+              )}
               <Typography
                 variant="body2"
                 sx={{
@@ -110,22 +110,10 @@ export default function CardProduct({
               >
                 S/ {price}
               </Typography>
-              {!!previousPrice &&
-                <Box
-                  display='flex'
-                  padding={0.5}
-                  borderRadius={1}
-                  gap={1}
-                  alignItems={'center'}
-                  sx={{ backgroundColor: '#F2F8F3' }}>
-                  <TagIcon />
-                  <Typography sx={{ color: '#0A801F' }}>
-                    Oferta
-                  </Typography>
-                </Box>
-              }
             </Box>
-
+            <Box>
+              {!!previousPrice && <Tag label="Oferta" icon={<Discount />} />}
+            </Box>
           </Box>
         </CardContent>
       </Box>

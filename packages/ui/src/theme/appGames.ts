@@ -54,6 +54,11 @@ export const darkTheme = createTheme({
     action: {
       active: "#996FFF",
     },
+    success: {
+      main: "#363B50",
+      light: "#363B50",
+      dark: "#BCD7C0",
+    },
   },
 });
 

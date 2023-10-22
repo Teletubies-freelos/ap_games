@@ -84,6 +84,13 @@ export const [useAnchorElMenu, anchorElMenuDefault$] = bind(
 export const [orderId$, setOrderId] = createSignal<string>();
 export const [useOrderId, orderIdDefault$] = bind(orderId$, '');
 
+export const [categoryIdSelected$, setCategoryIdSelected] =
+  createSignal<number>();
+export const [useCategoryIdSelected, categoryIdSelectedDefault$] = bind(
+  categoryIdSelected$,
+  Number.NaN
+);
+
 if (import.meta.env.DEV && isObserverDebugOn) {
   modalState$.subscribe((next) => console.log('modalState', next));
 }

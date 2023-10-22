@@ -19,7 +19,7 @@ import { useCallback, useMemo, useState } from "react";
 import { useGetList } from "data_providers";
 import { ProviderNames } from "../../types/providers";
 import { useQuery } from "@tanstack/react-query";
-import { setIsWishList } from "../../observables";
+import { setCategoryIdSelected, setIsWishList, useCategoryIdSelected } from "../../observables";
 
 const sxProductListHeader: SxProps = {
   width: "100%",
@@ -41,7 +41,7 @@ const useCategories = () => {
 
 export default function ProductsList() {
   const [filters, setFilters] = useState<HookFilters>({});
-  const [categoryId, setCategoryId] = useState(Number.NaN);
+  const categoryId = useCategoryIdSelected()
 
   const { products, fetchNextPage } = useProducts(categoryId, filters);
 
@@ -51,7 +51,7 @@ export default function ProductsList() {
     event.preventDefault();
     const id = Number(event.target.value);
 
-    setCategoryId(id);
+    setCategoryIdSelected(id);
   };
 
   const loadMore = useCallback(() => {
@@ -62,6 +62,7 @@ export default function ProductsList() {
 
   return (
     <Paper
+      id="product-list"
       sx={{
         padding: {
           xs: "2rem 1rem",
@@ -80,7 +81,7 @@ export default function ProductsList() {
         />
         <DropDown
           selectProps={{
-            defaultValue: "all",
+            value: categoryId || "all"
           }}
           onChange={_handleChange}
           sxForm={{
