@@ -25,7 +25,7 @@ export default function EstadoPedido() {
           navigatorLinks={<NavLinks />}
           mainLogo={
             <Link to='/'>
-              <MainLogo />
+               <MainLogo sx={{ width: { xs: '70%', md: '8rem' } }} />
             </Link>
           }
           menu={

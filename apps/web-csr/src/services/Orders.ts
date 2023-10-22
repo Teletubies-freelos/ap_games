@@ -32,7 +32,8 @@ export interface OrdersByIdResponse {
       discount_price?: number;
       name: string;
     }
-  }[]
+  }[];
+  created_at: string;
 }
 
 

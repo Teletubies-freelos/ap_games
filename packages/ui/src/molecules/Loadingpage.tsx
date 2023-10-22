@@ -8,7 +8,7 @@ const LoadingPage = ()=>(
     sx={{placeItems: 'center'}} 
   >
     <MainLogo sx={{
-      fontSie: '8rem',
+      fontSize: '8rem',
       animation: 'pulse .5s ease-in-out infinite',
       '@keyframes pulse':{
         '50%':{

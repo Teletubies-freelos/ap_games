@@ -1,94 +1,131 @@
-import { Box, Typography } from "@mui/material";
-import { Button, LabelStepStatus, SearchBar, StepStatus } from "../../../../packages/ui/src";
+import { Box, Stack, Typography } from "@mui/material";
+import {
+  Button,
+  LabelStepStatus,
+  SearchBar,
+  StepStatus,
+} from "../../../../packages/ui/src";
 import { useGetOne, useSyncGetOne } from "data_providers";
 import { ProviderNames, SyncProviderNames } from "../types/providers";
 import { useRef, useState } from "react";
 import { OrdersByIdResponse } from "../services/Orders";
 
-import totalMoney from './common/total.svg';
+import totalMoney from "./common/total.svg";
+import { InfoBanner, Title } from "./InfoBanner";
+import dayjs from "dayjs";
+import { DeliveryPriceLocal } from "./DeliveryPrice";
 
 const translateStatus: Record<string, string> = {
-  canceled: 'En camino',
-  delivered: 'Entregado'
-}
+  canceled: "En camino",
+  delivered: "Entregado",
+};
 
-const stepStatus = ['En tienda', 'En camino', 'Entregado']
+const stepStatus = ["En tienda", "En camino", "Entregado"];
 
 export default function OrderStatus() {
-  const [orderStatus, setOrderStatus] = useState<string | undefined>()
-  const refProducts = useRef<OrdersByIdResponse & {id: string}| undefined>()
-  const getOrder = useGetOne(ProviderNames.ORDERS)
   const syncGetPriceDelivery = useSyncGetOne(SyncProviderNames.LOCAL_CONFIG)
   const { deliveryPrice } = syncGetPriceDelivery()
 
-  const total = refProducts
-    .current
-    ?.order_products
-    .reduce(
-      (
-        acm, 
-        {
-          quantity,
-          product : {price, discount_price}}
-      ) => acm + quantity*(discount_price ?? price) , 0
-    )
+  const [orderStatus, setOrderStatus] = useState<string | undefined>();
+  const refProducts = useRef<
+    (OrdersByIdResponse & { id: string }) | undefined
+  >();
+  const getOrder = useGetOne(ProviderNames.ORDERS);
 
-  const _handleSearchOrder = async ({search: id}: {search: string})=> {
-    const {order_status, ...rest} = await getOrder({
+  const total = refProducts.current?.order_products.reduce(
+    (acm, { quantity, product: { price, discount_price } }) =>
+      acm + quantity * (discount_price ?? price),
+    0
+  );
+
+  const _handleSearchOrder = async ({ search: id }: { search: string }) => {
+    const { order_status, ...rest } = await getOrder({
       id,
       filter: {
-        status: true
-      }
-    })
+        status: true,
+      },
+    });
 
-    refProducts.current = { 
+    refProducts.current = {
       ...rest,
-      id
-    }
+      id,
+    };
 
-    setOrderStatus(translateStatus[order_status.name as string] ?? 'En tienda')
-  }
+    setOrderStatus(translateStatus[order_status.name as string] ?? "En tienda");
+  };
 
-  if(orderStatus)
-    return  (
-    <>
-      <StepStatus
-        steps={stepStatus.map((label)=>({label, isActive: label === orderStatus}))}
-        sx={{ marginY: '2rem' }}
-      />
-      <Typography>Numero de pedido</Typography>
-      <Typography>{refProducts.current?.id}</Typography>
-      <Typography>Fecha de entrega estimada</Typography>
-      <Typography>Productos</Typography>
-      {
-        refProducts.current?.order_products.map(({product: {price, discount_price, name}})=>
-          <Box key={name}>
-            <Typography>
-              {name}
-            </Typography>
-            <Typography>
-              {(discount_price ?? price).toFixed(2)}
-            </Typography>
-          </Box>
-        )
-      }
-      <Box>
-        <Typography>Costo del delivery</Typography>
-        <Typography>{deliveryPrice}</Typography>
-      </Box>
-
-      <LabelStepStatus
-            property='TOTAL'
-            icon={<img src={totalMoney} alt='money' />}
-            value={`S/. ${total?.toFixed()}`}
-            sx={{
-              fontWeight: 'bold !important',
-              fontSize: '1.1rem !important',
-            }}
+  if (orderStatus)
+    return (
+      <Stack maxWidth={"32rem"} margin={"auto"} spacing={2}>
+        <StepStatus
+          steps={stepStatus.map((label) => ({
+            label,
+            isActive: label === orderStatus,
+          }))}
+          sx={{ marginY: "2rem" }}
+        />
+        <Stack spacing={2} marginX={'1rem !important'}>
+          <InfoBanner
+            title="Numero de pedido"
+            content={refProducts.current?.id}
           />
-
-    </>
-    )
+          <InfoBanner
+            title="Fecha de entrega estimada"
+            content={dayjs(refProducts.current?.created_at)
+              .add(4, "day")
+              .toDate()
+              .toLocaleDateString("es-ES", {
+                month: "long",
+                day: "numeric",
+              })}
+          />
+          
+          <Stack spacing={2} pb={2} sx={{
+            backgroundColor: 'background.paper'
+          }}>
+            <Box p={2}>
+              <Title>
+                Productos
+              </Title>
+            </Box>
+            {refProducts.current?.order_products.map(
+              ({ product: { price, discount_price, name }, quantity }) => (
+                <Box key={name} p={2} sx={{backgroundColor: 'background.default'}}>
+                  <Box display='flex' gap={1}>
+                    <Typography>{name}</Typography>
+                    <Typography px={3/4} sx={{
+                      display: 'grid',
+                      placeItems: 'center',
+                      backgroundColor: 'primary.main',
+                      borderRadius: 3
+                    }}>
+                      x{quantity}
+                    </Typography>
+                  </Box>
+                  <Typography 
+                    fontSize='1.3em'
+                    fontWeight='bolder'
+                    display='flex'
+                    justifyContent='flex-end'>
+                    S/. {(((discount_price ?? price)*quantity) + Number(deliveryPrice)).toFixed(2)}
+                  </Typography>
+                </Box>
+              )
+            )}
+          </Stack>
+        </Stack>
+        <DeliveryPriceLocal />
+        <LabelStepStatus
+          property="TOTAL"
+          icon={<img src={totalMoney} alt="money" />}
+          value={`S/. ${total?.toFixed()}`}
+          sx={{
+            fontWeight: "bold !important",
+            fontSize: "1.1rem !important",
+          }}
+        />
+      </Stack>
+    );
 
   return (
     <Box
@@ -113,14 +150,15 @@ export default function OrderStatus() {
           direction="column"
           onSubmit={_handleSearchOrder}
           placeHolder="ABC123"
-          buttonSearch={<Button type='submit' label="buscar" variant="contained" />}
+          buttonSearch={
+            <Button type="submit" label="buscar" variant="contained" />
+          }
         />
       </Box>
       <Box
         justifyContent="center"
         sx={{ display: { xs: "none", sm: "flex" }, width: "100%" }}
-      >
-      </Box>
+      ></Box>
     </Box>
   );
 }

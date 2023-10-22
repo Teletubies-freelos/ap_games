@@ -42,6 +42,7 @@ export interface OrderDTO {
 export interface OrderProductDTO {
   order_id: string;
   product_id: number;
+  quantity: number;
 }
 
 export interface FeaturedDTO {

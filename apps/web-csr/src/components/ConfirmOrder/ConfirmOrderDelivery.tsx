@@ -1,12 +1,13 @@
 import { Typography } from '@mui/material';
 import ConfirmedOrder from '.';
-import { LabelStepStatus, StepStatus } from '../../../../../packages/ui/src';
+import { StepStatus } from '../../../../../packages/ui/src';
 import FooterModal from '../common/FooterModal';
 import InfoPayment from '../common/InfoPayment';
 import {  useQueryClient } from '@tanstack/react-query';
 import {  useSyncGetOne } from 'data_providers';
 import { UserInfo } from '../../services/SessionStorage';
-import { ProviderNames, SyncProviderNames } from '../../types/providers';
+import { ProviderNames } from '../../types/providers';
+import { DeliveryPriceLocal } from '../DeliveryPrice';
 
  interface IDataPayment{
   name: string
@@ -31,10 +32,6 @@ const useGetPaymentInfo = () => {
 }
 
 const ConfirmOrderDelivery = () => {
-  
-  const syncGetPriceDelivery = useSyncGetOne(SyncProviderNames.LOCAL_CONFIG)
-  const {deliveryPrice} = syncGetPriceDelivery()
-
   const {owner , number, alternative_number ,name , meta, type} = useGetPaymentInfo()
 
   return (
@@ -56,16 +53,7 @@ const ConfirmOrderDelivery = () => {
           }}
         />
       }
-      priceDelivery={
-        <LabelStepStatus
-          property='Costo de delivery'
-          value={deliveryPrice}
-          sx={{
-            fontSize: '1rem !important',
-            marginTop: '1.5rem',
-          }}
-        />
-      }
+      priceDelivery={<DeliveryPriceLocal />}
       infoPayment={
         <InfoPayment
           titleInfo='Números de cuenta'

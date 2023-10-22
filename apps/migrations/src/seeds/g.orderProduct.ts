@@ -13,9 +13,10 @@ export async function seed(knex: Knex) {
     Array
       .from({length: faker.number.int({min: 0, max: 6})})
       .map(()=>({
-       order_id,
-       product_id: products[faker.number.int({min: 0, max: products.length - 1})]
-        .product_id
+        order_id,
+        product_id: products[faker.number.int({min: 0, max: products.length - 1})]
+          .product_id,
+        quantity: faker.number.int({min: 0, max: 6})
       }))
       .filter(({product_id}, index, array)=>
         index === array.findIndex(({product_id:pid})=>product_id === pid)

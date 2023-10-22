@@ -34,55 +34,55 @@ export default function ConfirmedOrder({
   const total = useMemo(()=> reduceTotalPrice(data) ?? 0, [data])
 
   return (
-      <Stack
-        sx={(theme) => ({
-          background: theme.palette.background.default,
-          maxWidth: '40rem',
-          minHeight: '40rem',
-          width: '100%',
-          borderRadius: ' 0.3rem',
-          padding: '2rem',
-          justifyContent: 'center',
-        })}
-      >
-        <Stack alignItems='center'>
-          <CheckCircleOutlineOutlinedIcon
-            sx={(theme) => ({
-              color: theme.palette.primary.main,
-              height: '3.875rem',
-              width: '3.875rem',
-            })}
-          />
-          <Typography
-            variant='h6'
-            sx={{ color: 'primary.main' }}
-          >
-            ¡Pedido Confirmado!
-          </Typography>
-          {stepStatus}
-          {infoPayment}
-        </Stack>
-        <Stack marginTop='1.5rem'>
-          {priceDelivery}
-          { isFetching ? <CircularProgress /> :  <LabelStepStatus
-            property='TOTAL'
-            icon={<img src={totalMoney} alt='money' />}
-            value={`S/. ${total.toFixed()}`}
-            sx={{
-              fontWeight: 'bold !important',
-              fontSize: '1.1rem !important',
-            }}
-          />}
-          <LabelStepStatus
-            property='Número de pedido'
-            value={code}
-            sx={{
-              fontSize: '1rem !important',
-              marginTop: '1.5rem',
-            }}
-          />
-        </Stack>
-        {footer}
+    <Stack
+      sx={(theme) => ({
+        background: theme.palette.background.default,
+        maxWidth: '40rem',
+        minHeight: '40rem',
+        width: '100%',
+        borderRadius: ' 0.3rem',
+        padding: '2rem',
+        justifyContent: 'center',
+      })}
+    >
+      <Stack alignItems='center'>
+        <CheckCircleOutlineOutlinedIcon
+          sx={(theme) => ({
+            color: theme.palette.primary.main,
+            height: '3.875rem',
+            width: '3.875rem',
+          })}
+        />
+        <Typography
+          variant='h6'
+          sx={{ color: 'primary.main' }}
+        >
+          ¡Pedido Confirmado!
+        </Typography>
+        {stepStatus}
+        {infoPayment}
       </Stack>
+      <Stack marginTop='1.5rem'>
+        {priceDelivery}
+        { isFetching ? <CircularProgress /> :  <LabelStepStatus
+          property='TOTAL'
+          icon={<img src={totalMoney} alt='money' />}
+          value={`S/. ${total.toFixed()}`}
+          sx={{
+            fontWeight: 'bold !important',
+            fontSize: '1.1rem !important',
+          }}
+        />}
+        <LabelStepStatus
+          property='Número de pedido'
+          value={code}
+          sx={{
+            fontSize: '1rem !important',
+            marginTop: '1.5rem',
+          }}
+        />
+      </Stack>
+      {footer}
+    </Stack>
   );
 }

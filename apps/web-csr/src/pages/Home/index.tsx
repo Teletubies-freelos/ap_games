@@ -54,7 +54,7 @@ export default function Home() {
           navigatorLinks={<NavLinks />}
           mainLogo={
             <Link to='/'>
-              <MainLogo sx={{ width: { xs: '70%' } }} />
+              <MainLogo sx={{ width: { xs: '70%', md: '8rem' } }} />
             </Link>
           }
           searchBar={
