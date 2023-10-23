@@ -37,4 +37,8 @@ export class Cart implements IDataProvider{
   async deleteOne(id: string | number){
     await this.table.delete(id)
   }
+
+  async deleteMany(){
+    await this.table.clear()
+  }
 }

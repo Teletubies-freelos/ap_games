@@ -57,6 +57,7 @@ export function BodyCart({listPriceCb = defaultPriceCb }: BodyCartProps) {
             width: '100%',
           }}
         >
+          {!isFetching && data?.length=== 0 && <Typography textAlign='center' variant='h6'>No hay nada en el carrito </Typography>} 
           {data?.map(({ imageUrl, name, price, quantity, id }) => (
             <CardStateOrder
               key={id}
