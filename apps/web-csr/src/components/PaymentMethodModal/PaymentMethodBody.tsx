@@ -1,21 +1,20 @@
 import { Box, TextField, Typography, Button, Stack } from '@mui/material';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import { DropDown } from '../../../../../packages/ui/src';
-import { ModalState, setModalState, setOrderId } from '../../observables';
+import { ModalState, setModalState, setPurchaseCode } from '../../observables';
 import {
-  useCreateMany,
   useCreateOne,
   useGetList,
-  useGetOne,
 } from 'data_providers';
 import { ProviderNames } from '../../types/providers';
-import { UserInfo } from '../../services/SessionStorage';
 import { useForm } from 'react-hook-form';
 import CustomAcordion from '../common/CustomAcordion';
 import { ICartProduct } from '../../data/indexedDB';
 import { useQuery } from '@tanstack/react-query';
+import { useConfirmRequest } from '../../hooks/useConfirmRequest';
+import { useEffect } from 'react';
 
-interface PaymentMethodData {
+export interface PaymentMethodData {
   paymentMethod: string;
   payment_method_id: number;
   order_status_id: number;
@@ -28,33 +27,6 @@ interface PaymentMethodBodyProps {
     products: ICartProduct[] | undefined
   ) => number | undefined;
 }
-
-const useConfirmRequest = () => {
-  const getClientData = useGetOne<UserInfo>(ProviderNames.SESSION_STORAGE);
-  const getCartProducts = useGetList(ProviderNames.CART);
-  const createOrder = useCreateOne(ProviderNames.ORDERS);
-  const createOrderProducts = useCreateMany(ProviderNames.ORDER_PRODUCTS);
-
-  return async (data: PaymentMethodData) => {
-    const clientData = await getClientData();
-    const products = await getCartProducts();
-
-    const { order_id } =
-      (await createOrder({
-        ...clientData,
-        ...data,
-      })) ?? {};
-
-    await createOrderProducts(
-      products.map(({ productId }) => ({
-        product_id: productId,
-        order_id,
-      }))
-    );
-
-    order_id && setOrderId(order_id);
-  };
-};
 
 export default function PaymentMethodBody({
   reduceQuantity,
@@ -70,7 +42,9 @@ export default function PaymentMethodBody({
       order_status_id: 1,
     };
     await createToSession(newDataPayment);
-    await confirmRequest(newDataPayment);
+    const requestOrderId =  await confirmRequest(newDataPayment);
+    requestOrderId && setPurchaseCode(requestOrderId);
+
     setModalState({
       data: {
         name: ModalState.DELIVERY_CENTRAL_CONFIRMATION,

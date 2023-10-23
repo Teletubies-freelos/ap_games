@@ -3,14 +3,14 @@ import ConfirmedOrder from '.';
 import { StepStatus } from '../../../../../packages/ui/src';
 import FooterModal from '../common/FooterModal';
 import InfoPayment from '../common/InfoPayment';
-import {  useMutation, useQueryClient } from '@tanstack/react-query';
-import {  useSyncGetOne,useDeleteMany } from 'data_providers';
-import { UserInfo } from '../../services/SessionStorage';
+import {  useMutation } from '@tanstack/react-query';
+import { useDeleteMany } from 'data_providers';
 import { ProviderNames } from '../../types/providers';
 import { DeliveryPriceLocal } from '../DeliveryPrice';
 import { setModalState } from '../../observables';
+import { useGetPaymentInfo } from '../../hooks/useGetPaymentInfo';
 
- interface IDataPayment{
+ export interface IDataPayment{
   name: string
   payment_method_id: number
   owner: string
@@ -18,18 +18,6 @@ import { setModalState } from '../../observables';
   alternative_number: number
   meta?: string
   type: string
-}
-
-const useGetPaymentInfo = () => {
-  const queryClient = useQueryClient();
-  const getClientData = useSyncGetOne<UserInfo>(ProviderNames.SESSION_STORAGE);
-  const {payment_method_id} =  getClientData()
-
-  const data = queryClient.getQueryData<IDataPayment[] >(['payment_methods']);
-
-  const infoPayment = data?.find((item) => item.payment_method_id === Number(payment_method_id))
-  if(!infoPayment) throw new Error ('No hay informacion en la cache')
-  return infoPayment ?? {};
 }
 
 const ConfirmOrderDelivery = () => {
@@ -40,7 +28,6 @@ const ConfirmOrderDelivery = () => {
     ['products_in_cart'],
     async () => await deleteAllProductsInCart()
   );
-
 
   const handleSubmit = () => {
     setModalState(undefined);

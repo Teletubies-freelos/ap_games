@@ -1,14 +1,13 @@
-import { CircularProgress, IconButton, Typography } from '@mui/material';
+import { IconButton, Typography } from '@mui/material';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import { useMutation } from '@tanstack/react-query';
 import { useCreateOne } from 'data_providers';
 import HeadModal from '../common/HeadModal';
 import FooterModal from '../common/FooterModal';
 
 import { ModalLayout } from '../../../../../packages/ui/src';
-import { ModalState, setModalState } from '../../observables';
+import { ModalState, setModalState, setPurchaseCode } from '../../observables';
 import { ProviderNames } from '../../types/providers';
-import { CreateOrderDTO } from '../../services/Orders';
+import { useMutation } from '@tanstack/react-query';
 
 interface PickupStoreProps {
   content?: JSX.Element;
@@ -17,11 +16,14 @@ interface PickupStoreProps {
 export default function PickupStoreModal({
   content,
 }: Readonly<PickupStoreProps>) {
+
   const createOrder = useCreateOne(ProviderNames.ORDERS);
-  const { isLoading } = useMutation(
-    ['orders'],
-    async (orders: CreateOrderDTO) => await createOrder(orders)
-  );
+
+  const { mutate } = useMutation(createOrder, {
+    onSuccess: (data) => {
+      setPurchaseCode(data?.order_id);
+    },
+  });
 
   const handleBack = () => {
     setModalState({
@@ -30,14 +32,14 @@ export default function PickupStoreModal({
       },
       previousState: {
         data: {
-          name: ModalState.IN_STORE_SUMMARY,
+          name: ModalState.IN_STORE_CONFIRMATION,
         },
       },
     });
   };
 
   const handleConfirm = () => {
-   /*  mutate({ address: '' }); */
+     mutate({})
 
     setModalState({
       data: {
@@ -70,9 +72,7 @@ export default function PickupStoreModal({
       }
     >
       {content}
-      {isLoading ? (
-        <CircularProgress />
-      ) : (
+
         <FooterModal
           onClick={handleConfirm}
           nameButton='Confirmar pedido'
@@ -83,7 +83,7 @@ export default function PickupStoreModal({
             marginTop: '2rem',
           }}
         />
-      )}
+
     </ModalLayout>
   );
 }
