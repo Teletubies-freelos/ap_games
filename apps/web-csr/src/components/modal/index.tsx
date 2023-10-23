@@ -7,6 +7,7 @@ import PickupStoreBody from '../PickupStoreModal/PickupStoreBody';
 import ClientDataModal from '../ClientDataModal';
 import PaymentMethodModal from '../PaymentMethodModal';
 import ConfirmOrderDelivery from '../ConfirmOrder/ConfirmOrderDelivery';
+import ConfirmOrderPickup from '../ConfirmOrder/ConfirmOrderPickup';
 
 const modals = {
   [ModalState.CART]: () => <CartModal content={<BodyCart />} />,
@@ -17,9 +18,7 @@ const modals = {
   [ModalState.DELIVERY_CENTRAL_CLIENT_DATA]: () => <ClientDataModal />,
   [ModalState.DELIVERY_CENTRAL_CONFIRMATION]: () => <ConfirmOrderDelivery />,
   [ModalState.DELIVERY_CENTRAL_PAYMENT_METHOD]: () => <PaymentMethodModal />,
-  [ModalState.IN_STORE_CONFIRMATION]: () => (
-    <CartModal content={<BodyCart />} />
-  ),
+  [ModalState.IN_STORE_CONFIRMATION]: () => (<ConfirmOrderPickup />),
   [ModalState.IN_STORE_SUMMARY]: () => (
     <PickupStoreModal content={<PickupStoreBody />} />
   ),
