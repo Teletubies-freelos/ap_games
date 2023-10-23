@@ -11,6 +11,7 @@ jobs:
     env:
       VITE_MASTER_TOKEN: ${{ vars.MASTER_TOKEN }}
       VITE_GRAPHQL_URL: ${{ vars.GRAPHQL_URL }}
+      VITE_IS_HASH_PROVIDER: true
       VITE_WOOPRA_DOMAIN: ${{ vars.WOOPRA_DOMAIN }}
     name: 🎉 Deploy
     runs-on: ubuntu-latest
