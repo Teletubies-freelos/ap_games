@@ -4,13 +4,11 @@ import { StepStatus } from '../../../../../packages/ui/src';
 import FooterModal from '../common/FooterModal';
 import InfoPayment from '../common/InfoPayment';
 import {  useMutation, useQueryClient } from '@tanstack/react-query';
-import {  useSyncGetOne } from 'data_providers';
+import {  useSyncGetOne,useDeleteMany } from 'data_providers';
 import { UserInfo } from '../../services/SessionStorage';
 import { ProviderNames } from '../../types/providers';
 import { DeliveryPriceLocal } from '../DeliveryPrice';
 import { setModalState } from '../../observables';
-import { cartProvider } from '../../modules';
-import { useDeleteMany } from 'data_providers';
 
  interface IDataPayment{
   name: string
