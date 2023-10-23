@@ -39,6 +39,29 @@ export class Products {
     }
   `;
 
+static GET_PRODUCTS = gql`
+query GetProducts($limit: Int, $offset: Int,) {
+  Products(
+    limit: $limit
+    offset: $offset
+    order_by: { updated_at: desc }
+  ) {
+    banner_img_url
+    category_id
+    description
+    discount_price
+    img_url
+    is_offer
+    is_visible
+    name
+    price
+    product_id
+    quantity
+    secondary_img_url
+  }
+}
+`;
+
   static CREATE_PRODUCT = gql`
     mutation CREATE_PRODUCT(
       $description: String

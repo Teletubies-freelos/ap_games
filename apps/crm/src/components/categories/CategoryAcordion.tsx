@@ -13,7 +13,7 @@ import { Product } from '../product';
 import {
   categoryId$,
   isRefetchProducts$,
-  setIsOpenCategory,
+  setIsOpenCreateProduct,
 } from '../../observables';
 
 interface CategoryAcordionProps {
@@ -58,7 +58,7 @@ const CategoryAcordion = ({ id, name }: CategoryAcordionProps) => {
   });
  */
   const handleProductModal = () => {
-    setIsOpenCategory(true);
+    setIsOpenCreateProduct(true);
     categoryId$.next(id);
   };
 

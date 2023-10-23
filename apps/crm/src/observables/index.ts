@@ -2,12 +2,12 @@ import { createSignal } from '@react-rxjs/utils';
 import { bind } from '@react-rxjs/core';
 import { BehaviorSubject } from 'rxjs';
 
-export const [isOpenCategory$, setIsOpenCategory] = createSignal<
+export const [isOpenCreateProduct$, setIsOpenCreateProduct] = createSignal<
   boolean | undefined
 >();
 
-export const [useIsOpenCategory, isOpenCategoryModal$] = bind(
-  isOpenCategory$,
+export const [useIsOpenCreateProduct, isOpenCreateProductDefault$] = bind(
+  isOpenCreateProduct$,
   false,
 );
 
