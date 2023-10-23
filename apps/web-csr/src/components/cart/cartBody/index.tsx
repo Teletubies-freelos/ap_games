@@ -79,19 +79,21 @@ export function BodyCart({listPriceCb = defaultPriceCb }: BodyCartProps) {
           ))}
         </List>
       </Box>
-      {isFetching ? (
-        <CircularProgress />
-      ) : (
-        <LabelStepStatus
-          property='Total'
-          value={`S/. ${total?.toFixed(2)}`}
-          icon={<img src={totalMoney} alt='money' />}
-          sx={{
-            fontSize: '1rem !important',
-            marginTop: '1.5rem',
-          }}
-        />
-      )}
+      <Box height={'2.5rem'} display='flex' justifyContent='center' >
+        {isFetching ? (
+          <CircularProgress sx={{height:'2.5rem !important'}}/>
+        ) : (
+          <LabelStepStatus
+            property='Total'
+            value={`S/. ${total?.toFixed(2)}`}
+            icon={<img src={totalMoney} alt='money' />}
+            sx={{
+              fontSize: '1rem !important',
+              marginTop: '1.5rem',
+            }}
+          />
+        )}
+      </Box>
 
       <Stack>
         <Typography

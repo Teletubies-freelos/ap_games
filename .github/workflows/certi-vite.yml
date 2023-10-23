@@ -9,8 +9,9 @@ name: 🚀 Deploy website on push
 jobs:
   web-deploy:
     env:
-      VITE_HASURA_SECRET: ${{ vars.HASURA_SECRET }}
-      VITE_HASURA_BASE_URL: ${{ vars.HASURA_BASE_URLs }}
+      VITE_MASTER_TOKEN: ${{ vars.MASTER_TOKEN }}
+      VITE_GRAPHQL_URL: ${{ vars.GRAPHQL_URL }}
+      VITE_WOOPRA_DOMAIN: ${{ vars.WOOPRA_DOMAIN }}
     name: 🎉 Deploy
     runs-on: ubuntu-latest
     steps:
@@ -25,7 +26,7 @@ jobs:
         version: 8
         run_install: false
     - name: Build
-      working-directory: apps/web2
+      working-directory: apps/web-csr
       run: |
         pnpm install
         pnpm build
@@ -35,5 +36,5 @@ jobs:
         server: ${{ secrets.FTP_HOST }}
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
-        local-dir: ./apps/web2/dist/
+        local-dir: ./apps/web-csr/dist/
         server-dir: /cert.apgames.pe/public_html/
