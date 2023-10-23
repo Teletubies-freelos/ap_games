@@ -59,6 +59,9 @@ importers:
       cloudinary:
         specifier: ^1.40.0
         version: 1.41.0
+      data_providers:
+        specifier: ^2.0.2
+        version: 2.0.2(react-dom@18.2.0)(react@18.2.0)
       graphql:
         specifier: ^16.8.1
         version: 16.8.1

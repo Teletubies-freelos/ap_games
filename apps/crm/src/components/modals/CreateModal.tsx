@@ -5,8 +5,8 @@ import { useForm } from 'react-hook-form';
 import {
   categoryId$,
   isRefetchProducts$,
-  setIsOpenCategory,
-  useIsOpenCategory,
+  setIsOpenCreateProduct,
+  useIsOpenCreateProduct,
 } from '../../observables';
 import { useMutation } from '@tanstack/react-query';
 import { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
@@ -74,10 +74,10 @@ const CreateModal = () => {
     });
 
     isRefetchProducts$.next(categoryIdRef.current);
-    setIsOpenCategory(false);
+    setIsOpenCreateProduct(false);
   };
 
-  const isOpen = useIsOpenCategory();
+  const isOpen = useIsOpenCreateProduct();
 
   const handleChange = async (event: ChangeEvent<HTMLInputElement>)=>{
     const [ file ] = event.target.files ?? []
@@ -96,7 +96,7 @@ const CreateModal = () => {
   }
 
   return (
-    <Dialog open={!!isOpen} onClose={() => setIsOpenCategory(false)}>
+    <Dialog open={!!isOpen} onClose={() => setIsOpenCreateProduct(false)}>
       <Stack
         sx={{
           width: '80vw',
