@@ -12,7 +12,6 @@ import CustomAcordion from '../common/CustomAcordion';
 import { ICartProduct } from '../../data/indexedDB';
 import { useQuery } from '@tanstack/react-query';
 import { useConfirmRequest } from '../../hooks/useConfirmRequest';
-import { useEffect } from 'react';
 
 export interface PaymentMethodData {
   paymentMethod: string;
