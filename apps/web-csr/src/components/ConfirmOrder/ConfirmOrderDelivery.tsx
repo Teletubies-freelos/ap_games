@@ -3,11 +3,12 @@ import ConfirmedOrder from '.';
 import { StepStatus } from '../../../../../packages/ui/src';
 import FooterModal from '../common/FooterModal';
 import InfoPayment from '../common/InfoPayment';
-import {  useQueryClient } from '@tanstack/react-query';
-import {  useSyncGetOne } from 'data_providers';
+import {  useMutation, useQueryClient } from '@tanstack/react-query';
+import {  useSyncGetOne,useDeleteMany } from 'data_providers';
 import { UserInfo } from '../../services/SessionStorage';
 import { ProviderNames } from '../../types/providers';
 import { DeliveryPriceLocal } from '../DeliveryPrice';
+import { setModalState } from '../../observables';
 
  interface IDataPayment{
   name: string
@@ -33,6 +34,18 @@ const useGetPaymentInfo = () => {
 
 const ConfirmOrderDelivery = () => {
   const {owner , number, alternative_number ,name , meta, type} = useGetPaymentInfo()
+  const deleteAllProductsInCart = useDeleteMany(ProviderNames.CART)
+
+  const { mutate  } = useMutation(
+    ['products_in_cart'],
+    async () => await deleteAllProductsInCart()
+  );
+
+
+  const handleSubmit = () => {
+    setModalState(undefined);
+    mutate()
+  }
 
   return (
     <ConfirmedOrder
@@ -44,6 +57,7 @@ const ConfirmOrderDelivery = () => {
       }
       footer={
         <FooterModal
+          onClick={handleSubmit}
           infoMessage='Guarda tu número de pedido y realiza el seguimiento en nuestra página principal'
           nameButton='Hacer otro pedido'
           sx={{
