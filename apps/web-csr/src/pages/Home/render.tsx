@@ -1,5 +1,6 @@
-import { CardHeroHOC, IFeatured } from './carHeroHOC';
+import { FeaturedDTO } from '../../../../migrations/src/types/tables';
+import { CardHeroHOC } from './carHeroHOC';
 
-export const render = (props: IFeatured) => (
+export const render = (props: FeaturedDTO) => (
   <CardHeroHOC key={props.featured_id} {...props} />
 );

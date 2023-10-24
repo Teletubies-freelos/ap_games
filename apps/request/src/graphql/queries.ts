@@ -143,10 +143,12 @@ export const GET_ORDER_STATUS_BY_ID = gql`
 export const GET_FEATURED_PRODUCTS = gql`
   query GET_FEATURED_PRODUCTS {
     featureds {
-      banner_img_url
-      description
-      title
       featured_id
+      title
+      description
+      product_id
+      banner_img_url
+      offer_price
       price
     }
   }

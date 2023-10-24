@@ -2,6 +2,7 @@ import { useCreateOne } from 'data_providers';
 import { CardHero } from '../../../../../packages/ui/src';
 import { ProviderNames } from '../../types/providers';
 import { ICartProduct } from '../../data/indexedDB';
+import { FeaturedDTO } from '../../../../migrations/src/types/tables';
 
 export interface IFeatured {
   title: string;
@@ -16,7 +17,10 @@ export const CardHeroHOC = ({
   description = '',
   featured_id,
   price = 0,
-}: IFeatured) => {
+  title = '',
+  offer_price,
+  product_id
+}: FeaturedDTO) => {
   console.log({
     banner_img_url,
     description,
@@ -26,10 +30,11 @@ export const CardHeroHOC = ({
   const createCartProduct = useCreateOne<ICartProduct>(ProviderNames.CART, {
     payload: {
       imageUrl: banner_img_url,
-      description,
-      featured_id,
+      name: title,
+      priceDiscount: offer_price,
       price,
-
+      quantity: 1,
+      productId: product_id
     },
   });
 

@@ -54,5 +54,4 @@ export interface FeaturedDTO {
   offer_price?: number;
   price: number;
   is_offer?: boolean;
-  name?: string;
 }

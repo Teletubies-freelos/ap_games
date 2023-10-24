@@ -26,14 +26,17 @@ import { useQuery } from '@tanstack/react-query';
 import { Menu as MenuIcon } from '@mui/icons-material';
 import { setAnchorElMenu, useAnchorElMenu } from '../../observables';
 import { reduceQuantity } from '../../utils';
+import { FeaturedDTO } from '../../../../migrations/src/types/tables'
 
 export default function Home() {
-  const getFeaturedProducts = useGetList(ProviderNames.FEATURED);
+  const getFeaturedProducts = useGetList<FeaturedDTO>(ProviderNames.FEATURED);
 
   const { data } = useQuery(
     ['home featured'],
     async () => await getFeaturedProducts()
   );
+
+  console.log(data)
 
   const toggleColor = useToggleColor();
 
