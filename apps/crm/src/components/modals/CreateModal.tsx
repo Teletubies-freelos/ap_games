@@ -43,7 +43,7 @@ interface FormValues {
 const CreateModal = () => {
   const [imgUrl, setImgUrl] = useState('');
 
-  const { control, register, handleSubmit } = useForm<FormValues>({
+  const { control, register, handleSubmit, reset } = useForm<FormValues>({
     defaultValues: {
       name: '',
       quantity: 0,
@@ -76,6 +76,7 @@ const CreateModal = () => {
           ['all_products_table'],
           newProduct?.product_id
         );
+        reset();
       },
     }
   );
@@ -147,20 +148,28 @@ const CreateModal = () => {
         <Typography variant='h3' textAlign='center'>
           Producto Nuevo
         </Typography>
-        <IconButton
-          aria-label='upload picture'
-          component='label'
-          sx={{
-            width: '4rem',
-            aspectRatio: 1,
-          }}
-        >
-          <input hidden type='file' accept='image/*' onChange={handleChange} />
-          <Photo />
-        </IconButton>
-        {!!imgUrl && (
-          <img height={100} width={50} src={imgUrl} alt='uploaded image' />
-        )}
+        <Stack gap='1rem' alignItems='center'>
+          <Typography>Imagen del Producto</Typography>
+          <IconButton
+            aria-label='upload picture'
+            component='label'
+            sx={{
+              width: '4rem',
+              aspectRatio: 1,
+            }}
+          >
+            <input
+              hidden
+              type='file'
+              accept='image/*'
+              onChange={handleChange}
+            />
+            <Photo />
+          </IconButton>
+          {!!imgUrl && (
+            <img height={80} width={80} src={imgUrl} alt='uploaded image' />
+          )}
+        </Stack>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Stack gap='1rem'>
             <TextField

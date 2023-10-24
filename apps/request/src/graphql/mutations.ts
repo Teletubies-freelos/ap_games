@@ -72,8 +72,28 @@ export const DELETE_PRODUCT = gql`
 
 export const CREATE_CATEGORY = gql`
   mutation CREATE_CATEGORY($name: String!) {
-    insert_categories(object: { name: $name }) {
+    insert_categories_one(object: { name: $name }) {
       name
+    }
+  }
+`;
+
+export const DELETE_CATEGORY = gql`
+  mutation DELETE_CATEGORY($category_id: Int!) {
+    delete_categories_by_pk(category_id: $category_id) {
+      category_id
+    }
+  }
+`;
+
+export const UPDATE_CATEGORY = gql`
+  mutation UPDATE_CATEGORY($category_id: Int!, $name: String!) {
+    update_categories_by_pk(
+      pk_columns: { category_id: $category_id }
+      _set: { name: $name }
+    ) {
+      name
+      category_id
     }
   }
 `;
