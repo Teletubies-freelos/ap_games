@@ -40,23 +40,9 @@ const CategoryAcordion = ({ id, name }: CategoryAcordionProps) => {
       enabled: isOpen,
       cacheTime: Number.MAX_VALUE,
       staleTime: Number.MAX_VALUE,
-    },
+    }
   );
 
-  /*  const { data } = useInfiniteQuery({
-    queryKey: ['products', id],
-    queryFn: async ({ pageParam = 0 }) =>
-      await products?.getList({
-        filters: {
-          categoryId: id,
-        },
-        pagination: {
-          offset: pageParam,
-        },
-      }),
-    getNextPageParam: (_lastPage, pages) => pages.length + 1,
-  });
- */
   const handleProductModal = () => {
     setIsOpenCreateProduct(true);
     categoryId$.next(id);
@@ -106,7 +92,7 @@ const CategoryAcordion = ({ id, name }: CategoryAcordionProps) => {
               image_url={image_url}
               quantity={quantity}
             />
-          ),
+          )
         )}
       </AccordionDetails>
     </Accordion>

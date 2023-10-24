@@ -8,14 +8,17 @@ export const [isOpenCreateProduct$, setIsOpenCreateProduct] = createSignal<
 
 export const [useIsOpenCreateProduct, isOpenCreateProductDefault$] = bind(
   isOpenCreateProduct$,
-  false,
+  false
 );
 
 export const categoryId$ = new BehaviorSubject<number | string | undefined>(
-  undefined,
+  undefined
 );
 
 export const isRefetchCategories$ = new BehaviorSubject(undefined);
 export const isRefetchProducts$ = new BehaviorSubject<
   undefined | string | number
 >(undefined);
+
+export const [isEdit$, setIsEdit] = createSignal<boolean>();
+export const [useIsEdit, isEditDefault$] = bind(isEdit$, false);
