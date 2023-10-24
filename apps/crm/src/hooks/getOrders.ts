@@ -1,27 +1,25 @@
-import { useContext, useState } from 'react';
-import { dataContext } from '../context/data';
+import { useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import { MRT_PaginationState } from 'material-react-table';
-import { finalProducts } from '../utils';
+import { useGetList } from 'data_providers';
+import { AsyncProviderNames } from '../types/providers';
 
 export const useOrders = () => {
-  const { orders } = useContext(dataContext);
   const [page, setPage] = useState<MRT_PaginationState>({
     pageIndex: 0,
     pageSize: 20,
   });
 
-  const queryData = useQuery(['orders'], {
-    queryFn: () =>
-      orders?.getList({
-        pagination: { offset: page.pageIndex * page.pageSize },
-      }),
-  });
+  const getAllOrders = useGetList(AsyncProviderNames.ORDERS);
+  const queryData = useQuery(
+    ['all_orders_table'],
+    async () => await getAllOrders()
+  );
 
   return {
     ...queryData,
     setPage,
     pagination: page,
-    data: finalProducts(queryData.data || []),
+    data: queryData.data || [],
   };
 };

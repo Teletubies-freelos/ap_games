@@ -5,11 +5,34 @@ import CreateModal from '../../components/modals/CreateModal';
 import { ListColumns } from './config';
 import { setIsOpenCreateProduct } from '../../observables';
 import { Delete, Edit } from '@mui/icons-material';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useDeleteOne } from 'data_providers';
+import { AsyncProviderNames } from '../../types/providers';
+import { IProduct } from '../../services/Products';
 
 export const ListProducts = () => {
-  const { data, setPage, pagination,isFetching } = useGetProducts();
-  
+  const { data, setPage, pagination, isLoading } = useGetProducts();
+
   const list = ListColumns;
+  const queryClient = useQueryClient();
+
+  //delete
+  const deleteProduct = useDeleteOne(AsyncProviderNames.PRODUCTS);
+  const { mutate } = useMutation(
+    ['delete_product'],
+    async (product_id: number) => {
+      deleteProduct(product_id);
+    },
+    {
+      onSuccess: (_data, variables) => {
+        queryClient.setQueryData<IProduct[]>(
+          ['all_products_table'],
+          (prevProducts) =>
+            prevProducts?.filter((product) => product.product_id !== variables)
+        );
+      },
+    }
+  );
 
   return (
     <Stack gap={'1rem'}>
@@ -25,39 +48,31 @@ export const ListProducts = () => {
         onPaginationChange={setPage}
         renderTopToolbarCustomActions={() => (
           <>
-            <Button onClick={() => setIsOpenCreateProduct(true)} variant='contained'>
+            <Button
+              onClick={() => setIsOpenCreateProduct(true)}
+              variant='contained'
+            >
               Add Product
             </Button>
             <CreateModal />
           </>
         )}
-        renderRowActions={({ row, table }) => (
-          <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: '8px' }}>
-            
-            <IconButton
-              color="secondary"
-              onClick={() => {
-                table.setEditingRow(row);
-              }}
-            >
+        enableRowActions
+        renderRowActions={({ row }) => (
+          <Box display='flex'>
+            <IconButton color='secondary' onClick={() => console.info('Edit')}>
               <Edit />
             </IconButton>
-            <IconButton
-              color="error"
-              onClick={() => {
-                console.log('hola')
-              }}
-            >
-              <Delete />
+            <IconButton onClick={() => mutate(row.original.product_id)}>
+              <Delete color='error' />
             </IconButton>
           </Box>
         )}
         data={data ?? []}
         state={{
           pagination,
-          isLoading: isFetching 
+          isLoading: isLoading,
         }}
-
       />
     </Stack>
   );
