@@ -3,12 +3,7 @@ import { ORDER_DATA, PRODUCT_DATA } from './fragments';
 
 export const GET_PRODUCTS = gql`
   query GET_PRODUCTS($limit: Int, $offset: Int) {
-    products(
-      where: { is_visible: { _eq: true } }
-      limit: $limit
-      offset: $offset
-      order_by: { updated_at: desc }
-    ) {
+    products(limit: $limit, offset: $offset, order_by: { updated_at: desc }) {
       ...PRODUCT_DATA
     }
   }
@@ -104,7 +99,7 @@ export const GET_PRODUCT_DATA_LOW_PRICE = gql`
 `;
 
 export const GET_CATEGORIES = gql`
-  query GET_CATEGORIES($limit: Int!, $offset: Int!) {
+  query GET_CATEGORIES($limit: Int, $offset: Int) {
     categories(
       limit: $limit
       offset: $offset
@@ -117,8 +112,8 @@ export const GET_CATEGORIES = gql`
 `;
 
 export const GET_ORDERS = gql`
-  query GET_ORDERS($limit: Int!, $offset: Int!) {
-    orderers(limit: $limit, offset: $offset, order_by: { create_date: desc }) {
+  query GET_ORDERS($limit: Int, $offset: Int) {
+    orderers(limit: $limit, offset: $offset, order_by: { created_at: desc }) {
       ...ORDER_DATA
     }
   }
@@ -127,8 +122,8 @@ export const GET_ORDERS = gql`
 `;
 
 export const GET_ORDER_STATUS_BY_ID = gql`
-  query GET_ORDER_STATUS_BY_ID($id: uuid!){
-    orderers_by_pk(order_id: $id){
+  query GET_ORDER_STATUS_BY_ID($id: uuid!) {
+    orderers_by_pk(order_id: $id) {
       order_status {
         name
       }
@@ -143,8 +138,7 @@ export const GET_ORDER_STATUS_BY_ID = gql`
       created_at
     }
   }
-`
-
+`;
 
 export const GET_FEATURED_PRODUCTS = gql`
   query GET_FEATURED_PRODUCTS {
@@ -173,12 +167,12 @@ export const GET_PAYMENT_METHODS = gql`
 `;
 
 export const GET_CONFIG_CMS = gql`
-  query GET_CONFIG_CMS{
-    configs{
+  query GET_CONFIG_CMS {
+    configs {
       config_id
       name
       value
       meta
     }
   }
-`
+`;

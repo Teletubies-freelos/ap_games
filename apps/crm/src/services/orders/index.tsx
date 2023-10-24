@@ -16,17 +16,8 @@ export interface OrdersResponse {
 export class Orders {
   static GET_ORDERS = gql`
     query MyQuery($limit: Int!, $offset: Int!) {
-      Orders(limit: $limit, offset: $offset, order_by: { create_date: desc }) {
-        address
-        client_name
-        code
-        create_date
-        order_id
-        payment_method
-        payment_state
-        phone
-        products
-        total
+      orderers(limit: $limit, offset: $offset, order_by: { created_at: desc }) {
+       
       }
     }
   `;
@@ -36,10 +27,10 @@ export class Orders {
   async getList({ pagination = {} }: QueryManyOptions<unknown> = {}) {
     const { limit = 10, offset = 0 } = pagination;
 
-    const { Orders: orders } = await this.client.request<{
-      Orders: OrdersResponse[];
+    const { orderers } = await this.client.request<{
+      orderers: OrdersResponse[];
     }>(Orders.GET_ORDERS, { limit, offset });
 
-    return orders;
+    return orderers;
   }
 }

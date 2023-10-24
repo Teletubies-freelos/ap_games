@@ -12,7 +12,11 @@ export const PRODUCT_DATA = gql`
     product_id
     discount_price
     is_visible
-    category_id
+    updated_at
+    category {
+      name
+      category_id
+    }
   }
 `;
 
@@ -20,10 +24,28 @@ export const ORDER_DATA = gql`
   fragment ORDER_DATA on orderers {
     address
     client_name
+    comment
+    email
     order_id
+    phone
+    reference
+    created_at
+    order_status {
+      name
+      order_status_id
+    }
+    order_products {
+      product {
+        name
+        price
+        quantity
+      }
+      quantity
+    }
     payment_method {
       name
+      meta
+      alternative_number
     }
-    phone
   }
-`
+`;

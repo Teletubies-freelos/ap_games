@@ -12,14 +12,17 @@ export interface GamesResponse {
 }
 
 export interface CreateGamesPayload {
-  product_id?: string | number;
-  description?: string;
-  image_url?: string;
-  name?: string;
-  price_offer?: number;
-  quantity?: number;
-  price?: number;
-  category_id?: number;
+  name: string;
+  banner_img_url?: string;
+  category_id: number;
+  description: string;
+  discount_price?: number;
+  img_url: string;
+  is_offer?: boolean;
+  is_visible?: boolean;
+  price: number;
+  quantity: number;
+  secondary_img_url?: string;
 }
 
 export interface GetProductFilters {
@@ -39,49 +42,52 @@ export class Products {
     }
   `;
 
-static GET_PRODUCTS = gql`
-query GetProducts($limit: Int, $offset: Int,) {
-  Products(
-    limit: $limit
-    offset: $offset
-    order_by: { updated_at: desc }
-  ) {
-    banner_img_url
-    category_id
-    description
-    discount_price
-    img_url
-    is_offer
-    is_visible
-    name
-    price
-    product_id
-    quantity
-    secondary_img_url
-  }
-}
-`;
+  static GET_PRODUCTS = gql`
+    query GetProducts($limit: Int, $offset: Int) {
+      Products(limit: $limit, offset: $offset, order_by: { updated_at: desc }) {
+        banner_img_url
+        category_id
+        description
+        discount_price
+        img_url
+        is_offer
+        is_visible
+        name
+        price
+        product_id
+        quantity
+        secondary_img_url
+      }
+    }
+  `;
 
   static CREATE_PRODUCT = gql`
     mutation CREATE_PRODUCT(
       $description: String
-      $image_url: String
+      $img_url: String
       $name: String
       $price: float8
-      $price_offer: float8
+      $discount_price: float8
       $quantity: Int
       $category_id: Int
+      $banner_img_url: String
+      $is_offer: Boolean
+      $is_visible: Boolean
+      $secondary_img_url: String
     ) {
-      insert_Products_one(
+      insert_products_one(
         object: {
-          description: $description
-          image_url: $image_url
-          name: $name
-          price_offer: $price_offer
-          quantity: $quantity
-          category_id: $category_id
-          price: $price
-          is_visible: true
+          name :$name
+          category_id: $category_id;
+          description:$description
+          img_url: $img_url;
+          price: $price;
+          quantity: $quantity;
+          discount_price: $discount_price;
+          banner_img_url: $banner_img_url;
+          is_offer: $is_offer;
+          is_visible: $is_visible;
+          secondary_img_url: $secondary_img_url;
         }
       ) {
         product_id
@@ -180,7 +186,7 @@ query GetProducts($limit: Int, $offset: Int,) {
 
   async updateOne(
     product_id: number | string,
-    payload: CreateGamesPayload,
+    payload: CreateGamesPayload
   ): Promise<boolean> {
     const { update_Products_by_pk } = await this.client.request<{
       update_Products_by_pk: boolean;

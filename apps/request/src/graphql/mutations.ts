@@ -5,21 +5,28 @@ export const CREATE_PRODUCT = gql`
     $description: String
     $img_url: String
     $name: String
-    $price: float8
-    $discount_price: float8
+    $price: Float
+    $discount_price: Float
     $quantity: Int
     $category_id: Int
+    $banner_img_url: String
+    $is_offer: Boolean
+    $is_visible: Boolean
+    $secondary_img_url: String
   ) {
-    insert_products(
+    insert_products_one(
       object: {
+        name: $name
+        category_id: $category_id
         description: $description
         img_url: $img_url
-        name: $name
-        discount_price: $discount_price
-        quantity: $quantity
-        category_id: $category_id
         price: $price
-        is_visible: true
+        quantity: $quantity
+        discount_price: $discount_price
+        banner_img_url: $banner_img_url
+        is_offer: $is_offer
+        is_visible: $is_visible
+        secondary_img_url: $secondary_img_url
       }
     ) {
       product_id
@@ -56,8 +63,8 @@ export const UPDATE_PRODUCT = gql`
 `;
 
 export const DELETE_PRODUCT = gql`
-  mutation DELETE_PRODUCT($productId: Int!) {
-    delete_products_by_pk(product_id: $productId) {
+  mutation DELETE_PRODUCT($product_id: Int!) {
+    delete_products_by_pk(product_id: $product_id) {
       product_id
     }
   }

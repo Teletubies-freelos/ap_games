@@ -3,10 +3,18 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import { ReactNode, useMemo, useState } from 'react';
 
 interface TooltipProps {
-  renderedCellValue:  ReactNode ;
+  renderedCellValue: ReactNode;
 }
 
-const FieldTooltip = ({ renderedCellValue }: TooltipProps ) => {
+interface IOrderProduct {
+  quantity: number;
+  product: {
+    name: string;
+    price: number;
+  };
+}
+
+const FieldTooltip = ({ renderedCellValue }: TooltipProps) => {
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -36,22 +44,26 @@ const FieldTooltip = ({ renderedCellValue }: TooltipProps ) => {
           horizontal: 'left',
         }}
       >
-      {Array.isArray(renderedCellValue) ?  renderedCellValue.map((item: string) => (
-        <Box key={item} padding='.5rem'>
-          <Box>{item}</Box>
-        </Box>
-      ))
-      :
-      <Box  sx={{width:'8rem',padding:'.5rem'}}>
-        <Box>{renderedCellValue}</Box>
-      </Box>
-      }
+        {Array.isArray(renderedCellValue) ? (
+          renderedCellValue.map((item: IOrderProduct) => (
+            <Box key={item?.product?.name} padding='.5rem'>
+              <Box>
+                {item?.product?.name}{' '}
+                {!!item?.quantity && ` x ${item?.quantity}`}
+              </Box>
+            </Box>
+          ))
+        ) : (
+          <Box sx={{ width: '8rem', padding: '.5rem' }}>
+            <Box>{renderedCellValue}</Box>
+          </Box>
+        )}
       </Popover>
     );
   }, [open, renderedCellValue]);
 
   return (
-    <Box sx={{display: 'flex', justifyContent:'center'}}>
+    <Box sx={{ display: 'flex', justifyContent: 'center' }}>
       <IconButton onClick={handleClick}>
         <VisibilityIcon />
       </IconButton>

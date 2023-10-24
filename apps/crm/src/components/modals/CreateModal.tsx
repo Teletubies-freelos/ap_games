@@ -1,99 +1,136 @@
 //modal mui
 
-import { Button, Stack, Typography, TextField, Dialog, IconButton } from '@mui/material';
-import { useForm } from 'react-hook-form';
 import {
-  categoryId$,
-  isRefetchProducts$,
+  Button,
+  Stack,
+  Typography,
+  TextField,
+  Dialog,
+  IconButton,
+  FormControlLabel,
+  Box,
+  Checkbox,
+} from '@mui/material';
+import { Controller, useForm } from 'react-hook-form';
+import {
   setIsOpenCreateProduct,
   useIsOpenCreateProduct,
 } from '../../observables';
-import { useMutation } from '@tanstack/react-query';
-import { ChangeEvent, useContext, useEffect, useRef, useState } from 'react';
-import { dataContext } from '../../context/data';
-import { CreateGamesPayload } from '../../services/products';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { ChangeEvent, useState } from 'react';
 import { Photo } from '@mui/icons-material';
 import axios from 'axios';
 import { env } from '../../config';
-
+import { AsyncProviderNames } from '../../types/providers';
+import { useCreateOne, useGetList } from 'data_providers';
+import { DropDown } from '../../../../../packages/ui/src';
+import { ICategory } from '../../services/Categories';
 
 interface FormValues {
   name: string;
-  quantity: number;
-  price: number;
-  offerPrice: number;
-  image: string;
+  banner_img_url?: string;
+  category_id: number;
   description: string;
+  discount_price?: number;
+  img_url: string;
+  is_offer?: boolean;
+  is_visible?: boolean;
+  price: number;
+  quantity: number;
+  secondary_img_url?: string;
 }
 
 const CreateModal = () => {
-  const categoryIdRef = useRef<number | string | undefined>();
+  const [imgUrl, setImgUrl] = useState('');
 
-  const [ imgUrl, setImgUrl ] = useState('')
-
-  const { register, handleSubmit } = useForm<FormValues>({
+  const { control, register, handleSubmit } = useForm<FormValues>({
     defaultValues: {
       name: '',
       quantity: 0,
       price: 0,
-      offerPrice: 0,
-      image: '',
+      discount_price: 0,
+      img_url: '',
       description: '',
+      category_id: 0,
     },
   });
 
-  const { products } = useContext(dataContext);
+  const queryClient = useQueryClient();
 
-  const { mutateAsync } = useMutation(
-    async (payload: CreateGamesPayload) => await products?.createOne(payload),
+  const getCategories = useGetList(AsyncProviderNames.CATEGORIES);
+  const { data: dataCategories } = useQuery<ICategory[]>(
+    ['all_categories'],
+    async () => await getCategories()
   );
 
-  useEffect(() => {
-    const sub = categoryId$.subscribe((next) => {
-      categoryIdRef.current = next;
-    });
+  const createProduct = useCreateOne(AsyncProviderNames.PRODUCTS);
 
-    return () => sub.unsubscribe();
-  }, []);
+  const { mutateAsync } = useMutation(
+    ['create_product'],
+    async (payload: FormValues) => {
+      return await createProduct(payload);
+    },
+    {
+      onSuccess: (newProduct) => {
+        queryClient.invalidateQueries(
+          ['all_products_table'],
+          newProduct?.product_id
+        );
+      },
+    }
+  );
 
   const onSubmit = async ({
     description,
     name,
-    offerPrice,
+    discount_price,
     price,
     quantity,
+    category_id,
+    is_offer,
+    is_visible,
   }: FormValues) => {
     await mutateAsync({
       description,
-      image_url: imgUrl,
+      img_url: imgUrl,
       name,
-      price_offer: offerPrice,
+      discount_price,
       price,
       quantity,
-      category_id: Number(categoryIdRef.current),
+      category_id,
+      is_offer,
+      is_visible,
     });
 
-    isRefetchProducts$.next(categoryIdRef.current);
     setIsOpenCreateProduct(false);
   };
 
   const isOpen = useIsOpenCreateProduct();
 
-  const handleChange = async (event: ChangeEvent<HTMLInputElement>)=>{
-    const [ file ] = event.target.files ?? []
+  const handleChange = async (event: ChangeEvent<HTMLInputElement>) => {
+    const [file] = event.target.files ?? [];
 
     const formData = new FormData();
 
-    formData.append('file', file)
+    formData.append('file', file);
 
-    const { data } = await axios.post(`${env.PHOTO_UPLOAD_URL}/index.php`, formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      }})
+    const { data } = await axios.post(
+      `${env.PHOTO_UPLOAD_URL}/index.php`,
+      formData,
+      {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      }
+    );
 
+    setImgUrl(`${env.PHOTO_UPLOAD_URL}/${data}`);
+  };
 
-    setImgUrl(`${env.PHOTO_UPLOAD_URL}/${data}`)
-  }
+  const parsedPaymentMethods = dataCategories?.map((category) => ({
+    value: category.category_id,
+    label: category.name,
+  }));
 
   return (
     <Dialog open={!!isOpen} onClose={() => setIsOpenCreateProduct(false)}>
@@ -111,19 +148,19 @@ const CreateModal = () => {
           Producto Nuevo
         </Typography>
         <IconButton
-          aria-label="upload picture"
-          component="label"
+          aria-label='upload picture'
+          component='label'
           sx={{
             width: '4rem',
-            aspectRatio: 1
+            aspectRatio: 1,
           }}
         >
           <input hidden type='file' accept='image/*' onChange={handleChange} />
           <Photo />
         </IconButton>
-        {
-          !!imgUrl && <img height={100} width={50} src={imgUrl} alt='uploaded image'/>
-        }
+        {!!imgUrl && (
+          <img height={100} width={50} src={imgUrl} alt='uploaded image' />
+        )}
         <form onSubmit={handleSubmit(onSubmit)}>
           <Stack gap='1rem'>
             <TextField
@@ -143,11 +180,38 @@ const CreateModal = () => {
             <TextField
               label='Precio Oferta'
               type='number'
-              {...register('offerPrice', {
+              {...register('discount_price', {
                 required: 'El Precio del producto es obligatorio',
               })}
             />
-          {/*   <TextField
+            <Box>
+              <Controller
+                name='is_visible'
+                control={control}
+                render={({ field }) => (
+                  <FormControlLabel
+                    control={<Checkbox {...field} />}
+                    label='Es Visible'
+                  />
+                )}
+              />
+              <Controller
+                name='is_offer'
+                control={control}
+                render={({ field }) => (
+                  <FormControlLabel
+                    control={<Checkbox {...field} />}
+                    label='Es Oferta'
+                  />
+                )}
+              />
+            </Box>
+            <DropDown
+              textFieldProps={register('category_id')}
+              sxSelect={{ backgroundColor: 'background.paper' }}
+              items={parsedPaymentMethods}
+            ></DropDown>
+            {/*   <TextField
               label='Url de la imagen del Producto'
               {...register('image', {
                 required: 'La url de la imagen del producto es obligatorio',

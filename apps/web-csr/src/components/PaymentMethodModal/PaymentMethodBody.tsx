@@ -38,7 +38,7 @@ export default function PaymentMethodBody({
   const handleFinish = async (data: PaymentMethodData) => {
     const newDataPayment = {
       ...data,
-      order_status_id: 1,
+      order_status_id: 2,
     };
     await createToSession(newDataPayment);
     const requestOrderId =  await confirmRequest(newDataPayment);
