@@ -1,5 +1,5 @@
 import { Knex } from 'knex';
-import { FeaturedDTO, Tables } from '../types/tables';
+import { FeaturedDTO, ProductDTO, Tables } from '../types/tables';
 import { faker } from '@faker-js/faker';
 
 export async function seed(knex: Knex) {
@@ -9,14 +9,25 @@ export async function seed(knex: Knex) {
     console.log(error);
   }
 
-  const featured: FeaturedDTO[] = Array.from({ length: 10 }).map(() => {
+  const products: ProductDTO[] = await knex(Tables.PRODUCT).select('*').limit(10)
+
+  const featured: FeaturedDTO[] = products.map(({
+    banner_img_url, 
+    name, 
+    description,
+    price,
+    discount_price,
+    product_id,
+    is_offer
+  }) => {
     return ({
-      title: faker.commerce.product(),
-      banner_img_url: faker.image.urlPicsumPhotos(),
-      description: faker.commerce.productDescription(),
-      price: Number(faker.commerce.price()),
-      is_offer: faker.datatype.boolean(),
-      offer_price: Number(faker.commerce.price())
+      title: name,
+      banner_img_url: banner_img_url ?? faker.image.urlPicsumPhotos(),
+      description,
+      price,
+      is_offer,
+      offer_price: discount_price,
+      product_id
     })
   });
 

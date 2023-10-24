@@ -22,6 +22,7 @@ export class Cart implements IDataProvider{
   }
 
   async createOne(payload: ICartProduct){
+    console.log(payload)
     await this.table.add(payload)
     
     return payload
