@@ -7,6 +7,7 @@ import { dataContext } from '../../context/data';
 import { isRefetchCategories$ } from '../../observables';
 import CreateModal from '../../components/modals/CreateModal';
 import List from '../../components/categories/List';
+import Layout from '../../layout';
 
 interface ICategory {
   name: string;
@@ -16,7 +17,7 @@ export default function Categories() {
   const { register, handleSubmit } = useForm<ICategory>();
   const { categories } = useContext(dataContext);
   const { mutateAsync } = useMutation(
-    async (payload: string) => await categories?.createOne(payload),
+    async (payload: string) => await categories?.createOne(payload)
   );
 
   const onSubmit = async (data: ICategory) => {
@@ -26,18 +27,20 @@ export default function Categories() {
 
   return (
     <Authenticated>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Stack sx={{ padding: '1rem' }} gap='1rem'>
-          <TextField label='Nombre de la categoria' {...register('name')} />
-          <Button variant='contained' type='submit'>
-            Agregar Categoria
-          </Button>
+      <Layout>
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <Stack sx={{ padding: '1rem' }} gap='1rem'>
+            <TextField label='Nombre de la categoria' {...register('name')} />
+            <Button variant='contained' type='submit'>
+              Agregar Categoria
+            </Button>
+          </Stack>
+        </form>
+        <List />
+        <Stack>
+          <CreateModal />
         </Stack>
-      </form>
-      <List />
-      <Stack>
-        <CreateModal />
-      </Stack>
+      </Layout>
     </Authenticated>
   );
 }
