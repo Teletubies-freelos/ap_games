@@ -8,6 +8,8 @@ import ClientDataModal from '../ClientDataModal';
 import PaymentMethodModal from '../PaymentMethodModal';
 import ConfirmOrderDelivery from '../ConfirmOrder/ConfirmOrderDelivery';
 import ConfirmOrderPickup from '../ConfirmOrder/ConfirmOrderPickup';
+import { useDeleteMany } from 'data_providers';
+import { ProviderNames } from '../../types/providers';
 
 const modals = {
   [ModalState.CART]: () => <CartModal content={<BodyCart />} />,
@@ -26,10 +28,21 @@ const modals = {
 
 export const Modal = () => {
   const modalState = useModalState();
+  const cleanCart = useDeleteMany(ProviderNames.CART)
+
+  const handleCloseModal = async ()=>{
+    if(modalState?.data && [
+      ModalState.DELIVERY_CENTRAL_CONFIRMATION, 
+      ModalState.IN_STORE_CONFIRMATION
+    ].includes(modalState?.data.name))
+      await cleanCart()
+
+    setModalState(undefined)
+  }
 
   return (
     <ModalMUI
-      onClose={() => setModalState(undefined)}
+      onClose={handleCloseModal}
       open={!!modalState?.data}
       sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}
     >

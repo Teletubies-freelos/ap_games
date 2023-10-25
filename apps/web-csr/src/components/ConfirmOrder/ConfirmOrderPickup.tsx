@@ -1,4 +1,3 @@
-import { useMutation } from "@tanstack/react-query"
 import ConfirmedOrder from "."
 import { StepStatus } from "../../../../../packages/ui/src"
 import { setModalState } from "../../observables"
@@ -7,17 +6,12 @@ import { useDeleteMany } from "data_providers"
 import { ProviderNames } from "../../types/providers"
 
 const ConfirmOrderPickup = () => {
-
   const deleteAllProductsInCart = useDeleteMany(ProviderNames.CART)
-  const handleSubmit = () => {
-    mutate()
+  
+  const handleSubmit = async () => {
+    await deleteAllProductsInCart()
     setModalState(undefined)
   }
-
-  const { mutate  } = useMutation(
-    ['products_in_cart'],
-    async () => await deleteAllProductsInCart()
-  );
 
   return(
     <ConfirmedOrder 
