@@ -47,11 +47,11 @@ export default function ConfirmedOrder({
     >
       <Stack alignItems='center'>
         <CheckCircleOutlineOutlinedIcon
-          sx={(theme) => ({
-            color: theme.palette.primary.main,
+          sx={{
+            color: 'primary.main',
             height: '3.875rem',
             width: '3.875rem',
-          })}
+          }}
         />
         <Typography
           variant='h6'

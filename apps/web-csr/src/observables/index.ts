@@ -1,7 +1,7 @@
 import { bind } from '@react-rxjs/core';
 import { createSignal } from '@react-rxjs/utils';
 import { BehaviorSubject } from 'rxjs';
-import { ControlState, orderControlsLense } from '../utils';
+import { ControlState, bindLense, orderControlsLense } from '../utils';
 import { isObserverDebugOn } from '../config/debug';
 
 export const [isCartOpenChange$, setIsCartOpen] = createSignal<boolean>();
@@ -45,8 +45,9 @@ export const [useIsPickupStoreOpen, isPickupStoreOpen$] = bind(
   false
 );
 
-export const [purchaseCode$, setPurchaseCode] = createSignal<string>();
-export const [usePurchaseCode, purchaseCodeDefault$] = bind(purchaseCode$, '');
+export const codeObserver$ = new BehaviorSubject<string | undefined>(undefined)
+
+export const  [setPurchaseCode, usePurchaseCode] = bindLense(codeObserver$)
 
 export enum ModalState {
   CART = 'cart',

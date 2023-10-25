@@ -19,7 +19,7 @@ export default function PickupStoreModal({
 
   const createOrder = useCreateOne(ProviderNames.ORDERS);
 
-  const { mutate } = useMutation(createOrder, {
+  const { mutateAsync } = useMutation(createOrder, {
     onSuccess: (data) => {
       setPurchaseCode(data?.order_id);
     },
@@ -38,8 +38,8 @@ export default function PickupStoreModal({
     });
   };
 
-  const handleConfirm = () => {
-     mutate({})
+  const handleConfirm = async () => {
+    await mutateAsync({})
 
     setModalState({
       data: {

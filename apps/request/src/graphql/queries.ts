@@ -178,3 +178,13 @@ export const GET_CONFIG_CMS = gql`
     }
   }
 `;
+
+
+export const GET_ORDER_STATUS = gql`
+  query GET_ORDER_STATUS {
+    order_statuses {
+      name
+      order_status_id
+    }
+}
+`

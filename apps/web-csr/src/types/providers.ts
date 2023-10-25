@@ -8,6 +8,7 @@ export enum ProviderNames {
   ORDER_PRODUCTS = 'orderProducts',
   PAYMENT_METHODS = 'paymentMethods',
   CONFIG_CMS = 'configCms',
+  ORDER_STATUS = 'orderStatus'
 }
 
 export enum SyncProviderNames {

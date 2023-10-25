@@ -10,7 +10,7 @@ import { ProviderNames } from '../../types/providers';
 import { useForm } from 'react-hook-form';
 import CustomAcordion from '../common/CustomAcordion';
 import { ICartProduct } from '../../data/indexedDB';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useConfirmRequest } from '../../hooks/useConfirmRequest';
 
 export interface PaymentMethodData {
@@ -34,12 +34,22 @@ export default function PaymentMethodBody({
   const { register, handleSubmit } = useForm<PaymentMethodData>();
   const createToSession = useCreateOne(ProviderNames.SESSION_STORAGE);
   const confirmRequest = useConfirmRequest();
+  const queryClient = useQueryClient()
 
   const handleFinish = async (data: PaymentMethodData) => {
+    const orderStatuses: {order_status_id:number; name: string}[] | undefined = queryClient
+      .getQueryData(['orderStatus'])
+
+    const { order_status_id } = orderStatuses?.find(({name})=>name === 'pending') ?? {}
+    if(!order_status_id)
+      throw new Error('Order status not found')
+      
+  
     const newDataPayment = {
       ...data,
-      order_status_id: 2,
+      order_status_id,
     };
+
     await createToSession(newDataPayment);
     const requestOrderId =  await confirmRequest(newDataPayment);
     requestOrderId && setPurchaseCode(requestOrderId);

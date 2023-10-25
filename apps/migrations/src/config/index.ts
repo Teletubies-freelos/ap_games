@@ -53,4 +53,4 @@ export const config: { [key: string]: Knex.Config } = {
     ...defaultOptions,
   },
 };
-console.log(process.env.URI);
+
