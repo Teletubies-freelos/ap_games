@@ -15,18 +15,11 @@ export interface IFeatured {
 export const CardHeroHOC = ({
   banner_img_url = '',
   description = '',
-  featured_id,
   price = 0,
   title = '',
   offer_price,
   product_id
 }: FeaturedDTO) => {
-  console.log({
-    banner_img_url,
-    description,
-    featured_id,
-    price,
-  })
   const createCartProduct = useCreateOne<ICartProduct>(ProviderNames.CART, {
     payload: {
       imageUrl: banner_img_url,

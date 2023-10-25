@@ -17,11 +17,16 @@ const serializeConfig = ({name, value}: IConfigCms)=> ( { [name]: value })
 const transformConfig = (data: IConfigCms[] = []) => data.reduce((acc, item)=> ({...acc, ...serializeConfig(item)}), {})
 
 export const  Initializer = ({children}:PropsWithChildren)=>{
-
+  const getOrderStatus = useGetList(ProviderNames.ORDER_STATUS)
   const getConfig = useGetList(ProviderNames.CONFIG_CMS);
   const getConfigLocal = useSyncGetOne(SyncProviderNames.LOCAL_CONFIG)
   const createCache = useSyncCreateOne(SyncProviderNames.LOCAL_CONFIG)
   const {cacheTime = '7', createdAt}: IConfig = getConfigLocal()
+
+  useQuery(['orderStatus'], {
+    cacheTime: Number.MAX_VALUE,
+    queryFn: async () =>  await getOrderStatus(),
+  })
 
   const isExpired = dayjs(new Date())
     .diff(dayjs(createdAt), "days") >= Number(cacheTime);
@@ -39,7 +44,7 @@ export const  Initializer = ({children}:PropsWithChildren)=>{
         createdAt: new Date()
       })
     }
-   },[data, isExpired])
+   },[createCache, data, isExpired])
 
   if(isFetching) return <LoadingPage/>
 

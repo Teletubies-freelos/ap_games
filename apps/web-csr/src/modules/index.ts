@@ -13,6 +13,8 @@ import { GeolocationProvider } from '../services/Geolocation';
 import { ConfigCms } from '../services/ConfigCms';
 import { LocalConfig } from '../services/LocalConfig';
 import { SyncSessionClientStorage } from '../services/SyncSessionStorage';
+import { OrderStatus } from '../services/OrderStatus';
+
 
 const headers = new Headers({
   'x-hasura-admin-secret': masterToken,
@@ -45,3 +47,5 @@ export const configCmsProvider = new ConfigCms(graphqlClient);
 export const localConfigProvider = new LocalConfig();
 
 export const syncSessionStorageProvider = new SyncSessionClientStorage()
+
+export const orderStatusProvider = new OrderStatus(graphqlClient);

@@ -54,14 +54,14 @@ export const Product = ({
   );
 
   const onSubmit: SubmitHandler<ProductData> = ({
-    description,
+    description = '',
     name,
     price,
     price_offer,
     image_url,
     quantity,
   }) => {
-    console.log(image_url);
+
     mutate({
       product_id,
       description,

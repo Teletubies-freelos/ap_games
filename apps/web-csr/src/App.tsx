@@ -18,6 +18,7 @@ import {
   configCmsProvider,
   localConfigProvider,
   syncSessionStorageProvider,
+  orderStatusProvider,
 } from './modules';
 import { ProviderNames, SyncProviderNames } from './types/providers';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -34,6 +35,7 @@ const providers = {
   [ProviderNames.ORDER_PRODUCTS]: ordersProductsProvider,
   [ProviderNames.PAYMENT_METHODS]: paymentMethodsProvider,
   [ProviderNames.CONFIG_CMS]: configCmsProvider,
+  [ProviderNames.ORDER_STATUS]: orderStatusProvider
 };
 
 const syncProviders = {
