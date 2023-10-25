@@ -1,6 +1,6 @@
 import { GraphQLClient } from 'graphql-request';
 import { IDataProvider, IGetListParams } from 'data_providers';
-import { GET_PRODUCTS, GET_PRODUCTS_BY_CATEGORY, GET_PRODUCT_DATA_IS_OFFER, GET_PRODUCT_DATA_IS_OFFER_BY_CATEGORY_ID, GET_PRODUCT_DATA_LOW_PRICE, GET_PRODUCT_DATA_LOW_PRICE_BY_CATEGORY } from '../../../request/src/graphql/queries';
+import { GET_PRODUCTS, GET_PRODUCTS_BY_CATEGORY, GET_PRODUCTS_SEARCH, GET_PRODUCT_DATA_IS_OFFER, GET_PRODUCT_DATA_IS_OFFER_BY_CATEGORY_ID, GET_PRODUCT_DATA_LOW_PRICE, GET_PRODUCT_DATA_LOW_PRICE_BY_CATEGORY } from '../../../request/src/graphql/queries';
 
 export interface IProduct{
   product_id: number;
@@ -38,8 +38,20 @@ export class Products implements IDataProvider {
 
   async getList({ pagination, filter, sort }: IGetListParams) {
     const { limit = 10, page = 0 } = pagination ?? {};
-    const { isOffer = false, categoryId } = filter ?? {}
+    const { isOffer = false, categoryId, name,  isAlike} = filter ?? {}
     const { price } = sort ?? {}
+
+    if(isAlike && name){
+      const { products } = await this.client.request<{ products: IProduct[] }>(
+        GET_PRODUCTS_SEARCH,
+        {
+          name: `${name}%`
+        }
+      )
+
+      return products
+
+    }
 
     const withCategoryId = !Number.isNaN(categoryId)
 

@@ -1,4 +1,4 @@
-import { Stack, Button, IconButton } from '@mui/material';
+import { Stack,  IconButton, Autocomplete, TextField } from '@mui/material';
 import { Link } from 'react-router-dom';
 import {
   ColorSwitch,
@@ -7,7 +7,6 @@ import {
   NintendoLogo,
   PlayStation4Logo,
   PlayStation5Logo,
-  SearchBar,
   XboxLogo,
 } from '../../../../../packages/ui/src';
 import { GeneralLayout } from '../../layout/GeneralLayout';
@@ -27,6 +26,50 @@ import { Menu as MenuIcon } from '@mui/icons-material';
 import { setAnchorElMenu, useAnchorElMenu } from '../../observables';
 import { reduceQuantity } from '../../utils';
 import { FeaturedDTO } from '../../../../migrations/src/types/tables'
+import { ChangeEventHandler, useState } from 'react';
+import { useDebounce } from 'use-debounce';
+
+const SearchBar = ()=>{
+  const searchProduct = useGetList<{name: string}>(ProviderNames.PRODUCTS)
+  const [value, setValue] = useState<string>()
+  const [valueDebounced] = useDebounce(value, 1000);
+  const handleChange: ChangeEventHandler<HTMLInputElement>  = (event)=>{
+    setValue(event.target.value)
+  }
+
+  const { data }= useQuery(['search_products', valueDebounced], {
+    queryFn: async ()=> await searchProduct({
+      filter:{
+        name: valueDebounced,
+        isAlike: true
+      },
+    }),
+    enabled: !!valueDebounced
+  })
+
+  return(<Autocomplete
+    options={data?.map(({name})=>name) ?? []}
+    freeSolo
+    sx={{ 
+      width: "100%",
+      backgroundColor: "white",
+      borderRadius: ".25rem",
+      "& input": { color: "#434343" },
+    }}
+    renderInput={(params) => (
+      <TextField
+        {...params}
+        onChange={handleChange}
+        value={value}
+        label="Search input"
+        InputProps={{
+          ...params.InputProps,
+          type: 'search',
+        }}
+      />
+    )}
+  />)
+}
 
 export default function Home() {
   const getFeaturedProducts = useGetList<FeaturedDTO>(ProviderNames.FEATURED);
@@ -35,8 +78,6 @@ export default function Home() {
     ['home featured'],
     async () => await getFeaturedProducts()
   );
-
-  console.log(data)
 
   const toggleColor = useToggleColor();
 
@@ -60,12 +101,7 @@ export default function Home() {
               <MainLogo sx={{ width: { xs: '70%', md: '8rem' } }} />
             </Link>
           }
-          searchBar={
-            <SearchBar
-              onSubmit={() => 4}
-              buttonSearch={<Button variant='contained'>Buscar</Button>}
-            />
-          }
+          searchBar={<SearchBar />}
           menu={
             <IconButton onClick={_handleOpenMenu} size='small'>
               <MenuIcon />

@@ -26,6 +26,14 @@ export const GET_PRODUCTS_BY_CATEGORY = gql`
   ${PRODUCT_DATA}
 `;
 
+export const GET_PRODUCTS_SEARCH = gql`
+  query GET_PRODUCTS_SEARCH($name: String){
+    products(where: {name: {_ilike: $name}}){
+      name
+    }
+  }
+`
+
 export const GET_PRODUCT_DATA_IS_OFFER = gql`
   query GET_PRODUCT_DATA_IS_OFFER($limit: Int, $offset: Int) {
     products(

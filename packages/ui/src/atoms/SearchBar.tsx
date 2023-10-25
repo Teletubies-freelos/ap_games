@@ -11,6 +11,12 @@ interface SearchBarProps {
   onSubmit: SubmitHandler<ISearch>;
   buttonSearch?: JSX.Element;
 }
+const sx = {
+  width: "100%",
+  backgroundColor: "white",
+  borderRadius: ".25rem",
+  "& input": { color: "#434343" },
+}
 
 export default function SearchBar({
   placeHolder,
@@ -29,12 +35,7 @@ export default function SearchBar({
       onSubmit={handleSubmit(onSubmit)}
     >
       <TextField
-        sx={{
-          width: "100%",
-          backgroundColor: "white",
-          borderRadius: ".25rem",
-          "& input": { color: "#434343" },
-        }}
+        sx={sx}
         placeholder={placeHolder}
         id="input-with-icon-textfield"
         inputProps={register("search")}
@@ -43,7 +44,7 @@ export default function SearchBar({
             <InputAdornment
               position="start"
               sx={{
-                color: (theme) => theme.palette.primary.main,
+                color: 'primary.main',
               }}
             >
               <SearchOutlined />

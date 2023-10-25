@@ -12,9 +12,10 @@ export interface CardHeroProps {
   description: string;
   alt: string;
   onClick?: MouseEventHandler<HTMLButtonElement>;
+  isAlreadyOnCart?: boolean
 }
 
-const CardHero = ({ image, alt, onClick, description }: CardHeroProps) => (
+const CardHero = ({ image, alt, onClick, description, isAlreadyOnCart = false }: CardHeroProps) => (
   <MUICard
     sx={{
       background: "white",
@@ -48,6 +49,7 @@ const CardHero = ({ image, alt, onClick, description }: CardHeroProps) => (
     <CardActions sx={{ padding: 0 }}>
       <Button
         fullWidth
+        disabled={isAlreadyOnCart}
         variant="outlined"
         sx={{
           "&:hover": {
@@ -58,7 +60,7 @@ const CardHero = ({ image, alt, onClick, description }: CardHeroProps) => (
         }}
         onClick={onClick}
       >
-        Agregar al carrito
+        {!isAlreadyOnCart? 'Agregar al carrito' : 'En el carrito' }
       </Button>
     </CardActions>
   </MUICard>
