@@ -3,7 +3,6 @@ import ConfirmedOrder from '.';
 import { StepStatus } from '../../../../../packages/ui/src';
 import FooterModal from '../common/FooterModal';
 import InfoPayment from '../common/InfoPayment';
-import {  useMutation } from '@tanstack/react-query';
 import { useDeleteMany } from 'data_providers';
 import { ProviderNames } from '../../types/providers';
 import { DeliveryPriceLocal } from '../DeliveryPrice';
@@ -24,14 +23,9 @@ const ConfirmOrderDelivery = () => {
   const {owner , number, alternative_number ,name , meta, type} = useGetPaymentInfo()
   const deleteAllProductsInCart = useDeleteMany(ProviderNames.CART)
 
-  const { mutate  } = useMutation(
-    ['products_in_cart'],
-    async () => await deleteAllProductsInCart()
-  );
-
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     setModalState(undefined);
-    mutate()
+    await deleteAllProductsInCart()
   }
 
   return (
