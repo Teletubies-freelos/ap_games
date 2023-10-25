@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { MRT_PaginationState } from 'material-react-table';
 import { useGetList } from 'data_providers';
 import { AsyncProviderNames } from '../types/providers';
+import { IOrders } from '../services/Orders';
 
 export const useOrders = () => {
   const [page, setPage] = useState<MRT_PaginationState>({
@@ -10,7 +11,7 @@ export const useOrders = () => {
     pageSize: 20,
   });
 
-  const getAllOrders = useGetList(AsyncProviderNames.ORDERS);
+  const getAllOrders = useGetList<IOrders>(AsyncProviderNames.ORDERS);
   const queryData = useQuery(
     ['all_orders_table'],
     async () => await getAllOrders()
