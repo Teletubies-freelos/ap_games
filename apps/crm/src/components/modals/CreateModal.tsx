@@ -41,7 +41,10 @@ interface FormValues {
 }
 
 const CreateModal = () => {
-  const [imgUrl, setImgUrl] = useState('');
+  const [imageUrls, setImageUrls] = useState({
+    imgUrl: '',
+    bannerUrl: '',
+  });
 
   const { control, register, handleSubmit, reset } = useForm<FormValues>({
     defaultValues: {
@@ -50,6 +53,7 @@ const CreateModal = () => {
       price: 0,
       discount_price: 0,
       img_url: '',
+      banner_img_url: '',
       description: '',
       category_id: 0,
     },
@@ -93,7 +97,8 @@ const CreateModal = () => {
   }: FormValues) => {
     await mutateAsync({
       description,
-      img_url: imgUrl,
+      img_url: imageUrls.imgUrl,
+      banner_img_url: imageUrls.bannerUrl,
       name,
       discount_price,
       price,
@@ -108,7 +113,10 @@ const CreateModal = () => {
 
   const isOpen = useIsOpenCreateProduct();
 
-  const handleChange = async (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = async (
+    event: ChangeEvent<HTMLInputElement>,
+    imageKey: string
+  ) => {
     const [file] = event.target.files ?? [];
 
     const formData = new FormData();
@@ -125,7 +133,10 @@ const CreateModal = () => {
       }
     );
 
-    setImgUrl(`${env.PHOTO_UPLOAD_URL}/${data}`);
+    setImageUrls({
+      ...imageUrls,
+      [imageKey]: `${env.PHOTO_UPLOAD_URL}/${data}`,
+    });
   };
 
   const parsedPaymentMethods = dataCategories?.map((category) => ({
@@ -148,28 +159,63 @@ const CreateModal = () => {
         <Typography variant='h3' textAlign='center'>
           Producto Nuevo
         </Typography>
-        <Stack gap='1rem' alignItems='center'>
-          <Typography>Imagen del Producto</Typography>
-          <IconButton
-            aria-label='upload picture'
-            component='label'
-            sx={{
-              width: '4rem',
-              aspectRatio: 1,
-            }}
-          >
-            <input
-              hidden
-              type='file'
-              accept='image/*'
-              onChange={handleChange}
-            />
-            <Photo />
-          </IconButton>
-          {!!imgUrl && (
-            <img height={80} width={80} src={imgUrl} alt='uploaded image' />
-          )}
-        </Stack>
+        <Box display='flex' justifyContent='space-between'>
+          <Stack gap='1rem' alignItems='center'>
+            <Typography>Imagen del Producto</Typography>
+            <IconButton
+              aria-label='upload picture'
+              component='label'
+              sx={{
+                width: '4rem',
+                aspectRatio: 1,
+              }}
+            >
+              <input
+                hidden
+                type='file'
+                accept='image/*'
+                onChange={(e) => handleChange(e, 'imgUrl')}
+              />
+              <Photo />
+            </IconButton>
+            {!!imageUrls?.imgUrl && (
+              <img
+                height={80}
+                width={80}
+                src={imageUrls?.imgUrl}
+                alt='uploaded image'
+              />
+            )}
+          </Stack>
+
+          <Stack gap='1rem' alignItems='center'>
+            <Typography>Imagen para carousel</Typography>
+            <IconButton
+              aria-label='upload picture'
+              component='label'
+              sx={{
+                width: '4rem',
+                aspectRatio: 1,
+              }}
+            >
+              <input
+                hidden
+                type='file'
+                accept='image/*'
+                onChange={(e) => handleChange(e, 'bannerUrl')}
+              />
+              <Photo />
+            </IconButton>
+            {!!imageUrls?.bannerUrl && (
+              <img
+                height={80}
+                width={120}
+                src={imageUrls?.bannerUrl}
+                alt='uploaded image'
+              />
+            )}
+          </Stack>
+        </Box>
         <form onSubmit={handleSubmit(onSubmit)}>
           <Stack gap='1rem'>
             <TextField
