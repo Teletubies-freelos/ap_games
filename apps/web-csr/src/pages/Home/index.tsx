@@ -27,22 +27,24 @@ import { setAnchorElMenu, useAnchorElMenu } from '../../observables';
 import { reduceQuantity } from '../../utils';
 import { FeaturedDTO } from '../../../../migrations/src/types/tables'
 import { ChangeEventHandler, useState } from 'react';
+import { useDebounce } from 'use-debounce';
 
 const SearchBar = ()=>{
   const searchProduct = useGetList<{name: string}>(ProviderNames.PRODUCTS)
   const [value, setValue] = useState<string>()
+  const [valueDebounced] = useDebounce(value, 1000);
   const handleChange: ChangeEventHandler<HTMLInputElement>  = (event)=>{
     setValue(event.target.value)
   }
 
-  const { data }= useQuery(['search_products', value], {
+  const { data }= useQuery(['search_products', valueDebounced], {
     queryFn: async ()=> await searchProduct({
       filter:{
-        name: value,
+        name: valueDebounced,
         isAlike: true
       },
     }),
-    enabled: !!value
+    enabled: !!valueDebounced
   })
 
   return(<Autocomplete
