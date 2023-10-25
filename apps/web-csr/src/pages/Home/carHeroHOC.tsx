@@ -3,6 +3,8 @@ import { CardHero } from '../../../../../packages/ui/src';
 import { ProviderNames } from '../../types/providers';
 import { ICartProduct } from '../../data/indexedDB';
 import { FeaturedDTO } from '../../../../migrations/src/types/tables';
+import { useEffect, useState } from 'react';
+import { cartProvider } from '../../modules';
 
 export interface IFeatured {
   title: string;
@@ -20,6 +22,12 @@ export const CardHeroHOC = ({
   offer_price,
   product_id
 }: FeaturedDTO) => {
+  const [inCart, setInCart] = useState<boolean>()
+
+  useEffect(()=>{
+    cartProvider.getOne({id: product_id}).then(data => setInCart(!!data))
+  }, [product_id])
+
   const createCartProduct = useCreateOne<ICartProduct>(ProviderNames.CART, {
     payload: {
       imageUrl: banner_img_url,
@@ -31,9 +39,16 @@ export const CardHeroHOC = ({
     },
   });
 
+  const handleClick = async ()=>{
+    await createCartProduct()
+
+    setInCart(true)
+  }
+
   return (
     <CardHero
-      onClick={async () => await createCartProduct()}
+      isAlreadyOnCart={inCart}
+      onClick={handleClick}
       alt=''
       description={description}
       image={banner_img_url}
