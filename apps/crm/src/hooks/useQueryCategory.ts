@@ -17,7 +17,7 @@ interface IUseQueryCategory {
 export const useQueryCategory = ({ reset }: IUseQueryCategory) => {
   const queryClient = useQueryClient();
 
-  const getCategories = useGetList(AsyncProviderNames.CATEGORIES);
+  const getCategories = useGetList<ICategory>(AsyncProviderNames.CATEGORIES);
   const queryGet = useQuery(
     ['all_categories_table'],
     async () => await getCategories()

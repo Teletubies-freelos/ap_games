@@ -2,8 +2,9 @@ import { type MRT_ColumnDef } from 'material-react-table';
 import { parsedDate } from '../../utils';
 import { isEmpty } from '../../utils/index';
 import FieldTooltip from '../../components/FieldTooltip';
+import { IOrders } from '../../services/Orders';
 
-export function ListColumns(): MRT_ColumnDef[] {
+export function ListColumns(): MRT_ColumnDef<IOrders>[] {
   return [
     {
       header: 'Productos',

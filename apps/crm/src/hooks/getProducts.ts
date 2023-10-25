@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { MRT_PaginationState } from 'material-react-table';
 import { AsyncProviderNames } from '../types/providers';
 import { useGetList } from 'data_providers';
+import { IProduct } from '../services/Products';
 
 export const useGetProducts = () => {
   const [page, setPage] = useState<MRT_PaginationState>({
@@ -10,7 +11,7 @@ export const useGetProducts = () => {
     pageSize: 20,
   });
 
-  const getAllProducts = useGetList(AsyncProviderNames.PRODUCTS);
+  const getAllProducts = useGetList<IProduct>(AsyncProviderNames.PRODUCTS);
   const queryData = useQuery(
     ['all_products_table'],
     async () => await getAllProducts()
