@@ -1,5 +1,5 @@
 import { SearchOutlined } from "@mui/icons-material";
-import { Autocomplete, InputAdornment, Stack, TextField } from "@mui/material";
+import { InputAdornment, Stack, TextField } from "@mui/material";
 import { SubmitHandler, useForm } from "react-hook-form";
 
 export interface ISearch {
