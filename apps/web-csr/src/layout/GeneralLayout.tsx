@@ -54,70 +54,9 @@ export function GeneralLayout({
           }}
         />
       </Box>
-      {/* Curar modales y luego pasarlos a la maquina estado */}
       <Modal />
       <CartFloat />
       <Menu />
-      {/* <PickupStore content={<BodyPickup />} />
-      <MyData />
-      <Payments /> */}
-      {/* <ConfirmedOrder
-        stepStatus={
-          <StepStatus
-            steps={['En tienda', 'Entregado']}
-            sx={{ marginY: '2rem' }}
-          />
-        }
-        footer={
-          <FooterModal
-            onClick={() => setIsConfirmedStore(false)}
-            sx={{
-              marginTop: '1rem',
-              '& button': {
-                textTransform: 'capitalize',
-              },
-            }}
-            nameButton='Hacer otro pedido'
-            infoMessage='Guarda tu número de pedido y realiza el seguimiento en nuestra página principal'
-          />
-        }
-      />
-      <ConfirmedOrder
-        stepStatus={
-          <StepStatus
-            steps={['En tienda', 'En camino', 'Entregado']}
-            sx={{ marginY: '2rem' }}
-          />
-        }
-        infoPayment={
-          <InfoPayment
-            titleInfo='Números de cuenta'
-            content={
-              <Stack color='#000'>
-                <Typography>
-                  Banco BBVA Continental - calixto prueba uno
-                </Typography>
-                <Typography>Número de cuenta: 0238348483939292</Typography>
-                <Typography> CCI interbancario: 9483287829229292929</Typography>
-              </Stack>
-            }
-          />
-        }
-        footer={
-          <FooterModal
-            onClick={() => setIsConfirmedOrder(false)}
-            sx={{
-              flexDirection: 'column-reverse',
-              marginTop: '1rem',
-              '& button': {
-                textTransform: 'capitalize',
-              },
-            }}
-            nameButton='Hacer otro pedido'
-            infoMessage='Realiza el seguimiento de tu pedido aquí.'
-          />
-        }
-      /> */}
     </Box>
   );
 }

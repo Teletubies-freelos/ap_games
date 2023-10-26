@@ -51,10 +51,16 @@ const SearchBar = ()=>{
     options={data?.map(({name})=>name) ?? []}
     freeSolo
     sx={{ 
-      width: "100%",
+      width: {
+        xs: '80vw',
+        md: 'unset'
+      },
       backgroundColor: "white",
       borderRadius: ".25rem",
       "& input": { color: "#434343" },
+      "& .MuiAutocomplete-endAdornment": {
+        display: 'none'
+      }
     }}
     renderInput={(params) => (
       <TextField
