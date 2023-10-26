@@ -20,5 +20,14 @@ export const isRefetchProducts$ = new BehaviorSubject<
   undefined | string | number
 >(undefined);
 
-export const [isEdit$, setIsEdit] = createSignal<boolean>();
-export const [useIsEdit, isEditDefault$] = bind(isEdit$, false);
+export const [isEditCategory$, setIsEditCategory] = createSignal<boolean>();
+export const [useIsEditCategory, isEditCategoryDefault$] = bind(
+  isEditCategory$,
+  false
+);
+
+export const [isEditProduct$, setIsEditProduct] = createSignal<boolean>();
+export const [useIsEditProduct, isEditProductDefault$] = bind(
+  isEditProduct$,
+  false
+);

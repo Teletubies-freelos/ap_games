@@ -8,7 +8,7 @@ import {
 import { ICategoryName } from '../pages/categories/ListCategories';
 import { AsyncProviderNames } from '../types/providers';
 import { ICategory } from '../services/Categories';
-import { setIsEdit } from '../observables';
+import { setIsEditCategory } from '../observables';
 
 interface IUseQueryCategory {
   reset: () => void;
@@ -75,7 +75,7 @@ export const useQueryCategory = ({ reset }: IUseQueryCategory) => {
             )
         );
         reset();
-        setIsEdit(false);
+        setIsEditCategory(false);
       },
     }
   );

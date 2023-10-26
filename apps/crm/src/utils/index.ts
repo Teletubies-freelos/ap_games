@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { OrdersResponse } from '../services/orders';
+/* import { OrdersResponse } from '../services/orders'; */
 
 /* const deserializeProducts = (data) => {
   return data?.map((order) => {
@@ -13,11 +13,11 @@ import { OrdersResponse } from '../services/orders';
   });
 }; */
 
-const deserializeStatePayment = (order: OrdersResponse) => {
+/* const deserializeStatePayment = (order: OrdersResponse) => {
   return order.payment_state ? 'Pagado' : 'Pendiente';
-};
+}; */
 
-export const finalProducts = (data: OrdersResponse[]) => {
+/* export const finalProducts = (data: OrdersResponse[]) => {
   return data?.map((order: OrdersResponse) => {
     return {
       ...order,
@@ -25,7 +25,7 @@ export const finalProducts = (data: OrdersResponse[]) => {
       payment_state: deserializeStatePayment(order),
     };
   });
-};
+}; */
 
 export const parsedDate = (date: string) => {
   return new Date(date).toLocaleString('es-PE', {

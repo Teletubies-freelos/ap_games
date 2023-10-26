@@ -5,7 +5,7 @@ import { Delete, Edit } from '@mui/icons-material';
 import { useForm } from 'react-hook-form';
 import { useQueryCategory } from '../../hooks/useQueryCategory';
 import { useRef, useState } from 'react';
-import { setIsEdit, useIsEdit } from '../../observables';
+import { setIsEditCategory, useIsEditCategory } from '../../observables';
 
 export interface ICategoryName {
   name: string;
@@ -18,7 +18,7 @@ const ListCategories = () => {
   const { data, isFetching, mutateCreate, mutateDelete, mutateUpdate } =
     useQueryCategory({ reset });
 
-  const isEdit = useIsEdit();
+  const isEdit = useIsEditCategory();
   const [editId, setEditId] = useState<number>(0);
 
   const nameFieldRef = useRef<HTMLInputElement>(null);
@@ -62,7 +62,7 @@ const ListCategories = () => {
                 setValue('name', row.original.name);
                 if (nameFieldRef.current) {
                   nameFieldRef.current.focus();
-                  setIsEdit(true);
+                  setIsEditCategory(true);
                   setEditId(row.original.category_id);
                 }
               }}

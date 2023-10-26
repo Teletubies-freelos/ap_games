@@ -3,30 +3,17 @@ import { PropsWithChildren } from 'react';
 import { queryClient } from '../../modules/query';
 
 import { DataProvider as ContextDataProvider } from '../../context/data';
-import {
-  categoriesClient,
-  ordersClient,
-  productsProvider,
-  productsClient,
-  ordersProvider,
-  categoriesProvider,
-} from '../../modules';
+import { categoriesClient, ordersClient, productsClient } from '../../modules';
 import { Auth0Provider } from '@auth0/auth0-react';
 import { env } from '../../config';
 import { AuthProvider } from './auth';
 import { ThemeProvider } from '../../../../web-csr/src/providers/theme';
 import { DataProvider } from 'data_providers';
-import { AsyncProviderNames } from '../../types/providers';
+import { providerNames } from '../../dataProviders';
 
 export const Providers = ({ children }: PropsWithChildren) => {
-  const providers = {
-    [AsyncProviderNames.PRODUCTS]: productsProvider,
-    [AsyncProviderNames.ORDERS]: ordersProvider,
-    [AsyncProviderNames.CATEGORIES]: categoriesProvider,
-  };
-
   return (
-    <DataProvider providers={providers}>
+    <DataProvider providers={providerNames}>
       <ThemeProvider>
         <QueryClientProvider client={queryClient}>
           <Auth0Provider
