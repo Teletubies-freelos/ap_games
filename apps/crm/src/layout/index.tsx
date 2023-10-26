@@ -43,7 +43,7 @@ const Layout = ({ children }: PropsWithChildren) => {
                 sx={{ textDecoration: 'none' }}
                 component={Link}
                 to='/products'
-                color='primary'
+                color='text.primary'
               >
                 Productos
               </MuiLink>
@@ -57,7 +57,7 @@ const Layout = ({ children }: PropsWithChildren) => {
                 sx={{ textDecoration: 'none' }}
                 component={Link}
                 to='/categories'
-                color='primary'
+                color='text.primary'
               >
                 Categorias
               </MuiLink>
@@ -71,7 +71,7 @@ const Layout = ({ children }: PropsWithChildren) => {
                 sx={{ textDecoration: 'none' }}
                 component={Link}
                 to='/categories'
-                color='primary'
+                color='text.primary'
               >
                 Ajustes
               </MuiLink>

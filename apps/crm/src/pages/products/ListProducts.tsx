@@ -16,7 +16,6 @@ export const ListProducts = () => {
   const list = ListColumns;
   const queryClient = useQueryClient();
 
-  //delete
   const deleteProduct = useDeleteOne(AsyncProviderNames.PRODUCTS);
   const { mutate } = useMutation(
     ['delete_product'],
@@ -60,7 +59,16 @@ export const ListProducts = () => {
         enableRowActions
         renderRowActions={({ row }) => (
           <Box display='flex'>
-            <IconButton color='secondary' onClick={() => console.info('Edit')}>
+            <IconButton
+              color='secondary'
+              onClick={() => {
+                console.log(
+                  '%c row.original :',
+                  'background-color:#048A81',
+                  row.original
+                );
+              }}
+            >
               <Edit />
             </IconButton>
             <IconButton onClick={() => mutate(row.original.product_id)}>
