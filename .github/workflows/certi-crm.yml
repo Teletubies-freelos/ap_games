@@ -27,7 +27,7 @@ jobs:
           version: 8
           run_install: false
       - name: Build
-        working-directory: apps/crm2
+        working-directory: apps/crm
         run: |
           pnpm install
           pnpm build
@@ -37,5 +37,5 @@ jobs:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          local-dir: ./apps/crm2/dist/
+          local-dir: ./apps/crm/dist/
           server-dir: /cert.apgames.pe/public_html/cms/
