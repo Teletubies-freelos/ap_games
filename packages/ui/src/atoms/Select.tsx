@@ -8,6 +8,7 @@ import {
   SelectChangeEvent,
   SelectProps,
   TextFieldProps,
+  InputLabel,
 } from '@mui/material';
 
 import { ArrowDropDown as ArrowDropDownIcon } from '@mui/icons-material';
@@ -24,6 +25,7 @@ export interface SelectFilterProps<T extends IOption = IOption> {
   onChange?: (event: SelectChangeEvent) => void;
   selectProps?: SelectProps;
   textFieldProps?: TextFieldProps;
+  placeHolder?: string;
 }
 
 export default function SelectFilter({
@@ -34,6 +36,7 @@ export default function SelectFilter({
   onChange,
   selectProps,
   textFieldProps,
+  placeHolder
 }: PropsWithChildren<SelectFilterProps>) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -57,6 +60,9 @@ export default function SelectFilter({
 
   return (
     <FormControl sx={sxForm}>
+      {
+        placeHolder && <InputLabel>{placeHolder}</InputLabel>
+      }
       <MUISelect
         // @ts-expect-error no idea why
         onChange={onChange}

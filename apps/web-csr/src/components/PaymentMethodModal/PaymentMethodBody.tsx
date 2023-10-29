@@ -118,6 +118,7 @@ export default function PaymentMethodBody({
       <DropDown
         textFieldProps={register('payment_method_id')}
         items={parsedPaymentMethods}
+        placeHolder={"Indique su medio de pago"}
       ></DropDown>
 
       <TextField
