@@ -42,7 +42,7 @@ export default function CardProduct({
         background: palette.background.default,
         boxShadow: "none",
         borderRadius: ".25rem",
-        height: "10rem",
+        height: "11rem",
       })}
       className={className}
     >
@@ -118,28 +118,28 @@ export default function CardProduct({
         </CardContent>
       </Box>
       <Box
-        display="flex"
-        justifyContent="flex-end"
-        height={0}
-        alignItems="start"
-      >
-        {/* TODO: try to use translate instead to avoid shift layout */}
-        <Button
-          disabled={inCart}
-          onClick={onAdd}
-          variant="contained"
-          sx={{
-            position: "relative",
-            bottom: { xs: "2.8rem", sm: "3.2rem" },
-            right: "2rem",
-            padding: 1,
-            minWidth: "unset",
-            aspectRatio: !inCart ? 1 : 'unset',
-          }}
+          display="flex"
+          justifyContent="flex-end"
+          height={0}
+          alignItems="start"
         >
-          {inCart ? 'En el carrito' : <Add />}
-        </Button>
-      </Box>
+          {/* TODO: try to use translate instead to avoid shift layout */}
+          <Button
+            disabled={inCart}
+            onClick={onAdd}
+            variant="contained"
+            sx={{
+              position: "relative",
+              bottom: { xs: "3.15rem", sm: "3.2rem" },
+              right: "0.85rem",
+              padding: 0.6,
+              minWidth: "unset",
+              aspectRatio: !inCart ? 1 : 'unset',
+            }}
+          >
+            {inCart ? 'En el carrito' : <Add />}
+          </Button>
+        </Box>
     </Card>
   );
 }
