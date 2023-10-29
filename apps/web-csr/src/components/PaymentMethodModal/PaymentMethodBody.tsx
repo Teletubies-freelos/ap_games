@@ -5,19 +5,30 @@ import { ModalState, setModalState, setPurchaseCode } from '../../observables';
 import {
   useCreateOne,
   useGetList,
+  useGetOne,
+  useSyncGetOne,
 } from 'data_providers';
-import { ProviderNames } from '../../types/providers';
+import { ProviderNames, SyncProviderNames } from '../../types/providers';
 import { useForm } from 'react-hook-form';
 import CustomAcordion from '../common/CustomAcordion';
 import { ICartProduct } from '../../data/indexedDB';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useConfirmRequest } from '../../hooks/useConfirmRequest';
+import { UserInfo } from '../../services/SessionStorage';
+import { useMemo } from 'react';
+import { GeolocationProvider, ResourceNames } from '../../services/Geolocation';
 
 export interface PaymentMethodData {
   paymentMethod: string;
   payment_method_id: number;
   order_status_id: number;
   comment: string;
+}
+
+interface IDeliveryInfo {
+  address: [String, String?];
+  name: [String, String?];
+  district: [String, String?];
 }
 
 interface PaymentMethodBodyProps {
@@ -32,6 +43,7 @@ export default function PaymentMethodBody({
   reduceTotalPrice,
 }: PaymentMethodBodyProps) {
   const { register, handleSubmit } = useForm<PaymentMethodData>();
+  const getGeolocation: typeof GeolocationProvider.prototype.getOne = useSyncGetOne(SyncProviderNames.GEOLOCATION);
   const createToSession = useCreateOne(ProviderNames.SESSION_STORAGE);
   const confirmRequest = useConfirmRequest();
   const queryClient = useQueryClient()
@@ -78,6 +90,24 @@ export default function PaymentMethodBody({
 
   const totalQunatity = reduceQuantity(data);
 
+  const getClientData = useGetOne<UserInfo>(ProviderNames.SESSION_STORAGE);
+  const { data: orderData } = useQuery(['order'], async () => await getClientData());
+  
+  const deliveryInfo: IDeliveryInfo = useMemo((): IDeliveryInfo => ({
+    address: ["Dirección", orderData?.address],
+    district: ["Distrito", getGeolocation(
+      {
+        filter: {
+          province_id: "150117",
+        },
+      },
+      {
+        resource: ResourceNames.DISTRICT,
+      }
+    )],
+    name: ["Nombre", orderData?.client_name],
+  }), [orderData]);
+
   return (
     <Box
       component={'form'}
@@ -103,18 +133,50 @@ export default function PaymentMethodBody({
                 padding='.5rem 0'
                 key={product.id}
               >
-                <Typography>
-                  {product.name} x {product.quantity}
-                </Typography>
+                <Typography>{product.name} x {product.quantity} </Typography>
                 <Typography>S/.{product.price}.00</Typography>
               </Box>
             ))}
           </Box>
         }
       />
-      <DropDown
-        items={[{ value: '1', label: 'Informacion de entrega' }]}
-      ></DropDown>
+
+      <CustomAcordion
+        header={
+          <Stack>
+            <Typography>Información de entrega</Typography>
+          </Stack>
+        }
+        content={
+          <Box>
+            <Box
+              display='flex'
+              justifyContent='space-between'
+              padding='.5rem 0'
+            >
+              <Typography>{deliveryInfo?.address[0]}</Typography>
+              <Typography>{deliveryInfo?.address[1]}</Typography>
+            </Box>
+            <Box
+              display='flex'
+              justifyContent='space-between'
+              padding='.5rem 0'
+            >
+              <Typography>{deliveryInfo?.district[0]}</Typography>
+              <Typography>{deliveryInfo?.district[1]}</Typography>
+            </Box>
+            <Box
+              display='flex'
+              justifyContent='space-between'
+              padding='.5rem 0'
+            >
+              <Typography>{deliveryInfo?.name[0]}</Typography>
+              <Typography>{deliveryInfo?.name[1]}</Typography>
+            </Box>
+          </Box>
+        }
+      />
+
       <DropDown
         textFieldProps={register('payment_method_id')}
         items={parsedPaymentMethods}

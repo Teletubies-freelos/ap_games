@@ -36,4 +36,13 @@ export class GeolocationProvider implements IDataSyncProvider{
 
     throw new Error('Not valid resource')
   }
+
+  getOne({filter}: IGetListParams, {resource} : {resource: ResourceNames}) {
+    if(resource === ResourceNames.DISTRICT){
+      return districts.find(({id})=> id === filter?.province_id)?.name;
+    }
+
+    throw new Error('Not valid resource')
+  }
+
 }
