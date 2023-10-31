@@ -29,7 +29,7 @@ const Layout = ({ children }: PropsWithChildren) => {
                 sx={{ textDecoration: 'none' }}
                 component={Link}
                 to='/orders'
-                color='primary'
+                color={'#/orders' == location.hash ? 'primary' : 'text.primary'}
               >
                 Pedidos
               </MuiLink>
@@ -43,7 +43,7 @@ const Layout = ({ children }: PropsWithChildren) => {
                 sx={{ textDecoration: 'none' }}
                 component={Link}
                 to='/products'
-                color='text.primary'
+                color={'#/products' == location.hash ? 'primary' : 'text.primary'}
               >
                 Productos
               </MuiLink>
@@ -57,7 +57,7 @@ const Layout = ({ children }: PropsWithChildren) => {
                 sx={{ textDecoration: 'none' }}
                 component={Link}
                 to='/categories'
-                color='text.primary'
+                color={'#/categories' == location.hash ? 'primary' : 'text.primary'}
               >
                 Categorias
               </MuiLink>
@@ -71,7 +71,7 @@ const Layout = ({ children }: PropsWithChildren) => {
                 sx={{ textDecoration: 'none' }}
                 component={Link}
                 to='/categories'
-                color='text.primary'
+                color={'#/categories' == location.hash ? 'primary' : 'text.primary'}
               >
                 Ajustes
               </MuiLink>
