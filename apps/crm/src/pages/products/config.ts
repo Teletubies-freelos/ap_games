@@ -7,11 +7,6 @@ import { parsedDate } from '../../utils';
 export function ListColumns(): MRT_ColumnDef<IProduct>[] {
   return [
     {
-      header: 'Id',
-      accessorKey: 'product_id',
-      size: 50,
-    },
-    {
       header: 'Nombre',
       accessorKey: 'name',
       size: 50,
@@ -35,7 +30,7 @@ export function ListColumns(): MRT_ColumnDef<IProduct>[] {
       size: 50,
     },
     {
-      header: 'Oferta',
+      header: 'Tag Oferta',
       accessorKey: 'is_offer',
       Cell: ({ renderedCellValue }) => (renderedCellValue ? 'Si' : 'No'),
       size: 50,
@@ -47,30 +42,26 @@ export function ListColumns(): MRT_ColumnDef<IProduct>[] {
       size: 50,
     },
     {
-      header: 'Url de imagen',
+      header: 'Imagen',
       accessorKey: 'img_url',
       Cell: ImageInTable,
     },
     {
-      header: 'Url de imagen secundaria',
+      header: 'Imagen secundaria',
       accessorKey: 'secondary_url',
       Cell: ImageInTable,
     },
     {
-      header: 'Url de imagen de banner',
+      header: 'Imagen de banner',
       accessorKey: 'banner_img_url',
       Cell: ImageInTable,
     },
     {
-      header: 'Cantidad',
-      accessorKey: 'quantity',
-    },
-    {
-      header: 'Categoria',
+      header: 'Categoría',
       accessorKey: 'category.name',
     },
     {
-      header: 'Fecha de actualizacion',
+      header: 'Fecha de actualización',
       accessorKey: 'updated_at',
       Cell: ({ renderedCellValue }) => parsedDate(renderedCellValue as string),
       size: 50,

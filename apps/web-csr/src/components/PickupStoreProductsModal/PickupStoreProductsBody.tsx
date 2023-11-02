@@ -8,7 +8,7 @@ import { useQuery } from "@tanstack/react-query";
 import { ICartProduct } from "../../data/indexedDB";
 import { reduceQuantity, reduceTotalPrice } from "../../utils";
 
-export default function PickupStoreBody() {
+export default function PickupStoreProductsBody() {
   const getCartProducts = useGetList<ICartProduct>(ProviderNames.CART);
   const { data } = useQuery(['cart'], async () => await getCartProducts());
 

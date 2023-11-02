@@ -1,11 +1,11 @@
 import { GraphQLClient } from 'graphql-request';
 import { env } from '../config';
-import { Products } from '../services/products';
-import { Orders } from '../services/orders';
-import { Categories } from '../services/categories';
+import { Categories } from '../services/categories/index';
 import { ProductsData } from '../services/Products';
 import { OrdersData } from '../services/Orders';
 import { CategoriesData } from '../services/Categories';
+import { Products } from '../services/products/index';
+import { Orders } from '../services/orders/index';
 
 export const graphqlClient = new GraphQLClient(env.HASURA_GRAPHQL_URL);
 if (env.HASURA_GRAPHQL_MASTER_TOKEN) {

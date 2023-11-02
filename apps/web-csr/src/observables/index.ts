@@ -53,6 +53,8 @@ export enum ModalState {
   CART = 'cart',
   DETAIL = 'detail',
   IN_STORE_SUMMARY = 'inStoreSummary',
+  IN_STORE_INFO_ORDER = 'inStoreInfoOrder',
+  IN_STORE_PRE_CONFIRMATION = 'inStorePreConfirmation',
   IN_STORE_CONFIRMATION = 'inStoreConfirmation',
   DELIVERY_CENTRAL_CLIENT_DATA = 'deliveryCentralClientData',
   DELIVERY_CENTRAL_PAYMENT_METHOD = 'deliveryCentralPaymentMethod',

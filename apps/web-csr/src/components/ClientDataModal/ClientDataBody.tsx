@@ -36,8 +36,7 @@ const parseDestination = (destination: Destination) =>
   destination === 'capital' ? '1501' : undefined;
 
 export default function ClientDataBody() {
-  const getGeolocation: typeof GeolocationProvider.prototype.getList =
-    useSyncGetList(SyncProviderNames.GEOLOCATION);
+  const getGeolocation: typeof GeolocationProvider.prototype.getList = useSyncGetList(SyncProviderNames.GEOLOCATION);
   const { register, handleSubmit } = useForm<UserInfo>();
   const createToSession = useCreateOne(ProviderNames.SESSION_STORAGE);
 

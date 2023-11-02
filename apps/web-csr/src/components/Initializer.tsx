@@ -18,14 +18,24 @@ const transformConfig = (data: IConfigCms[] = []) => data.reduce((acc, item)=> (
 
 export const  Initializer = ({children}:PropsWithChildren)=>{
   const getOrderStatus = useGetList(ProviderNames.ORDER_STATUS)
+  const getDeliveryWays = useGetList(ProviderNames.DELIVERY_WAYS);
   const getConfig = useGetList(ProviderNames.CONFIG_CMS);
   const getConfigLocal = useSyncGetOne(SyncProviderNames.LOCAL_CONFIG)
   const createCache = useSyncCreateOne(SyncProviderNames.LOCAL_CONFIG)
   const {cacheTime = '7', createdAt}: IConfig = getConfigLocal()
-
+  useQuery(['deliveryWays'], {
+    cacheTime: Number.MAX_VALUE,
+    queryFn: async () =>  {
+      const a = await getDeliveryWays()
+      return a;
+    },
+  })
   useQuery(['orderStatus'], {
     cacheTime: Number.MAX_VALUE,
-    queryFn: async () =>  await getOrderStatus(),
+    queryFn: async () => {
+     const b=  await getOrderStatus()
+     return b;
+    },
   })
 
   const isExpired = dayjs(new Date())

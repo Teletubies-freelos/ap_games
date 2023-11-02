@@ -28,6 +28,9 @@ export interface IOrders {
     meta: string;
     alternative_number: string;
   };
+  delivery_way : {
+    name: string;
+  }
 }
 
 export class OrdersData implements IDataProvider {

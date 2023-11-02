@@ -14,6 +14,7 @@ import { ConfigCms } from '../services/ConfigCms';
 import { LocalConfig } from '../services/LocalConfig';
 import { SyncSessionClientStorage } from '../services/SyncSessionStorage';
 import { OrderStatus } from '../services/OrderStatus';
+import { DeliveryWays } from '../services/DeliveryWays';
 
 
 const headers = new Headers({
@@ -49,3 +50,5 @@ export const localConfigProvider = new LocalConfig();
 export const syncSessionStorageProvider = new SyncSessionClientStorage()
 
 export const orderStatusProvider = new OrderStatus(graphqlClient);
+
+export const deliveryWaysProvider = new DeliveryWays(graphqlClient);

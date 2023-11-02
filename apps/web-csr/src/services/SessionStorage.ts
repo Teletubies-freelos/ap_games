@@ -11,6 +11,7 @@ export type UserInfo = {
   payment_method_id: number;
   order_status_id: number;
   reference: string;
+  comment: string;
 };
 
 export class SessionClientStorage implements IDataProvider {
@@ -23,6 +24,7 @@ export class SessionClientStorage implements IDataProvider {
     'district_id',
     'order_status_id',
     'payment_method_id',
+    'comment'
   ];
 
   async createOne(object: UserInfo) {

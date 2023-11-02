@@ -7,7 +7,7 @@ import {
   Typography,
 } from '@mui/material';
 import { ProviderNames } from '../../../types/providers';
-import { useDeleteOne, useGetList } from 'data_providers';
+import { useDeleteMany, useDeleteOne, useGetList } from 'data_providers';
 import { useQuery } from '@tanstack/react-query';
 
 import {
@@ -35,11 +35,13 @@ const defaultPriceCb = (quantity: number, price: number)=> quantity*price
 export function BodyCart({listPriceCb = defaultPriceCb }: BodyCartProps) {
   const getCartProducts = useGetList<ICartProduct>(ProviderNames.CART);
   const deleteCartProduct = useDeleteOne(ProviderNames.CART);
+  const deleteCartProducts = useDeleteMany(ProviderNames.CART);
+
   const { data, isFetching, refetch } = useQuery(
     ['productsCart'],
     async () => await getCartProducts()
   );
-
+    
   const total = useMemo(() => reduceTotalPrice(data) ?? 0, [data]);
 
   return (
@@ -79,6 +81,25 @@ export function BodyCart({listPriceCb = defaultPriceCb }: BodyCartProps) {
             />
           ))}
         </List>
+        <Button
+          onClick={
+            async () => {
+              await deleteCartProducts();
+              await refetch();
+            }
+          }
+        >
+          <Typography
+            textAlign='center'
+            variant='body2'
+            fontSize='.9rem'
+            padding='0.3rem 0 .5rem 0'
+            color='text.primary'
+            textTransform={"uppercase"}
+          >
+            Limpiar
+          </Typography>
+        </Button>
       </Box>
       <Box height={'2.5rem'} display='flex' justifyContent='center' >
         {isFetching ? (
