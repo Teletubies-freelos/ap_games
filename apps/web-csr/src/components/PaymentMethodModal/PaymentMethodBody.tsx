@@ -27,9 +27,9 @@ export interface PaymentMethodData {
 }
 
 interface IDeliveryInfo {
-  address: [String, String?];
-  name: [String, String?];
-  district: [String, String?];
+  address: [string, string?];
+  name: [string, string?];
+  district: [string, string?];
 }
 
 interface PaymentMethodBodyProps {

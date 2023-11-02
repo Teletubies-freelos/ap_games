@@ -29,13 +29,13 @@ export interface PickUpInfo {
 }
 
 interface IDeliveryInfo {
-    name: [String, String?];
-    email: [String, String?];
-    phone: [String, String?];
+    name: [string, string?];
+    email: [string, string?];
+    phone: [string, string?];
 }
 
 export default function PickupStorePreConfirmationBody() {
-    const { register, handleSubmit } = useForm<PickUpInfo>();
+    const { handleSubmit } = useForm<PickUpInfo>();
     const createToSession = useCreateOne(ProviderNames.SESSION_STORAGE);
     const confirmRequest = useConfirmRequest();
     const queryClient = useQueryClient()
