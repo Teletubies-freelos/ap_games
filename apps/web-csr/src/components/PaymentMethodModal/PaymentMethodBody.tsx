@@ -17,6 +17,7 @@ import { useConfirmRequest } from '../../hooks/useConfirmRequest';
 import { UserInfo } from '../../services/SessionStorage';
 import { useMemo } from 'react';
 import { GeolocationProvider, ResourceNames } from '../../services/Geolocation';
+import { DeliveryWayEnum, IDeliveryWay } from '../../services/DeliveryWays';
 
 export interface PaymentMethodData {
   paymentMethod: string;
@@ -52,14 +53,19 @@ export default function PaymentMethodBody({
     const orderStatuses: {order_status_id:number; name: string}[] | undefined = queryClient
       .getQueryData(['orderStatus'])
 
+    const deliveryWays : IDeliveryWay[] | undefined  =  queryClient.getQueryData(['deliveryWays'])
+    
+    const { delivery_way_id } = deliveryWays?.find(({ token }) => token === DeliveryWayEnum.DELIVERY) ?? {}
+    
     const { order_status_id } = orderStatuses?.find(({name})=>name === 'pending') ?? {}
+    
     if(!order_status_id)
       throw new Error('Order status not found')
-      
-  
+
     const newDataPayment = {
       ...data,
       order_status_id,
+      delivery_way_id
     };
 
     await createToSession(newDataPayment);
@@ -98,7 +104,7 @@ export default function PaymentMethodBody({
     district: ["Distrito", getGeolocation(
       {
         filter: {
-          province_id: "150117",
+          province_id: orderData?.district_id,
         },
       },
       {

@@ -196,3 +196,16 @@ export const GET_ORDER_STATUS = gql`
     }
 }
 `
+
+export const GET_DELIVERY_WAYS = gql`
+  query GET_DELIVERY_WAYS($limit: Int, $offset: Int) {
+    delivery_way(
+      limit: $limit
+      offset: $offset
+    ) {
+      delivery_way_id
+      name
+      token
+    }
+  }
+`;

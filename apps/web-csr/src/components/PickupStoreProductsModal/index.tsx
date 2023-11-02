@@ -5,7 +5,7 @@ import HeadModal from '../common/HeadModal';
 import FooterModal from '../common/FooterModal';
 
 import { ModalLayout } from '../../../../../packages/ui/src';
-import { ModalState, setModalState, setPurchaseCode } from '../../observables';
+import { ModalState, setModalState, setNextState, setPrevState, setPurchaseCode } from '../../observables';
 import { ProviderNames } from '../../types/providers';
 import { useMutation } from '@tanstack/react-query';
 
@@ -13,7 +13,7 @@ interface PickupStoreProps {
   content?: JSX.Element;
 }
 
-export default function PickupStoreModal({
+export default function PickupStoreProductsModal({
   content,
 }: Readonly<PickupStoreProps>) {
 
@@ -26,30 +26,14 @@ export default function PickupStoreModal({
   });
 
   const handleBack = () => {
-    setModalState({
-      data: {
-        name: ModalState.CART,
-      },
-      previousState: {
-        data: {
-          name: ModalState.IN_STORE_CONFIRMATION,
-        },
-      },
-    });
+    setPrevState();
   };
 
   const handleConfirm = async () => {
     await mutateAsync({})
-
-    setModalState({
-      data: {
-        name: ModalState.IN_STORE_CONFIRMATION,
-      },
-      previousState: {
-        data: {
-          name: ModalState.IN_STORE_SUMMARY,
-        },
-      },
+    
+    setNextState({
+      name: ModalState.IN_STORE_INFO_ORDER,
     });
   };
 
@@ -63,7 +47,6 @@ export default function PickupStoreModal({
           icon={
             <IconButton onClick={handleBack}>
               <ArrowBackIosIcon
-                onClick={handleBack}
                 sx={{ cursor: 'pointer' }}
               />
             </IconButton>
@@ -72,18 +55,16 @@ export default function PickupStoreModal({
       }
     >
       {content}
-
-        <FooterModal
-          onClick={handleConfirm}
-          nameButton='Confirmar pedido'
-          infoMessage='No existe costo de envío por ser recojo en tienda.'
-          sx={{
-            display: 'flex',
-            flexDirection: 'column-reverse',
-            marginTop: '2rem',
-          }}
-        />
-
+      <FooterModal
+        onClick={handleConfirm}
+        nameButton='Siguiente'
+        infoMessage='No existe costo de envío por ser recojo en tienda.'
+        sx={{
+          display: 'flex',
+          flexDirection: 'column-reverse',
+          marginTop: '2rem',
+        }}
+      />
     </ModalLayout>
   );
 }

@@ -48,5 +48,8 @@ export const ORDER_DATA = gql`
       meta
       alternative_number
     }
+    delivery_way {
+      name
+    }
   }
 `;

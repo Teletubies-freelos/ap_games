@@ -109,6 +109,7 @@ export const CREATE_ORDER = gql`
     $order_status_id: Int
     $comment: String
     $reference: String
+    $delivery_way_id: Int
   ) {
     insert_orderers_one(
       object: {
@@ -121,6 +122,7 @@ export const CREATE_ORDER = gql`
         order_status_id: $order_status_id
         comment: $comment
         reference: $reference
+        delivery_way_id: $delivery_way_id
       }
     ) {
       order_id

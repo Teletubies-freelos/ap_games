@@ -25,7 +25,7 @@ const ConfirmOrderPickup = () => {
       footer={
         <FooterModal
           onClick={handleSubmit}
-          nameButton="Confirmar pedido"
+          nameButton="Hacer Otro Pedido"
           infoMessage="Guarda tu número de pedido y realiza el seguimiento en nuestra página principal"
           sx={{
             marginTop: '2.5rem',
