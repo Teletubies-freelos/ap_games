@@ -1,13 +1,10 @@
 import { IconButton, Typography } from '@mui/material';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import { useCreateOne } from 'data_providers';
 import HeadModal from '../common/HeadModal';
 import FooterModal from '../common/FooterModal';
 
 import { ModalLayout } from '../../../../../packages/ui/src';
-import { ModalState, setModalState, setNextState, setPrevState, setPurchaseCode } from '../../observables';
-import { ProviderNames } from '../../types/providers';
-import { useMutation } from '@tanstack/react-query';
+import { ModalState, setModalState, setNextState, setPrevState } from '../../observables';
 
 interface PickupStoreProps {
   content?: JSX.Element;
@@ -17,21 +14,11 @@ export default function PickupStoreProductsModal({
   content,
 }: Readonly<PickupStoreProps>) {
 
-  const createOrder = useCreateOne(ProviderNames.ORDERS);
-
-  const { mutateAsync } = useMutation(createOrder, {
-    onSuccess: (data) => {
-      setPurchaseCode(data?.order_id);
-    },
-  });
-
   const handleBack = () => {
     setPrevState();
   };
 
   const handleConfirm = async () => {
-    await mutateAsync({})
-    
     setNextState({
       name: ModalState.IN_STORE_INFO_ORDER,
     });

@@ -12,6 +12,7 @@ export type UserInfo = {
   order_status_id: number;
   reference: string;
   comment: string;
+  delivery_way_id: string;
 };
 
 export class SessionClientStorage implements IDataProvider {
