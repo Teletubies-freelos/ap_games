@@ -7,8 +7,9 @@ import {
 import { ProviderNames } from '../types/providers';
 import { UserInfo } from '../services/SessionStorage';
 import { PaymentMethodData } from '../components/PaymentMethodModal/PaymentMethodBody';
+import { getWhatsappMessage, getWhatsappNumber } from '../utils/wspInfoBuilder';
 
-interface IProduct {
+export interface IProduct {
   id: number;
   imageUrl: string;
   name: string;
@@ -26,12 +27,16 @@ export const useConfirmRequest = () => {
 
   return async (data: PaymentMethodData) => {
     const clientData = await getClientData();
-    const products = await getCartProducts();
+    const products  = await getCartProducts();
+    const wsp_value = getWhatsappNumber(clientData.phone);
+    const wsp_message = getWhatsappMessage(clientData, products);
 
     const { order_id } =
       (await createOrder({
         ...clientData,
         ...data,
+        wsp_value,
+        wsp_message
       })) ?? {};
 
     await createOrderProducts(

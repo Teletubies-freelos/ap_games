@@ -110,6 +110,8 @@ export const CREATE_ORDER = gql`
     $comment: String
     $reference: String
     $delivery_way_id: Int
+    $wsp_value: String
+    $wsp_message: String
   ) {
     insert_orderers_one(
       object: {
@@ -123,6 +125,8 @@ export const CREATE_ORDER = gql`
         comment: $comment
         reference: $reference
         delivery_way_id: $delivery_way_id
+        wsp_value: $wsp_value
+        wsp_message: $wsp_message
       }
     ) {
       order_id
