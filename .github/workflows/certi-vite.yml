@@ -13,6 +13,7 @@ jobs:
       VITE_GRAPHQL_URL: ${{ vars.GRAPHQL_URL }}
       VITE_IS_HASH_PROVIDER: true
       VITE_WOOPRA_DOMAIN: ${{ vars.WOOPRA_DOMAIN }}
+      VITE_ABLY_TOKEN: ${{ vars.ABLY_TOKEN }}
     name: 🎉 Deploy
     runs-on: ubuntu-latest
     steps:
