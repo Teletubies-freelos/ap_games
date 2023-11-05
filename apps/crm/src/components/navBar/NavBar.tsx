@@ -33,8 +33,9 @@ export function NavBar({ name }: NavBarProps) {
     
 
     useChannel("orders", (message: any) => {
-        const { created_at } = message ?? {}
-        updateNotifications([...notifications, created_at])
+        const { data: { created_at} } = message ?? {}
+
+        updateNotifications([created_at, ...notifications])
     });
 
     return (
