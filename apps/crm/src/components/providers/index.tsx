@@ -10,8 +10,12 @@ import { AuthProvider } from './auth';
 import { ThemeProvider } from '../../../../web-csr/src/providers/theme';
 import { DataProvider } from 'data_providers';
 import { providerNames } from '../../dataProviders';
+import * as Ably from 'ably'
+import { AblyProvider } from 'ably/react';
 
 export const Providers = ({ children }: PropsWithChildren) => {
+  const client = new Ably.Realtime.Promise({ key: env.ABLY_SUBSCRIBER_TOKEN });
+
   return (
     <DataProvider providers={providerNames}>
       <ThemeProvider>
@@ -30,7 +34,9 @@ export const Providers = ({ children }: PropsWithChildren) => {
                 orders={ordersClient}
                 categories={categoriesClient}
               >
-                {children}
+                <AblyProvider client={client}>
+                  {children}
+                </AblyProvider>
               </ContextDataProvider>
             </AuthProvider>
           </Auth0Provider>

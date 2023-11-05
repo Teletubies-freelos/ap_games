@@ -13,6 +13,7 @@ jobs:
       VITE_AUTH0_ID: ${{ vars.OAUTH_ID }}
       VITE_AUTH0_DOMAIN: ${{ vars.OAUTH_DOMAIN }}
       VITE_PHOTO_UPLOAD_URL: ${{ vars.PHOTO_UPLOAD_URL }}
+      VITE_ABLY_SUBSCRIBER: ${{ vars.ABLY_SUBSCRIBER }}
     name: 🎉 Deploy
     runs-on: ubuntu-latest
     steps:

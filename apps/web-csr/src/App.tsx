@@ -26,6 +26,10 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ThemeProvider } from './providers/theme';
 import { Initializer } from './components/Initializer';
 
+import * as Ably from 'ably'
+import { AblyProvider } from 'ably/react';
+import { ablyToken } from './config/ably';
+
 const providers = {
   [ProviderNames.PRODUCTS]: productsProvider,
   [ProviderNames.CART]: cartProvider,
@@ -42,7 +46,7 @@ const providers = {
 
 const syncProviders = {
   [SyncProviderNames.GEOLOCATION]: geolocationProvider,
-  [SyncProviderNames.LOCAL_CONFIG] : localConfigProvider,
+  [SyncProviderNames.LOCAL_CONFIG]: localConfigProvider,
   [ProviderNames.SESSION_STORAGE]: syncSessionStorageProvider,
 }
 
@@ -62,15 +66,19 @@ if (import.meta.env.DEV) {
   window.providers = providers;
 }
 
+const client = new Ably.Realtime.Promise({ key: ablyToken });
+
 function App() {
   return (
     <DataProvider providers={providers} syncProviders={syncProviders}>
       <QueryClientProvider client={queryClient}>
         <ThemeProvider>
           <Initializer>
-            <Suspense fallback={<LoadingPage />}>
-              <RouterProvider router={routes} />
-            </Suspense>
+            <AblyProvider client={client}>
+              <Suspense fallback={<LoadingPage />}>
+                <RouterProvider router={routes} />
+              </Suspense>
+            </AblyProvider>
           </Initializer>
         </ThemeProvider>
         {/* <ReactQueryDevtools initialIsOpen /> */}

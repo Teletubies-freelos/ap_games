@@ -26,13 +26,13 @@ import {
 import totalMoney from '../../common/total.svg';
 import { ICartProduct } from '../../../data/indexedDB';
 
-interface BodyCartProps{
-  listPriceCb?: (quantity: number, price: number, taxOrDiscount?: number)=> number;
+interface BodyCartProps {
+  listPriceCb?: (quantity: number, price: number, taxOrDiscount?: number) => number;
 }
 
-const defaultPriceCb = (quantity: number, price: number)=> quantity*price
+const defaultPriceCb = (quantity: number, price: number) => quantity * price
 
-export function BodyCart({listPriceCb = defaultPriceCb }: BodyCartProps) {
+export function BodyCart({ listPriceCb = defaultPriceCb }: BodyCartProps) {
   const getCartProducts = useGetList<ICartProduct>(ProviderNames.CART);
   const deleteCartProduct = useDeleteOne(ProviderNames.CART);
   const deleteCartProducts = useDeleteMany(ProviderNames.CART);
@@ -41,7 +41,7 @@ export function BodyCart({listPriceCb = defaultPriceCb }: BodyCartProps) {
     ['productsCart'],
     async () => await getCartProducts()
   );
-    
+
   const total = useMemo(() => reduceTotalPrice(data) ?? 0, [data]);
 
   return (
@@ -59,7 +59,7 @@ export function BodyCart({listPriceCb = defaultPriceCb }: BodyCartProps) {
             width: '100%',
           }}
         >
-          {!isFetching && data?.length=== 0 && <Typography textAlign='center' variant='h6'>No hay nada en el carrito </Typography>} 
+          {!isFetching && data?.length === 0 && <Typography textAlign='center' variant='h6'>No hay nada en el carrito </Typography>}
           {data?.map(({ imageUrl, name, price, quantity, id }) => (
             <CardStateOrder
               key={id}
@@ -68,7 +68,7 @@ export function BodyCart({listPriceCb = defaultPriceCb }: BodyCartProps) {
               price={listPriceCb(quantity, price)}
               quantity={
                 <CardQty
-                  onChangeQty={() => refetch().then(() => {})}
+                  onChangeQty={() => refetch().then(() => { })}
                   price={price}
                   onDeleteTotal={async () => {
                     await deleteCartProduct(id);
@@ -81,39 +81,43 @@ export function BodyCart({listPriceCb = defaultPriceCb }: BodyCartProps) {
             />
           ))}
         </List>
-        <Button
-          onClick={
-            async () => {
-              await deleteCartProducts();
-              await refetch();
-            }
-          }
-        >
-          <Typography
-            textAlign='center'
-            variant='body2'
-            fontSize='.9rem'
-            padding='0.3rem 0 .5rem 0'
-            color='text.primary'
-            textTransform={"uppercase"}
-          >
-            Limpiar
-          </Typography>
-        </Button>
       </Box>
-      <Box height={'2.5rem'} display='flex' justifyContent='center' >
+      <Box height={'7rem'} display='flex' flexDirection={"column"} justifyContent='center' >
         {isFetching ? (
-          <CircularProgress sx={{height:'2.5rem !important'}}/>
+          <CircularProgress sx={{ height: '2.5rem !important' }} />
         ) : (
-          <LabelStepStatus
-            property='Total'
-            value={`S/. ${total?.toFixed(2)}`}
-            icon={<img src={totalMoney} alt='money' />}
-            sx={{
-              fontSize: '1rem !important',
-              marginTop: '1.5rem',
-            }}
-          />
+          <>
+            <Button
+              sx={{
+                marginTop: '3rem',
+              }}
+              onClick={
+                async () => {
+                  await deleteCartProducts();
+                  await refetch();
+                }
+              }
+            >
+              <Typography
+                textAlign='center'
+                variant='body2'
+                fontSize='.9rem'
+                color='text.primary'
+                textTransform={"uppercase"}
+              >
+                Limpiar
+              </Typography>
+            </Button>
+            <LabelStepStatus
+              property='Total'
+              value={`S/. ${total?.toFixed(2)}`}
+              icon={<img src={totalMoney} alt='money' />}
+              sx={{
+                fontSize: '1rem !important',
+                marginTop: '1.5rem',
+                paddingBottom: '3rem'
+              }}
+            /></>
         )}
       </Box>
 
