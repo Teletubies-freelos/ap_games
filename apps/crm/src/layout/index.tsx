@@ -3,7 +3,6 @@ import { Box, Link as MuiLink, Stack, Typography } from '@mui/material';
 import { Link } from 'react-router-dom';
 import LocalMallIcon from '@mui/icons-material/LocalMall';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
-import SettingsIcon from '@mui/icons-material/Settings';
 import { MainLogo } from '../../../../packages/ui/src';
 import { PropsWithChildren } from 'react';
 
