@@ -8,6 +8,7 @@ import { ProviderNames } from '../types/providers';
 import { UserInfo } from '../services/SessionStorage';
 import { PaymentMethodData } from '../components/PaymentMethodModal/PaymentMethodBody';
 import { getWhatsappMessage, getWhatsappNumber } from '../utils/wspInfoBuilder';
+import { useChannel } from "ably/react";
 
 export interface IProduct {
   id: number;
@@ -25,20 +26,27 @@ export const useConfirmRequest = () => {
   const createOrder = useCreateOne(ProviderNames.ORDERS);
   const createOrderProducts = useCreateMany(ProviderNames.ORDER_PRODUCTS);
 
+  const { channel } = useChannel("orders", (message: any) => {
+    console.log(message);
+  });
+
   return async (data: PaymentMethodData) => {
     const clientData = await getClientData();
     const products  = await getCartProducts();
     const wsp_value = getWhatsappNumber(clientData.phone);
     const wsp_message = getWhatsappMessage(clientData, products);
-
+    
     const { order_id } =
-      (await createOrder({
-        ...clientData,
-        ...data,
-        wsp_value,
-        wsp_message
-      })) ?? {};
+    
+    (await createOrder({
+      ...clientData,
+      ...data,
+      wsp_value,
+      wsp_message
+    })) ?? {};
 
+    channel.publish("orders", { created_at : new Date() });
+    
     await createOrderProducts(
       products.map(({ productId, quantity }) => ({
         product_id: productId,

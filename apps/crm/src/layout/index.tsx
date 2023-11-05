@@ -64,7 +64,7 @@ const Layout = ({ children }: PropsWithChildren) => {
             </Typography>
           </Box>
 
-          <Box display='flex' gap='.5rem' alignItems='center'>
+          {/* <Box display='flex' gap='.5rem' alignItems='center'>
             <SettingsIcon />
             <Typography fontSize='1.1rem'>
               <MuiLink
@@ -76,7 +76,7 @@ const Layout = ({ children }: PropsWithChildren) => {
                 Ajustes
               </MuiLink>
             </Typography>
-          </Box>
+          </Box> */}
         </Stack>
       </Stack>
       <Box sx={{ width: '87%' }}>{children}</Box>

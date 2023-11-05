@@ -1,18 +1,15 @@
-import { Stack, Typography } from '@mui/material';
 import ListOrders from './ListOrders';
 import { Authenticated } from '../../components/authenticated';
 import Layout from '../../layout';
+import { NavBar } from '../../components/navBar/NavBar';
 
 const Orders = () => {
+
   return (
     <Authenticated>
       <Layout>
-        <Stack gap='1rem'>
-          <Typography variant='h1' padding='1rem'>
-            Registro de Ordenes
-          </Typography>
-          <ListOrders />
-        </Stack>
+        <NavBar name='Registro de Ordenes'/>
+        <ListOrders />
       </Layout>
     </Authenticated>
   );
