@@ -6,6 +6,8 @@ export function getWhatsappNumber(phoneNumber: Number): String {
 }
 
 export function getWhatsappMessage(userInfo: UserInfo, products: IProduct[]): String {
+    console.log("🚀 ~ file: wspInfoBuilder.ts:9 ~ getWhatsappMessage ~ products:", products)
+    console.log("🚀 ~ file: wspInfoBuilder.ts:9 ~ getWhatsappMessage ~ userInfo:", userInfo)
     const numProductos = products.reduce(
         (total, product) => total + product.quantity,
         0
@@ -18,7 +20,9 @@ export function getWhatsappMessage(userInfo: UserInfo, products: IProduct[]): St
 
     const mensaje = `
         Hola, se ha generado un pedido por *${userInfo?.client_name}* con el número ${userInfo?.phone},
-
+        Correo: ${userInfo?.email}
+        Tipo de Pedido: ${userInfo?.address ? "Delivery" : "Recojo en Tienda"}
+        
         Detalles de tu pedido:
         - Número de productos: ${numProductos}
         - Precio total: S/. ${precioTotal?.toFixed(2)}
@@ -27,10 +31,16 @@ export function getWhatsappMessage(userInfo: UserInfo, products: IProduct[]): St
         ${products
                 .map(
                     (product, index) =>
-                        `\n\t${index + 1}. ${product?.name} - $${product?.price?.toFixed(2)}`
+                        `\n\t${index + 1}. ${product?.name} - S/. ${product?.price?.toFixed(2)}`
                 )}
         
-        Comentario: ${userInfo?.comment}
+        Comentario: ${userInfo?.comment}\n
+        ${
+            userInfo.address ?
+            `Dirección: ${userInfo.address}\n
+             Referencia: ${userInfo.reference}\n
+            ` : ""
+        }
     `;
 
     return mensaje;
