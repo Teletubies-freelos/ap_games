@@ -10,7 +10,7 @@ interface NotificationsProps {
 
 export function Notifications({ notifications, updateNotifications }: NotificationsProps) {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-    
+
     const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     };
@@ -50,7 +50,7 @@ export function Notifications({ notifications, updateNotifications }: Notificati
                 <Typography variant='h2' padding='1rem'>Notificaciones</Typography>
                 <List>
                     {
-                        notifications?.map(( created_at) => (
+                        notifications?.map((created_at) => (
                             <ListItem
                                 key={created_at}
                                 sx={{

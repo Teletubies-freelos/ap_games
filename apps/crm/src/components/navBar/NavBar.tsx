@@ -1,7 +1,7 @@
 import { Stack, Typography } from "@mui/material"
 import { Notifications } from "../notifications/Notifications"
 import { useChannel } from "ably/react";
-import { useMemo, useState } from "react";
+import { useMemo, useRef, useState } from "react";
 import { IOrders } from "../../services/Orders";
 import { useGetList } from "data_providers";
 import { AsyncProviderNames } from "../../types/providers";
@@ -12,8 +12,8 @@ interface NavBarProps {
 }
 
 export function NavBar({ name }: NavBarProps) {
+    const audioRef = useRef<HTMLAudioElement | null>(null);
     const [notifications, updateNotifications] = useState<any[]>([]);
-
     const getAllOrders = useGetList<IOrders>(AsyncProviderNames.ORDERS);
 
     const queryData = useQuery(
@@ -27,14 +27,20 @@ export function NavBar({ name }: NavBarProps) {
         return created_at
     })
     
+    const playSound = () => {
+        if (audioRef.current) {
+            audioRef.current.play();
+        }
+    };
+
     useMemo(() => {
         updateNotifications([...notifications, ...lastOrders])
-    },[queryData?.data])
-    
+    }, [queryData?.data])
+
 
     useChannel("orders", (message: any) => {
-        const { data: { created_at} } = message ?? {}
-
+        const { data: { created_at } } = message ?? {}
+        playSound();
         updateNotifications([created_at, ...notifications])
     });
 
@@ -44,6 +50,9 @@ export function NavBar({ name }: NavBarProps) {
                 {name}
             </Typography>
             <Notifications notifications={notifications} updateNotifications={updateNotifications} />
+            <audio ref={audioRef}>
+                <source src="https://cdn.pixabay.com/download/audio/2021/08/04/audio_bb630cc098.mp3?filename=short-success-sound-glockenspiel-treasure-video-game-6346.mp3" type="audio/mpeg" />
+            </audio>
         </Stack>
     )
 }
