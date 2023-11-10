@@ -7,7 +7,7 @@ import { CardProductProps } from "../../../../../packages/ui/src/molecules/CardP
 import { ProductDetailPorps } from ".";
 import { useQueryClient } from "@tanstack/react-query";
 import { useMemo } from "react";
-import { serializeGames } from "../ProductList/hooks/useFeaturedProducts";
+import { serializeGames, useProductsById } from "../ProductList/hooks/useFeaturedProducts";
 import { Maybe } from "../../types";
 import { IProduct } from "../../services/Products";
 
@@ -15,10 +15,17 @@ export default function ProductDetailBody({ productId }: Readonly<ProductDetailP
   const queryClient = useQueryClient()
 
   const query = queryClient.getQueryData<{pages: IProduct[][]}>(["list_games", null, null, null])
+  const { product: productById } = useProductsById(Number(productId));
 
   const product: Maybe<CardProductProps> = useMemo(
-    () => query?.pages.flat().map(serializeGames)?.find(( product: CardProductProps) => product.productId === productId ),
-    [productId, query?.pages]
+    () => {
+      const result = query?.pages.flat().map(serializeGames)?.find(( product: CardProductProps) => product.productId == productId)
+      if(!result){
+        return productById;
+      }
+      return result;
+    },
+    [productId, query?.pages, productById]
   );
 
   const createCartProduct = useCreateOne(ProviderNames.CART, {

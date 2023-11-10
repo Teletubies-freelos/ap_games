@@ -26,10 +26,29 @@ export const GET_PRODUCTS_BY_CATEGORY = gql`
   ${PRODUCT_DATA}
 `;
 
+export const GET_PRODUCTS_BY_ID = gql`
+  query GET_PRODUCTS_BY_ID($limit: Int, $offset: Int, $productId: Int) {
+    products(
+      where: { is_visible: { _eq: true }, product_id: { _eq: $productId } }
+      limit: $limit
+      offset: $offset
+      order_by: { updated_at: desc }
+    ) {
+      ...PRODUCT_DATA
+    }
+  }
+
+  ${PRODUCT_DATA}
+`;
+
+
 export const GET_PRODUCTS_SEARCH = gql`
   query GET_PRODUCTS_SEARCH($name: String){
-    products(where: {name: {_ilike: $name}}){
+    products(where: {name: {_ilike: $name}, is_visible: { _eq: true }}){
       name
+      img_url
+      price
+      product_id
     }
   }
 `

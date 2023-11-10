@@ -1,4 +1,4 @@
-import { Stack,  IconButton, Autocomplete, TextField } from '@mui/material';
+import { Stack,  IconButton, Autocomplete, TextField, Box, InputAdornment } from '@mui/material';
 import { Link } from 'react-router-dom';
 import {
   ColorSwitch,
@@ -14,7 +14,7 @@ import ResponsiveCarousel from '../../components/ResponsiveCarousel';
 
 import ProductsList from '../../components/ProductList';
 import NavLinks from '../../components/NavLinks';
-
+import SearchIcon from '@mui/icons-material/Search';
 import { noMargin, sxInnerStack } from './styles';
 import { useToggleColor } from '../../providers/theme';
 import { CartIconReactive } from '../../components/cart/cartReactiveIcon';
@@ -23,18 +23,36 @@ import { useGetList } from 'data_providers';
 import { ProviderNames } from '../../types/providers';
 import { useQuery } from '@tanstack/react-query';
 import { Menu as MenuIcon } from '@mui/icons-material';
-import { setAnchorElMenu, useAnchorElMenu } from '../../observables';
+import { ModalState, setAnchorElMenu, setModalState, useAnchorElMenu } from '../../observables';
 import { reduceQuantity } from '../../utils';
 import { FeaturedDTO } from '../../../../migrations/src/types/tables'
 import { ChangeEventHandler, useState } from 'react';
 import { useDebounce } from 'use-debounce';
-
+interface ISearchBarQuery {
+  name: string;
+  img_url: string;
+  price: number;
+  product_id: number;
+}
 const SearchBar = ()=>{
-  const searchProduct = useGetList<{name: string}>(ProviderNames.PRODUCTS)
+  const searchProduct = useGetList<ISearchBarQuery>(ProviderNames.PRODUCTS)
   const [value, setValue] = useState<string>()
   const [valueDebounced] = useDebounce(value, 1000);
   const handleChange: ChangeEventHandler<HTMLInputElement>  = (event)=>{
     setValue(event.target.value)
+  }
+  
+  const _hamdleCardClick = (value: any) => {
+    if(!value) return;
+
+    setModalState({
+      data: {
+        name: ModalState.DETAIL,
+        meta: {
+          productId: value.product_id
+        }
+      }
+    })
   }
 
   const { data }= useQuery(['search_products', valueDebounced], {
@@ -48,11 +66,11 @@ const SearchBar = ()=>{
   })
 
   return(<Autocomplete
-    options={data?.map(({name})=>name) ?? []}
+    options={data?.map(({name, img_url, price, product_id})=> ({ name, img_url, price, product_id })) ?? []}
     freeSolo
     sx={{ 
       width: {
-        xs: '80vw',
+        xs: '90vw',
         md: 'unset'
       },
       backgroundColor: "white",
@@ -66,13 +84,33 @@ const SearchBar = ()=>{
       <TextField
         {...params}
         onChange={handleChange}
+        placeholder="Ingresa tu búsqueda"
         value={value}
-        label="Search input"
         InputProps={{
           ...params.InputProps,
           type: 'search',
+          startAdornment: (<InputAdornment position="start" sx={{paddingLeft: '0.5rem'}} children={<SearchIcon /> } />)
         }}
       />
+    )}
+    onChange={(e : any, value) => _hamdleCardClick(value)}
+    getOptionLabel={(option) => {
+      if (typeof option === 'string') {
+        return option;
+      } else {
+        return option.name || '';
+      }
+    }}
+    renderOption={(props, option) => (
+      <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
+        <img
+          loading="lazy"
+          width="70"
+          src={option.img_url}
+          alt={option.name}
+        />
+        {option.name}
+      </Box>
     )}
   />)
 }
