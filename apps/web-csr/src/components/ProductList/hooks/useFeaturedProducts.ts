@@ -68,3 +68,30 @@ export const useProducts = (categoryId: number,{isLowerPrice, isOffer}:HookFilte
     products,
   };
 };
+
+export const useProductsById = (productId: number) => {
+  const getProducts = useGetList(ProviderNames.PRODUCTS, {payload:{
+    filter: {
+      productId
+    }
+  }});
+
+  const query = useInfiniteQuery({
+    queryKey: ['product_by_id', productId],
+    queryFn: async ({ pageParam = 0 }) =>
+      await getProducts({ pagination: { limit: 1, page: pageParam } }),
+    getNextPageParam: getNextPage,
+    cacheTime: 5000*60,
+    staleTime: 5000*60,
+  });
+
+  const product: Maybe<CardProductProps> = useMemo(
+    () => query.data?.pages.flat().map(serializeGames).find(x => x.productId == productId),
+    [query.data?.pages]
+  );
+
+  return {
+    ...query,
+    product,
+  };
+};
