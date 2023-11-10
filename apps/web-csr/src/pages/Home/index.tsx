@@ -93,7 +93,7 @@ const SearchBar = ()=>{
         }}
       />
     )}
-    onChange={(e : any, value) => _hamdleCardClick(value)}
+    onChange={(_, value) => _hamdleCardClick(value)}
     getOptionLabel={(option) => {
       if (typeof option === 'string') {
         return option;
