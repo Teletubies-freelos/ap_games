@@ -31,6 +31,7 @@ export default function OrderStatus() {
 
   const syncGetPriceDelivery = useSyncGetOne(SyncProviderNames.LOCAL_CONFIG)
   const { deliveryPrice } = syncGetPriceDelivery()
+  console.log("🚀 ~ file: OrderStatus.tsx:34 ~ OrderStatus ~ deliveryPrice:", deliveryPrice)
 
   const coolDownRef = useRef<Date | undefined>()
 
@@ -79,7 +80,7 @@ export default function OrderStatus() {
       id: paramId,
     };
 
-
+    
 
     setOrderStatus(translateStatus[order_status.name as string] ?? "En tienda");
   }, [getOrder, paramId])
@@ -142,7 +143,7 @@ export default function OrderStatus() {
                     fontWeight='bolder'
                     display='flex'
                     justifyContent='flex-end'>
-                    S/. {(((discount_price ?? price)*quantity) + Number(deliveryPrice)).toFixed(2)}
+                    S/. {(((discount_price ?? price) * quantity)).toFixed(2)}
                   </Typography>
                 </Box>
               )
