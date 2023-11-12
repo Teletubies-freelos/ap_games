@@ -33,7 +33,7 @@ export default function ProductDetailBody({ productId }: Readonly<ProductDetailP
       imageUrl: product?.src,
       name: product?.title,
       description: product?.description,
-      product_id: productId,
+      productId: productId,
       price: product?.price,
       quantity: 1,
       priceDiscount: 0,
