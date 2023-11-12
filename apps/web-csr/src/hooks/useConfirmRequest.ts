@@ -26,9 +26,7 @@ export const useConfirmRequest = () => {
   const createOrder = useCreateOne(ProviderNames.ORDERS);
   const createOrderProducts = useCreateMany(ProviderNames.ORDER_PRODUCTS);
 
-  const { channel } = useChannel("orders", (message: any) => {
-    console.log(message);
-  });
+  const { channel } = useChannel("orders");
 
   return async (data: PaymentMethodData) => {
     const clientData = await getClientData();
@@ -36,9 +34,7 @@ export const useConfirmRequest = () => {
     const wsp_value = getWhatsappNumber(clientData.phone);
     const wsp_message = getWhatsappMessage(clientData, products);
     
-    const { order_id } =
-    
-    (await createOrder({
+    const { order_id } = (await createOrder({
       ...clientData,
       ...data,
       wsp_value,
@@ -46,9 +42,10 @@ export const useConfirmRequest = () => {
     })) ?? {};
 
     channel.publish("orders", { created_at : new Date() });
-    
+    const reducedProducts = groupProductQuantity(products);
+
     await createOrderProducts(
-      products.map(({ productId, quantity }) => ({
+      reducedProducts.map(({ productId, quantity }) => ({
         product_id: productId,
         order_id,
         quantity,
@@ -58,3 +55,20 @@ export const useConfirmRequest = () => {
     return order_id;
   };
 };
+
+function groupProductQuantity(products: IProduct[]) {
+  const quantityById = products.reduce((acc: any, product: IProduct) => {
+    const { productId, quantity, price } = product;
+
+    if (acc.hasOwnProperty(productId)) {
+      acc[productId].quantity += quantity;
+      acc[productId].price += price;
+    } else {
+      acc[productId] = { ...product };
+    }
+
+    return acc;
+  }, {});
+
+  return Object.values<IProduct>(quantityById);
+}
