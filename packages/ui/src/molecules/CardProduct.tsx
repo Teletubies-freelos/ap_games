@@ -1,4 +1,4 @@
-import { Add } from "@mui/icons-material";
+import { Add, Done } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -137,7 +137,7 @@ export default function CardProduct({
               aspectRatio: !inCart ? 1 : 'unset',
             }}
           >
-            {inCart ? 'En el carrito' : <Add />}
+            {inCart ? <Done /> : <Add />}
           </Button>
         </Box>
     </Card>
