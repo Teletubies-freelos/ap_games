@@ -12,7 +12,7 @@ import SelectModals from '../common/SelectModals';
 import { Button } from '../../../../../packages/ui/src';
 
 import { ModalState, setNextState } from '../../observables';
-import { useCreateOne, useSyncGetList } from 'data_providers';
+import { useCreateOne, useSyncGetList, useSyncGetOne } from 'data_providers';
 import { ProviderNames, SyncProviderNames } from '../../types/providers';
 import { useCallback, useState } from 'react';
 
@@ -37,6 +37,7 @@ const parseDestination = (destination: Destination) =>
 
 export default function ClientDataBody() {
   const getGeolocation: typeof GeolocationProvider.prototype.getList = useSyncGetList(SyncProviderNames.GEOLOCATION);
+  const getGeolocationOne: typeof GeolocationProvider.prototype.getOne = useSyncGetOne(SyncProviderNames.GEOLOCATION);
   const { register, handleSubmit } = useForm<UserInfo>();
   const createToSession = useCreateOne(ProviderNames.SESSION_STORAGE);
 
@@ -45,7 +46,17 @@ export default function ClientDataBody() {
   const [province, setProvince] = useState<string | undefined>('1501');
 
   const _handleSubmit: SubmitHandler<UserInfo> = useCallback(async (data) => {
-    await createToSession(data);
+    const newData = {
+      ...data,
+      delivery_price: getGeolocationOne({
+        filter: {
+          district_id: data.district_id
+        }
+      }, {
+        resource: ResourceNames.DEPARTMENT_PRICE
+      })
+    }
+    await createToSession(newData);
 
     setNextState({
       name: ModalState.DELIVERY_CENTRAL_PAYMENT_METHOD,
@@ -64,13 +75,17 @@ export default function ClientDataBody() {
           textfieldProps={register('client_name')}
           width='50%'
           label='Nombres y Apellidos'
-          data-testid='fullname'
+          data-testid='name'
+          type='text'
+          required
         />
         <CustomTextField
           textfieldProps={register('phone')}
           width='50%'
           label='Teléfono'
           data-testid='numberPhone'
+          type='number'
+          required
         />
       </Box>
       <CustomTextField
@@ -78,6 +93,7 @@ export default function ClientDataBody() {
         width='100%'
         label='Correo electrónico'
         data-testid='email'
+        type='email'
       />
       <FormControl>
         <RadioGroup

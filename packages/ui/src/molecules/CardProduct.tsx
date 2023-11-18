@@ -49,7 +49,6 @@ export default function CardProduct({
       <Box onClick={onCardClick} display={"flex"} height="100%">
         <Box
           sx={{
-            maxWidth: "6rem",
           }}
         >
           <CardMedia
@@ -58,9 +57,8 @@ export default function CardProduct({
             src={src}
             height={"100%"}
             sx={{
-              objectFit: "contain",
               margin: "auto 0",
-              padding: "1rem",
+              padding: "0.6rem",
               width: "100%",
             }}
           />

@@ -12,6 +12,7 @@ export interface ProductDetailPorps {
 export default function ProductDetailModal(props: Readonly<ProductDetailPorps>) {
   return (
     <ModalLayout
+      sx={{ maxWidth: "60rem", padding: '1rem' }}
       headerModal={
         <HeadModal
           onClose={()=> setModalState(undefined)}

@@ -1,9 +1,10 @@
 import { IDataProvider } from 'data_providers';
 import { GraphQLClient } from 'graphql-request';
-import { GET_PRODUCTS } from '../../../request/src/graphql/queries';
+import { GET_PRODUCTS, GET_PRODUCT_BY_ID } from '../../../request/src/graphql/queries';
 import {
   CREATE_PRODUCT,
   DELETE_PRODUCT,
+  UPDATE_PRODUCT,
 } from '../../../request/src/graphql/mutations';
 
 export interface IProduct {
@@ -12,8 +13,8 @@ export interface IProduct {
   description: string;
   discount_price?: number;
   img_url: string;
-  is_offer?: boolean;
-  is_visible?: boolean;
+  is_offer: boolean;
+  is_visible: boolean;
   name: string;
   price: number;
   product_id: number;
@@ -23,7 +24,7 @@ export interface IProduct {
 }
 
 export class ProductsData implements IDataProvider {
-  constructor(private client: GraphQLClient) {}
+  constructor(private client: GraphQLClient) { }
 
   async getList() {
     const { products } = await this.client.request<{ products: IProduct[] }>(
@@ -31,6 +32,16 @@ export class ProductsData implements IDataProvider {
     );
 
     return products;
+  }
+
+  async getOne({ id }: { id: number }) {
+    if (Number.isNaN(id)) throw new Error("No product id was provided");
+
+    const { products } = await this.client.request<{ products: IProduct[] }>(
+      GET_PRODUCT_BY_ID, { productId: id }
+    );
+
+    return products.find(x => x.product_id);
   }
 
   async createOne(payload: IProduct) {
@@ -47,5 +58,13 @@ export class ProductsData implements IDataProvider {
     }>(DELETE_PRODUCT, { product_id: payload });
 
     return delete_products_by_pk;
+  }
+
+  async updateOne(payload: IProduct): Promise<boolean> {
+    const { update_products_by_pk } = await this.client.request<{
+      update_products_by_pk: boolean;
+    }>(UPDATE_PRODUCT, { ...payload });
+
+    return update_products_by_pk;
   }
 }
