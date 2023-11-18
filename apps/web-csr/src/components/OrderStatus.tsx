@@ -5,8 +5,8 @@ import {
   SearchBar,
   StepStatus,
 } from "../../../../packages/ui/src";
-import { useGetOne, useSyncGetOne } from "data_providers";
-import { ProviderNames, SyncProviderNames } from "../types/providers";
+import { useGetOne } from "data_providers";
+import { ProviderNames } from "../types/providers";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { OrdersByIdResponse } from "../services/Orders";
 
