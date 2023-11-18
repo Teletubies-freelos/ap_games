@@ -48,7 +48,7 @@ const ConfirmOrderDelivery = () => {
           }}
         />
       }
-      priceDelivery={<DeliveryPriceLocal />}
+      priceDelivery={<DeliveryPriceLocal deliveryPrice={20}/>}
       infoPayment={
         <InfoPayment
           titleInfo='Números de cuenta'

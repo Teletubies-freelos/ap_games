@@ -57,7 +57,8 @@ export default function PickupStorePreConfirmationBody() {
         const newDataPayment = {
             ...data,
             order_status_id,
-            delivery_way_id
+            delivery_way_id,
+            delivery_price: 0
         };
         
         await createToSession(newDataPayment);

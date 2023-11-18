@@ -1,6 +1,7 @@
 import { IDataProvider } from 'data_providers';
 import { GraphQLClient } from 'graphql-request';
-import { GET_ORDERS } from '../../../request/src/graphql/queries';
+import { GET_ORDERS, GET_ORDERS_BY_ID } from '../../../request/src/graphql/queries';
+import { UPDATE_STATUS_ORDER_BY_ID } from '../../../request/src/graphql/mutations';
 
 export interface IOrders {
   address: string;
@@ -28,13 +29,13 @@ export interface IOrders {
     meta: string;
     alternative_number: string;
   };
-  delivery_way : {
+  delivery_way: {
     name: string;
   }
 }
 
 export class OrdersData implements IDataProvider {
-  constructor(private client: GraphQLClient) {}
+  constructor(private client: GraphQLClient) { }
 
   async getList() {
     const { orderers } = await this.client.request<{ orderers: IOrders[] }>(
@@ -42,5 +43,20 @@ export class OrdersData implements IDataProvider {
     );
 
     return orderers;
+  }
+  async getOne({ id }: { id: string }) {
+    const { orderers } = await this.client.request<{ orderers: IOrders[] }>(
+      GET_ORDERS_BY_ID, { orderId: id }
+    );
+
+    return orderers.find(x => x.order_id);
+  }
+
+  async updateOne(payload: IOrders): Promise<boolean> {
+    const { update_order_status_by_pk } = await this.client.request<{
+      update_order_status_by_pk: boolean;
+    }>(UPDATE_STATUS_ORDER_BY_ID, { ...payload });
+
+    return update_order_status_by_pk;
   }
 }

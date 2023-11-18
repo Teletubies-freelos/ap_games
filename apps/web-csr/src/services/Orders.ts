@@ -2,6 +2,7 @@ import { IDataProvider, IGetListParams, IGetOneParams } from 'data_providers';
 import { GraphQLClient } from 'graphql-request';
 import { GET_ORDERS, GET_ORDER_STATUS_BY_ID } from '../../../request/src/graphql/queries';
 import { CREATE_ORDER } from '../../../request/src/graphql/mutations';
+import { DeliveryWayEnum } from './DeliveryWays';
 
 export interface IOrders {
   order_id?: string | number;
@@ -34,6 +35,11 @@ export interface OrdersByIdResponse {
     }
   }[];
   created_at: string;
+  delivery_price: number;
+  delivery_way: {
+    name: string;
+    token: DeliveryWayEnum;
+  }
 }
 
 

@@ -26,6 +26,18 @@ export const GET_PRODUCTS_BY_CATEGORY = gql`
   ${PRODUCT_DATA}
 `;
 
+export const GET_PRODUCT_BY_ID = gql`
+  query GET_PRODUCT_BY_ID($productId: Int) {
+    products(
+      where: { product_id: { _eq: $productId } }
+    ) {
+      ...PRODUCT_DATA
+    }
+  }
+
+  ${PRODUCT_DATA}
+`;
+
 export const GET_PRODUCTS_BY_ID = gql`
   query GET_PRODUCTS_BY_ID($limit: Int, $offset: Int, $productId: Int) {
     products(
@@ -148,6 +160,23 @@ export const GET_ORDERS = gql`
   ${ORDER_DATA}
 `;
 
+export const GET_ORDERS_BY_ID = gql`
+  query GET_ORDERS_BY_ID($orderId: uuid) {
+    orderers(where: {order_id: {_eq: $orderId}}) {
+      order_id
+      email
+      district_id
+      delivery_way_id
+      delivery_price
+      created_at
+      client_name
+      comment
+      address
+      order_status_id
+    }
+  }
+`;
+
 export const GET_ORDER_STATUS_BY_ID = gql`
   query GET_ORDER_STATUS_BY_ID($id: uuid!) {
     orderers_by_pk(order_id: $id) {
@@ -163,6 +192,11 @@ export const GET_ORDER_STATUS_BY_ID = gql`
         }
       }
       created_at
+      delivery_price
+      delivery_way {
+        token
+        name
+      }
     }
   }
 `;
@@ -228,3 +262,24 @@ export const GET_DELIVERY_WAYS = gql`
     }
   }
 `;
+
+export const GET_CONFIG = gql`
+  query GET_CONFIG {
+    configs {
+      config_id
+      name
+      name_es
+      value
+      meta
+      token
+    }
+  }
+`;
+
+export const GET_ORDER_STATUSES = gql`
+  query GET_ORDER_STATUSES {
+    order_statuses {
+      order_status_id
+      name
+    }
+  }`;

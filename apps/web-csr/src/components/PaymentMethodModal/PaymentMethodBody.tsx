@@ -29,7 +29,7 @@ export interface PaymentMethodData {
 interface IDeliveryInfo {
   address: [string, string?];
   name: [string, string?];
-  district: [string, string?];
+  district: [string, string | undefined | number];
 }
 
 interface PaymentMethodBodyProps {
@@ -50,10 +50,10 @@ export default function PaymentMethodBody({
   const queryClient = useQueryClient()
 
   const handleFinish = async (data: PaymentMethodData) => {
-    const orderStatuses: {order_status_id:number; name: string}[] | undefined = queryClient
+    const orderStatuses: { order_status_id: number; name: string }[] | undefined = queryClient
       .getQueryData(['orderStatus'])
 
-    const deliveryWays : IDeliveryWay[] | undefined  =  queryClient.getQueryData(['deliveryWays'])
+    const deliveryWays : IDeliveryWay[] | undefined = queryClient.getQueryData(['deliveryWays'])
     
     const { delivery_way_id } = deliveryWays?.find(({ token }) => token === DeliveryWayEnum.DELIVERY) ?? {}
     
@@ -111,7 +111,7 @@ export default function PaymentMethodBody({
         resource: ResourceNames.DISTRICT,
       }
     )],
-    name: ["Nombre", orderData?.client_name],
+    name: ["Nombre", orderData?.client_name]
   }), [orderData]);
 
   return (
@@ -210,7 +210,7 @@ export default function PaymentMethodBody({
           variant='body2'
           sx={{ color: 'text.secondary' }}
         >
-          S/ 20.00
+          S/ {orderData?.delivery_price}
         </Typography>
       </Box>
       <Box

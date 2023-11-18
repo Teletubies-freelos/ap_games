@@ -23,7 +23,7 @@ import { useGetList } from 'data_providers';
 import { ProviderNames } from '../../types/providers';
 import { useQuery } from '@tanstack/react-query';
 import { Menu as MenuIcon } from '@mui/icons-material';
-import { ModalState, setAnchorElMenu, setModalState, useAnchorElMenu } from '../../observables';
+import { ModalState, setAnchorElMenu, setCategoryIdSelected, setModalState, useAnchorElMenu, useCategoryIdSelected } from '../../observables';
 import { reduceQuantity } from '../../utils';
 import { FeaturedDTO } from '../../../../migrations/src/types/tables'
 import { ChangeEventHandler, useState } from 'react';
@@ -115,9 +115,26 @@ const SearchBar = ()=>{
   />)
 }
 
+const useCategories = () => {
+  const getCategories = useGetList(ProviderNames.CATEGORIES);
+
+  const queryData = useQuery(["categories"], async () => await getCategories());
+
+  return queryData;
+};
+
+enum Categories {
+  XBOX = 'Xbox',
+  PS4 = 'PlayStation 4',
+  PS5 = 'PlayStation 5',
+  NINTENDO = 'Nintendo Switch'
+}
+
 export default function Home() {
   const getFeaturedProducts = useGetList<FeaturedDTO>(ProviderNames.FEATURED);
+  const { data: categories } = useCategories();
 
+  const categoryId = useCategoryIdSelected();
   const { data } = useQuery(
     ['home featured'],
     async () => await getFeaturedProducts()
@@ -130,6 +147,13 @@ export default function Home() {
   const _handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElMenu(anchorEl ? null : event.currentTarget);
   };
+  
+  const getCategoryBySection = (category: Categories) =>{
+    const id = categories?.find(({name}) => name == category)?.category_id;
+    if(id){
+      setCategoryIdSelected(id);
+    }
+  }
 
   return (
     <GeneralLayout
@@ -163,12 +187,12 @@ export default function Home() {
         justifyContent={{ xs: 'space-evenly', sm: 'center' }}
         sx={sxInnerStack}
       >
-        <PlayStation4Logo sx={noMargin} />
-        <PlayStation5Logo sx={noMargin} />
-        <NintendoLogo sx={noMargin} />
-        <XboxLogo sx={noMargin} />{' '}
+        <PlayStation4Logo sx={noMargin} onClick={() => getCategoryBySection(Categories.PS4)}/>
+        <PlayStation5Logo sx={noMargin} onClick={() => getCategoryBySection(Categories.PS5)}/>
+        <NintendoLogo sx={noMargin} onClick={() => getCategoryBySection(Categories.NINTENDO)}/>
+        <XboxLogo sx={noMargin} onClick={() => getCategoryBySection(Categories.XBOX)}/>{' '}
       </Stack>
-      <ProductsList />
+      <ProductsList categoryId={categoryId} categories={categories}/>
     </GeneralLayout>
   );
 }

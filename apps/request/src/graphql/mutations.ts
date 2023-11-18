@@ -39,27 +39,44 @@ export const UPDATE_PRODUCT = gql`
     $product_id: Int!
     $description: String!
     $img_url: String!
-    $isVisible: Boolean!
+    $banner_img_url: String!
+    $is_visible: Boolean!
+    $is_offer: Boolean!
     $name: String!
-    $price: float8!
-    $discount_price: float8!
+    $price: Float!
+    $discount_price: Float!
     $quantity: Int
+    $category_id: Int
   ) {
-    update_categories_by_pk(
+    update_products_by_pk(
       pk_columns: { product_id: $product_id }
       _set: {
         description: $description
         img_url: $img_url
-        is_visible: $isVisible
+        is_visible: $is_visible
+        is_offer: $is_offer
         name: $name
         price: $price
         discount_price: $discount_price
         quantity: $quantity
+        category_id: $category_id
+        banner_img_url: $banner_img_url
       }
     ) {
       product_id
     }
   }
+`;
+
+export const UPDATE_STATUS_ORDER_BY_ID = gql`
+mutation UPDATE_STATUS_ORDER_BY_ID($order_id: uuid!, $order_status_id: Int!) {
+  update_orderers_by_pk(
+    pk_columns: { order_id: $order_id }
+    _set: { order_status_id: $order_status_id }
+  ) {
+    order_id
+  }
+}
 `;
 
 export const DELETE_PRODUCT = gql`
@@ -112,6 +129,7 @@ export const CREATE_ORDER = gql`
     $delivery_way_id: Int
     $wsp_value: String
     $wsp_message: String
+    $delivery_price: Int
   ) {
     insert_orderers_one(
       object: {
@@ -127,6 +145,7 @@ export const CREATE_ORDER = gql`
         delivery_way_id: $delivery_way_id
         wsp_value: $wsp_value
         wsp_message: $wsp_message
+        delivery_price: $delivery_price
       }
     ) {
       order_id

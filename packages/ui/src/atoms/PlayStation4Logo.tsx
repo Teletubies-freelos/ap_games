@@ -1,6 +1,6 @@
 import { UnsetSvgProps, UnsetSvg } from "../helpers/UnsetSvg";
 
-export default function PlayStation4Logo({ sx }: UnsetSvgProps) {
+export default function PlayStation4Logo({ sx, onClick }: UnsetSvgProps) {
   return (
     <UnsetSvg sx={sx}>
       <svg
@@ -9,6 +9,7 @@ export default function PlayStation4Logo({ sx }: UnsetSvgProps) {
         viewBox="0 0 160 34"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
+        onClick={onClick}
       >
         <path
           d="M156.294 28.7047H156.606V26.668H157.343V26.4043H155.557V26.668H156.294V28.7047Z"

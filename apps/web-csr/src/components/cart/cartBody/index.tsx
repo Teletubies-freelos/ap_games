@@ -50,7 +50,7 @@ export function BodyCart({ listPriceCb = defaultPriceCb }: BodyCartProps) {
         display='flex'
         flexDirection='column'
         gap='1rem'
-        height={'60vh'}
+        height={'50vh'}
         sx={{ overflowY: 'scroll' }}
       >
         <List

@@ -1,8 +1,9 @@
 import { SvgIcon, SxProps, Theme } from "@mui/material";
-import { PropsWithChildren } from "react";
+import { MouseEventHandler, PropsWithChildren } from "react";
 
 export interface UnsetSvgProps {
   sx?: SxProps | SxProps<Theme>;
+  onClick?: MouseEventHandler<SVGSVGElement>;
 }
 
 export const UnsetSvg = ({
