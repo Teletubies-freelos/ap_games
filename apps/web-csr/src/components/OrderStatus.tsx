@@ -31,8 +31,8 @@ export default function OrderStatus() {
   
   const navigate = useNavigate()
 
-  const syncGetPriceDelivery = useSyncGetOne(SyncProviderNames.LOCAL_CONFIG)
-  const { deliveryPrice } = syncGetPriceDelivery()
+  //const syncGetPriceDelivery = useSyncGetOne(SyncProviderNames.LOCAL_CONFIG)
+  // const { deliveryPrice } = syncGetPriceDelivery()
 
   const coolDownRef = useRef<Date | undefined>()
 

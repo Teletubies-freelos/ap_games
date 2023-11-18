@@ -79,7 +79,7 @@ export default function ProductsList({ categoryId, categories }: { categoryId: n
           <MenuItem value={"all"}>
             Todos
           </MenuItem>
-          {categories?.map(({ category_id, name }) => (
+          {categories?.map(({ category_id, name }: { category_id: number, name: string }) => (
             <MenuItem value={category_id} key={category_id}>
               Juegos {name}
             </MenuItem>

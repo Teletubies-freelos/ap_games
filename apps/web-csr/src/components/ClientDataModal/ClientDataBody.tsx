@@ -77,6 +77,7 @@ export default function ClientDataBody() {
           label='Nombres y Apellidos'
           data-testid='name'
           type='text'
+          inputMode='text'
           required
         />
         <CustomTextField
@@ -85,6 +86,7 @@ export default function ClientDataBody() {
           label='Teléfono'
           data-testid='numberPhone'
           type='number'
+          inputMode='numeric'
           required
         />
       </Box>
@@ -94,6 +96,7 @@ export default function ClientDataBody() {
         label='Correo electrónico'
         data-testid='email'
         type='email'
+        inputMode='email'
       />
       <FormControl>
         <RadioGroup

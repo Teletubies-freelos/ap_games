@@ -7,6 +7,7 @@ interface CustomTextFieldProps {
   textfieldProps?: TextFieldProps;
   'data-testid'?: string;
   required?: boolean
+  inputMode? : "none" | "text" | "tel" | "url" | "email" | "numeric" | "decimal" | "search" | undefined;
 }
 
 export default function CustomTextField({
@@ -16,6 +17,7 @@ export default function CustomTextField({
   textfieldProps,
   required = false,
   'data-testid': dataTestId,
+  inputMode,
 }: CustomTextFieldProps) {
   return (
     <TextField
@@ -24,7 +26,7 @@ export default function CustomTextField({
       required={required}
       type={type}
       label={label}
-      inputMode={type}
+      inputMode={inputMode}
       data-testid={dataTestId}
       sx={({ palette }) => ({
         width: { width },

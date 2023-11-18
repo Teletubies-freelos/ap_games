@@ -46,7 +46,7 @@ const UpdateOrderModal = ({ orderId }: { orderId: string | undefined }) => {
     useMemo(() => {
         if (order) {
             setValue("order_id", orderId!);
-            setValue("order_status_id", order?.order_status_id);
+            setValue("order_status_id", order?.order_status_id?.toString());
         }
     }, [order, orderId, isOpen])
 
@@ -57,8 +57,17 @@ const UpdateOrderModal = ({ orderId }: { orderId: string | undefined }) => {
 
     const { mutateAsync } = useMutation(
         ['update_order'],
-        async (payload: IOrders) => {
-            return await updateOrder(payload);
+        async ({
+            order_id,
+            order_status_id
+        }: {
+            order_id: string,
+            order_status_id: string | undefined
+        }) => {
+            return await updateOrder({
+                order_id,
+                order_status_id
+            });
         },
         {
             onSuccess: (newProduct) => {
@@ -81,7 +90,7 @@ const UpdateOrderModal = ({ orderId }: { orderId: string | undefined }) => {
     }: FormValues) => {
         await mutateAsync({
             order_id,
-            order_status_id: Number(order_status_id)
+            order_status_id
         });
 
         setIsOpenUpdateOrder(false);
