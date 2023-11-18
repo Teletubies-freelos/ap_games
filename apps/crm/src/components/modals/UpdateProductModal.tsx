@@ -84,6 +84,7 @@ const UpdateProductModal = ({ productId }: { productId: number | undefined }) =>
             setValue("description", product?.description);
             setValue("is_offer", product?.is_offer);
             setValue("is_visible", product?.is_visible);
+            // @ts-ignore
             setValue("category_id", product?.category?.category_id);
             
             setImageUrls({

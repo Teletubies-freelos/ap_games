@@ -31,7 +31,8 @@ export interface IOrders {
   };
   delivery_way: {
     name: string;
-  }
+  };
+  order_status_id?: number;
 }
 
 export class OrdersData implements IDataProvider {
