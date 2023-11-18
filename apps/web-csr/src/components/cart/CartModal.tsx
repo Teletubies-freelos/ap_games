@@ -12,7 +12,7 @@ interface CartProps {
 export function CartModal({ content }: CartProps) {
    return (
       <ModalLayout
-        sx={{ maxWidth: "40rem" }}
+        sx={{ maxWidth: "40rem", paddingX: '1rem'  }}
         headerModal={
           <HeadModal
             onClose={()=> setModalState(undefined)}

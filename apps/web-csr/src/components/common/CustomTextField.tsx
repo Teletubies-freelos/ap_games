@@ -2,10 +2,11 @@ import { TextField, TextFieldProps } from '@mui/material';
 
 interface CustomTextFieldProps {
   label: string;
-  type?: 'text' | 'email';
+  type?: "none" | "text" | "tel" | "url" | "email" | "numeric" | "decimal" | "search" | 'number' |undefined;
   width?: string;
   textfieldProps?: TextFieldProps;
   'data-testid'?: string;
+  required?: boolean
 }
 
 export default function CustomTextField({
@@ -13,12 +14,14 @@ export default function CustomTextField({
   type,
   width,
   textfieldProps,
+  required = false,
   'data-testid': dataTestId,
 }: CustomTextFieldProps) {
   return (
     <TextField
       id='standard-basic'
       variant='standard'
+      required={required}
       type={type}
       label={label}
       inputMode={type}
@@ -47,6 +50,21 @@ export default function CustomTextField({
           '&:before': {
             border: 'none !important',
           },
+        },
+        '& input[type=number]': {
+          '-moz-appearance': 'textfield'
+        },
+        '& input[type=number]::-webkit-outer-spin-button': {
+          '-webkit-appearance': 'none',
+          margin: 0
+        },
+        '& input[type=number]::-webkit-inner-spin-button': {
+          '-webkit-appearance': 'none',
+          margin: 0
+        },
+        '& *': {
+          '-webkit-user-select': 'text',
+          userSelect: 'text'
         },
       })}
       {...textfieldProps}

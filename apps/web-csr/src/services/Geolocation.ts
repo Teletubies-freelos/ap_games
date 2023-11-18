@@ -7,7 +7,8 @@ import departments from '../../../../packages/geolocation/departments.json';
 export enum ResourceNames {
   DEPARTMENT = 'department',
   PROVINCE = 'province',
-  DISTRICT = 'district'
+  DISTRICT = 'district',
+  DEPARTMENT_PRICE = 'departmentPrice'
 }
 
 export class GeolocationProvider implements IDataSyncProvider{
@@ -18,7 +19,7 @@ export class GeolocationProvider implements IDataSyncProvider{
       .filter(({province_id})=>province_id === metropolisId)
   }
   
-  getList({filter}: IGetListParams, {resource} : {resource: ResourceNames}){
+  getList({filter}: IGetListParams, {resource} : {resource: ResourceNames}) : any{
     if(resource === ResourceNames.DEPARTMENT)
       return departments
 
@@ -37,9 +38,13 @@ export class GeolocationProvider implements IDataSyncProvider{
     throw new Error('Not valid resource')
   }
 
-  getOne({filter}: IGetListParams, {resource} : {resource: ResourceNames}) {
-    if(resource === ResourceNames.DISTRICT){
-      return districts.find(({id})=> id === filter?.province_id)?.name;
+  getOne({ filter }: IGetListParams, { resource }: { resource: ResourceNames }) {
+    if (resource === ResourceNames.DISTRICT) {
+      return districts.find(({ id }) => id === filter?.province_id)?.name;
+    }
+    else if (resource === ResourceNames.DEPARTMENT_PRICE) {
+      const district = districts.find(({ id }) => id == filter?.district_id)
+      return departments.find(({ id }) => id === district?.department_id)?.delivery_price;
     }
 
     throw new Error('Not valid resource')

@@ -3,16 +3,18 @@ import { useGetProducts } from '../../hooks/getProducts';
 import { Box, Button, IconButton, Stack } from '@mui/material';
 import CreateModal from '../../components/modals/CreateModal';
 import { ListColumns } from './config';
-import { setIsOpenCreateProduct } from '../../observables';
+import { setIsOpenCreateProduct, setIsOpenUpdateProduct } from '../../observables';
 import { Delete, Edit } from '@mui/icons-material';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useDeleteOne } from 'data_providers';
 import { AsyncProviderNames } from '../../types/providers';
 import { IProduct } from '../../services/Products';
+import UpdateProductModal from '../../components/modals/UpdateProductModal';
+import { useState } from 'react';
 
 export const ListProducts = () => {
   const { data, setPage, pagination, isLoading } = useGetProducts();
-
+  const [selectProductId, setSelectedProductId] = useState<number>();
   const list = ListColumns;
   const queryClient = useQueryClient();
 
@@ -32,7 +34,6 @@ export const ListProducts = () => {
       },
     }
   );
-
   return (
     <Stack gap={'1rem'}>
       <MaterialReactTable
@@ -51,7 +52,7 @@ export const ListProducts = () => {
               onClick={() => setIsOpenCreateProduct(true)}
               variant='contained'
             >
-              Add Product
+              Agregar Producto
             </Button>
             <CreateModal />
           </>
@@ -62,11 +63,8 @@ export const ListProducts = () => {
             <IconButton
               color='secondary'
               onClick={() => {
-                console.log(
-                  '%c row.original :',
-                  'background-color:#048A81',
-                  row.original
-                );
+                setIsOpenUpdateProduct(true)
+                setSelectedProductId(row.original.product_id);
               }}
             >
               <Edit />
@@ -82,6 +80,7 @@ export const ListProducts = () => {
           isLoading: isLoading,
         }}
       />
+      <UpdateProductModal productId={selectProductId}/>
     </Stack>
   );
 };

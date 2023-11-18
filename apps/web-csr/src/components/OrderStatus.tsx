@@ -16,6 +16,7 @@ import dayjs from "dayjs";
 import { DeliveryPriceLocal } from "./DeliveryPrice";
 import { validate } from 'uuid'
 import { useNavigate, useParams } from "react-router-dom";
+import { DeliveryWayEnum } from "../services/DeliveryWays";
 
 const translateStatus: Record<string, string> = {
   canceled: "En camino",
@@ -23,15 +24,15 @@ const translateStatus: Record<string, string> = {
 };
 
 const stepStatus = ["En tienda", "En camino", "Entregado"];
+const stepStatusPickupStore = ["En tienda", "Entregado"];
 
 export default function OrderStatus() {
   const { id: paramId } = useParams()
-
+  
   const navigate = useNavigate()
 
   const syncGetPriceDelivery = useSyncGetOne(SyncProviderNames.LOCAL_CONFIG)
   const { deliveryPrice } = syncGetPriceDelivery()
-  console.log("🚀 ~ file: OrderStatus.tsx:34 ~ OrderStatus ~ deliveryPrice:", deliveryPrice)
 
   const coolDownRef = useRef<Date | undefined>()
 
@@ -80,8 +81,6 @@ export default function OrderStatus() {
       id: paramId,
     };
 
-    
-
     setOrderStatus(translateStatus[order_status.name as string] ?? "En tienda");
   }, [getOrder, paramId])
 
@@ -94,7 +93,7 @@ export default function OrderStatus() {
     return (
       <Stack maxWidth={"32rem"} margin={"auto"} spacing={2}>
         <StepStatus
-          steps={stepStatus.map((label) => ({
+          steps={(refProducts.current?.delivery_way.token == DeliveryWayEnum.DELIVERY ? stepStatus : stepStatusPickupStore).map((label) => ({
             label,
             isActive: label === orderStatus,
           }))}
@@ -143,18 +142,18 @@ export default function OrderStatus() {
                     fontWeight='bolder'
                     display='flex'
                     justifyContent='flex-end'>
-                    S/. {(((discount_price ?? price) * quantity)).toFixed(2)}
+                    S/. {(((discount_price ?? price)*quantity)).toFixed(2)}
                   </Typography>
                 </Box>
               )
             )}
           </Stack>
         </Stack>
-        <DeliveryPriceLocal />
+        <DeliveryPriceLocal deliveryPrice={refProducts.current?.delivery_price} />
         <LabelStepStatus
           property="TOTAL"
           icon={<img src={totalMoney} alt="money" />}
-          value={`S/. ${total?.toFixed()}`}
+          value={`S/. ${(total ?? 0 + (refProducts.current?.delivery_price ?? 0))?.toFixed()}`}
           sx={{
             fontWeight: "bold !important",
             fontSize: "1.1rem !important",

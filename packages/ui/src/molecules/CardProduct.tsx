@@ -1,4 +1,4 @@
-import { Add } from "@mui/icons-material";
+import { Add, Done } from "@mui/icons-material";
 import {
   Box,
   Button,
@@ -49,7 +49,6 @@ export default function CardProduct({
       <Box onClick={onCardClick} display={"flex"} height="100%">
         <Box
           sx={{
-            maxWidth: "6rem",
           }}
         >
           <CardMedia
@@ -58,9 +57,8 @@ export default function CardProduct({
             src={src}
             height={"100%"}
             sx={{
-              objectFit: "contain",
               margin: "auto 0",
-              padding: "1rem",
+              padding: "0.6rem",
               width: "100%",
             }}
           />
@@ -137,7 +135,7 @@ export default function CardProduct({
               aspectRatio: !inCart ? 1 : 'unset',
             }}
           >
-            {inCart ? 'En el carrito' : <Add />}
+            {inCart ? <Done /> : <Add />}
           </Button>
         </Box>
     </Card>

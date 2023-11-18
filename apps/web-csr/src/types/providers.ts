@@ -10,6 +10,7 @@ export enum ProviderNames {
   CONFIG_CMS = 'configCms',
   ORDER_STATUS = 'orderStatus',
   DELIVERY_WAYS = 'deliveryWays',
+  CONFIG = 'config',
 }
 
 export enum SyncProviderNames {

@@ -1,6 +1,6 @@
 import { UnsetSvgProps, UnsetSvg } from "../helpers/UnsetSvg";
 
-export default function XboxLogo({ sx }: UnsetSvgProps) {
+export default function XboxLogo({ sx, onClick }: UnsetSvgProps) {
   return (
     <UnsetSvg sx={sx}>
       <svg
@@ -9,6 +9,7 @@ export default function XboxLogo({ sx }: UnsetSvgProps) {
         viewBox="0 0 110 34"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
+        onClick={onClick}
       >
         <path
           d="M107.228 27.4936L100.856 18.8454L94.4905 27.4936H91.8682L99.5288 17.0447L92.5325 7.54688H95.1548L100.856 15.2931L106.556 7.54688H109.177L102.186 17.043L109.848 27.4936H107.228ZM57.5742 27.4901L49.9049 17.043L56.9011 7.54688H54.2788L48.5763 15.2948L42.8789 7.54688H40.2637L47.2564 17.043L39.5889 27.4901H42.2146L48.5798 18.8454L54.9501 27.4901H57.5742Z"

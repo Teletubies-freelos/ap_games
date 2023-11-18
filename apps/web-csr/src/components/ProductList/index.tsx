@@ -16,10 +16,7 @@ import Filters from "./Filters";
 import { itemContentRender } from "./Containers/itemContentRender";
 import { ItemContainer, ListContainer } from "./Containers/ListContainer";
 import { useCallback, useMemo, useState } from "react";
-import { useGetList } from "data_providers";
-import { ProviderNames } from "../../types/providers";
-import { useQuery } from "@tanstack/react-query";
-import { setCategoryIdSelected, setIsWishList, useCategoryIdSelected } from "../../observables";
+import { setCategoryIdSelected, setIsWishList } from "../../observables";
 
 const sxProductListHeader: SxProps = {
   width: "100%",
@@ -31,21 +28,11 @@ const sxProductListHeader: SxProps = {
   gap: 2,
 };
 
-const useCategories = () => {
-  const getCategories = useGetList(ProviderNames.CATEGORIES);
 
-  const queryData = useQuery(["categories"], async () => await getCategories());
-
-  return queryData;
-};
-
-export default function ProductsList() {
+export default function ProductsList({ categoryId, categories }: { categoryId: number, categories: any }) {
   const [filters, setFilters] = useState<HookFilters>({});
-  const categoryId = useCategoryIdSelected()
 
   const { products, fetchNextPage } = useProducts(categoryId, filters);
-
-  const { data: categories } = useCategories();
 
   const _handleChange = (event: SelectChangeEvent) => {
     event.preventDefault();

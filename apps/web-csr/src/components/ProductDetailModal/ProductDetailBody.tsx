@@ -94,7 +94,7 @@ export default function ProductDetailBody({ productId }: Readonly<ProductDetailP
             </Typography>
             <Typography
               variant="body1"
-              sx={{ fontSize: "1rem" }}
+              sx={{ fontSize: "1rem", minHeight: '5rem', maxHeight: '35vh', overflow: 'scroll'}}
             >
               { product?.description }
             </Typography>

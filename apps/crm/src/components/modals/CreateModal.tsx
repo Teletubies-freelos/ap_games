@@ -265,6 +265,7 @@ const CreateModal = () => {
               textFieldProps={register('category_id')}
               sxSelect={{ backgroundColor: 'background.paper' }}
               items={parsedPaymentMethods}
+              placeHolder='Categorias'
             ></DropDown>
             {/*   <TextField
               label='Url de la imagen del Producto'

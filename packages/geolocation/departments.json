@@ -1,102 +1,127 @@
 [
   {
     "id": "01",
-    "name": "Amazonas"
+    "name": "Amazonas",
+    "delivery_price": 20
   },
   {
     "id": "02",
-    "name": "Áncash"
+    "name": "Áncash",
+    "delivery_price": 20
   },
   {
     "id": "03",
-    "name": "Apurímac"
+    "name": "Apurímac",
+    "delivery_price": 20
   },
   {
     "id": "04",
-    "name": "Arequipa"
+    "name": "Arequipa",
+    "delivery_price": 20
   },
   {
     "id": "05",
-    "name": "Ayacucho"
+    "name": "Ayacucho",
+    "delivery_price": 20
   },
   {
     "id": "06",
-    "name": "Cajamarca"
+    "name": "Cajamarca",
+    "delivery_price": 20
   },
   {
     "id": "07",
-    "name": "Callao"
+    "name": "Callao",
+    "delivery_price": 20
   },
   {
     "id": "08",
-    "name": "Cusco"
+    "name": "Cusco",
+    "delivery_price": 20
   },
   {
     "id": "09",
-    "name": "Huancavelica"
+    "name": "Huancavelica",
+    "delivery_price": 20
   },
   {
     "id": "10",
-    "name": "Huánuco"
+    "name": "Huánuco",
+    "delivery_price": 20
   },
   {
     "id": "11",
-    "name": "Ica"
+    "name": "Ica",
+    "delivery_price": 20
   },
   {
     "id": "12",
-    "name": "Junín"
+    "name": "Junín",
+    "delivery_price": 20
   },
   {
     "id": "13",
-    "name": "La Libertad"
+    "name": "La Libertad",
+    "delivery_price": 20
   },
   {
     "id": "14",
-    "name": "Lambayeque"
+    "name": "Lambayeque",
+    "delivery_price": 20
   },
   {
     "id": "15",
-    "name": "Lima"
+    "name": "Lima",
+    "delivery_price": 20
   },
   {
     "id": "16",
-    "name": "Loreto"
+    "name": "Loreto",
+    "delivery_price": 20
   },
   {
     "id": "17",
-    "name": "Madre de Dios"
+    "name": "Madre de Dios",
+    "delivery_price": 20
   },
   {
     "id": "18",
-    "name": "Moquegua"
+    "name": "Moquegua",
+    "delivery_price": 20
   },
   {
     "id": "19",
-    "name": "Pasco"
+    "name": "Pasco",
+    "delivery_price": 20
   },
   {
     "id": "20",
-    "name": "Piura"
+    "name": "Piura",
+    "delivery_price": 20
   },
   {
     "id": "21",
-    "name": "Puno"
+    "name": "Puno",
+    "delivery_price": 20
   },
   {
     "id": "22",
-    "name": "San Martín"
+    "name": "San Martín",
+    "delivery_price": 20
   },
   {
     "id": "23",
-    "name": "Tacna"
+    "name": "Tacna",
+    "delivery_price": 20
   },
   {
     "id": "24",
-    "name": "Tumbes"
+    "name": "Tumbes",
+    "delivery_price": 20
   },
   {
     "id": "25",
-    "name": "Ucayali"
+    "name": "Ucayali",
+    "delivery_price": 20
   }
 ]

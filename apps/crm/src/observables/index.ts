@@ -5,9 +5,20 @@ import { BehaviorSubject } from 'rxjs';
 export const [isOpenCreateProduct$, setIsOpenCreateProduct] = createSignal<
   boolean | undefined
 >();
-
 export const [useIsOpenCreateProduct, isOpenCreateProductDefault$] = bind(
   isOpenCreateProduct$,
+  false
+);
+
+export const [isOpenUpdateProduct$, setIsOpenUpdateProduct] = createSignal<boolean | undefined>();
+export const [useIsOpenUpdateProduct, isOpenUpdateProductDefault$] = bind(
+  isOpenUpdateProduct$,
+  false
+);
+
+export const [isOpenUpdateOrder$, setIsOpenUpdateOrder] = createSignal<boolean | undefined>();
+export const [useIsOpenUpdateOrder, isOpenUpdateOrderDefault$] = bind(
+  isOpenUpdateOrder$,
   false
 );
 
