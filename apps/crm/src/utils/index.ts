@@ -1,4 +1,5 @@
-import { ReactNode } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
+import type { BehaviorSubject } from 'rxjs';
 /* import { OrdersResponse } from '../services/orders'; */
 
 /* const deserializeProducts = (data) => {
@@ -26,7 +27,44 @@ import { ReactNode } from 'react';
     };
   });
 }; */
+export interface ControlState<Data> {
+  data?: Data;
+  previousState?: ControlState<Data>;
+}
 
+export function bindLense<T = unknown>(
+  subject: BehaviorSubject<T>
+): [(nextValue: T) => void, () => T] {
+  return [
+    (value) => subject.next(value),
+    () => {
+      const [value, setValue] = useState<T>(subject.value);
+
+      useEffect(() => {
+        const subscription = subject.subscribe(setValue);
+
+        return () => subscription.unsubscribe();
+      }, []);
+
+      return value;
+    },
+  ];
+}
+export function orderControlsLense<T>(
+  subject: BehaviorSubject<ControlState<T> | undefined>
+) {
+  const [setState, useObserverState] = bindLense(subject);
+  return {
+    setState,
+    useObserverState,
+    setPrevState: () => setState(subject.value?.previousState),
+    setNextState: (nextStateData: T) =>
+      setState({
+        data: nextStateData,
+        previousState: subject.value,
+      }),
+  };
+}
 export const parsedDate = (date: string) => {
   return new Date(date).toLocaleString('es-PE', {
     timeZone: 'UTC',
@@ -37,3 +75,9 @@ export const parsedDate = (date: string) => {
 export const isEmpty = (render: ReactNode) => {
   return render ?? 'Sin datos';
 };
+
+export enum ActionsEnum {
+  CREATE,
+  DELETE,
+  UPDATE,
+}

@@ -11,6 +11,8 @@ export interface IProduct{
   is_offer?: boolean;
   img_url: string;
   quantity: number;
+  category_id: number;
+  sub_category_id: number;
 }
 
 export class Products implements IDataProvider {
@@ -49,7 +51,7 @@ export class Products implements IDataProvider {
       const { products } = await this.client.request<{ products: IProduct[] }>(
         GET_PRODUCTS_SEARCH,
         {
-          name: `${name}%`
+          name: `%${name}%`
         }
       )
 

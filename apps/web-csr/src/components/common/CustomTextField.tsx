@@ -32,6 +32,7 @@ export default function CustomTextField({
         width: { width },
         background: `${palette.background.default} !important`,
         border: `1px solid ${palette.primary.main} !important`,
+        fontSize: '16px',
         borderRadius: '0.3rem !important',
         padding: '0.5rem  !important',
         '& .MuiFormLabel-root': {

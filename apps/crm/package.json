@@ -32,7 +32,8 @@
     "react-hook-form": "^7.46.2",
     "react-router-dom": "^6.16.0",
     "react-virtuoso": "^4.5.0",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "use-debounce": "^9.0.4"
   },
   "devDependencies": {
     "@types/react": "^18.2.15",

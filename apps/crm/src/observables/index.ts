@@ -1,6 +1,27 @@
 import { createSignal } from '@react-rxjs/utils';
 import { bind } from '@react-rxjs/core';
 import { BehaviorSubject } from 'rxjs';
+import { ControlState, orderControlsLense } from '../utils';
+
+export enum ModalState {
+  DELIVERY_COSTS = 'deliveryCostsClient',
+  DELIVERY_COSTS_DETAIL = 'deliveryCostsDetail',
+}
+export interface ModalData {
+  name: ModalState;
+  meta?: any;
+}
+
+export const modalState$ = new BehaviorSubject<
+  ControlState<ModalData> | undefined
+>(undefined);
+
+export const {
+  setState: setModalState,
+  useObserverState: useModalState,
+  setNextState,
+  setPrevState,
+} = orderControlsLense<ModalData>(modalState$);
 
 export const [isOpenCreateProduct$, setIsOpenCreateProduct] = createSignal<
   boolean | undefined

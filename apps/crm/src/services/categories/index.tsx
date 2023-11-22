@@ -50,12 +50,12 @@ export class Categories {
 
   async list({ limit = 20, offset = 0 }: ListOptions) {
     const { Categories: allCategories } = await this.client.request<{
-      Categories: CategoryResponse[];
+      Categories: any;
     }>(Categories.GET_CATEGORIES, {
       limit,
       offset
     });
 
-    return allCategories;
+    return allCategories?.nodes;
   }
 }

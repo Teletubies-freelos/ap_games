@@ -5,21 +5,28 @@ import {
   DELETE_CATEGORY,
   UPDATE_CATEGORY,
 } from '../../../request/src/graphql/mutations';
+import { IDataProvider } from 'data_providers';
 
 export interface ICategory {
   category_id: number;
   name: string;
+  sub_categories?: ISubCategory[]
 }
 
-export class CategoriesData {
-  constructor(private client: GraphQLClient) {}
+export interface ISubCategory {
+  sub_category_id: number;
+  category_id: number;
+  name: string;
+}
+export class CategoriesData implements IDataProvider {
+  constructor(private client: GraphQLClient) { }
 
-  async getList() {
-    const { categories } = await this.client.request<{
-      categories: ICategory[];
+  async getList() : Promise<ICategory[]> {
+    const { categories_aggregate: categories } = await this.client.request<{
+      categories_aggregate: any;
     }>(GET_CATEGORIES);
 
-    return categories;
+    return categories?.nodes;
   }
 
   async deleteOne(payload: number) {

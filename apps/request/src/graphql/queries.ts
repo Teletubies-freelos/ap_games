@@ -10,7 +10,6 @@ export const GET_PRODUCTS = gql`
 
   ${PRODUCT_DATA}
 `;
-
 export const GET_PRODUCTS_BY_CATEGORY = gql`
   query GET_PRODUCTS_BY_CATEGORY($limit: Int, $offset: Int, $categoryId: Int) {
     products(
@@ -139,13 +138,20 @@ export const GET_PRODUCT_DATA_LOW_PRICE = gql`
 
 export const GET_CATEGORIES = gql`
   query GET_CATEGORIES($limit: Int, $offset: Int) {
-    categories(
+    categories_aggregate(
       limit: $limit
       offset: $offset
       order_by: { category_id: desc }
     ) {
-      category_id
-      name
+      nodes {
+        category_id
+        name
+        sub_categories {
+          name
+          sub_category_id
+          category_id
+        }
+      }
     }
   }
 `;
@@ -215,6 +221,53 @@ export const GET_FEATURED_PRODUCTS = gql`
   }
 `;
 
+export const GET_DELIVERY_COSTS = gql`
+  query GET_DELIVERY_COSTS {
+    delivery_costs_aggregate {
+      nodes {
+        delivery_costs_details {
+          category_id
+          delivery_costs_detail_id
+          delivery_costs_id
+          department_id
+          district_id
+          sub_category_id
+        }
+        type
+        price
+        description
+        delivery_costs_id
+      }
+    }
+  }
+`;
+
+export const GET_DELIVERY_COSTS_DETAIL_BY_PARAM = gql`
+  query GET_DELIVERY_COSTS ($category_id: Int, $department_id: Int, $district_id: Int, $sub_category_id: Int){
+    delivery_costs_detail(
+      where: {
+        _or: [
+          { category_id: { _eq: $category_id } },
+          { sub_category_id: { _eq: $sub_category_id } },
+          { district_id: { _eq: $district_id } },
+          { department_id: { _eq: $department_id } }
+        ]
+      }
+      
+      ) {
+      delivery_cost {
+        price
+        description
+        type
+      }
+      district_id
+      department_id
+      delivery_costs_id
+      delivery_costs_detail_id
+      sub_category_id
+    }
+  }
+`;
 export const GET_PAYMENT_METHODS = gql`
   query GET_PAYMENT_METHODS($limit: Int!, $offset: Int!) {
     payment_methods(limit: $limit, offset: $offset) {
@@ -283,3 +336,4 @@ export const GET_ORDER_STATUSES = gql`
       name
     }
   }`;
+

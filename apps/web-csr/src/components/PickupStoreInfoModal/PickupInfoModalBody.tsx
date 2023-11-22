@@ -28,6 +28,7 @@ export default function PickupInfoModalBody() {
 
   const createToSession = useCreateOne(ProviderNames.SESSION_STORAGE);
 
+
   const handleFinish = async (data: PickUpInfo) => {
     await createToSession(data);
 
@@ -50,8 +51,9 @@ export default function PickupInfoModalBody() {
 
   const parsedPaymentMethods = paymentMethods?.map((method) => ({
     value: method.payment_method_id,
-    label: method.name,
+    label: method.meta,
   }));
+  
   return (
     <Box
       component={'form'}
