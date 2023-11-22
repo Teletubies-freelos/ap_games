@@ -91,16 +91,18 @@ export default function PaymentMethodBody({
 
   const parsedPaymentMethods = paymentMethods?.map((method) => ({
     value: method.payment_method_id,
-    label: method.name,
+    label: method.meta,
   }));
 
   const totalQunatity = reduceQuantity(data);
 
   const getClientData = useGetOne<UserInfo>(ProviderNames.SESSION_STORAGE);
   const { data: orderData } = useQuery(['order'], async () => await getClientData());
+  console.log("🚀 ~ file: PaymentMethodBody.tsx:101 ~ orderData:", orderData)
   
   const deliveryInfo: IDeliveryInfo = useMemo((): IDeliveryInfo => ({
     address: ["Dirección", orderData?.address],
+    // @ts-ignore
     district: ["Distrito", getGeolocation(
       {
         filter: {

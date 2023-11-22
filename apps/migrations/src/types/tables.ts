@@ -27,7 +27,6 @@ export interface ProductDTO {
   secondary_img_url?: string;
   banner_img_url?: string;
   quantity: number;
-  category_id: number | string;
 }
 
 export interface OrderDTO {
@@ -55,4 +54,6 @@ export interface FeaturedDTO {
   offer_price?: number;
   price: number;
   is_offer?: boolean;
+  category_id: number;
+  sub_category_id: number;
 }

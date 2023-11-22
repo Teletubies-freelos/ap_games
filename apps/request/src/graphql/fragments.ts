@@ -18,6 +18,8 @@ export const PRODUCT_DATA = gql`
       name
       category_id
     }
+    category_id
+    sub_category_id
   }
 `;
 

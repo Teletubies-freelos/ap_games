@@ -11,6 +11,7 @@ export enum ProviderNames {
   ORDER_STATUS = 'orderStatus',
   DELIVERY_WAYS = 'deliveryWays',
   CONFIG = 'config',
+  DELIVERY_COSTS = 'deliveryCosts'
 }
 
 export enum SyncProviderNames {

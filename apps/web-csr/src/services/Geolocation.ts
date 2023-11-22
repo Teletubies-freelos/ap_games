@@ -44,7 +44,7 @@ export class GeolocationProvider implements IDataSyncProvider{
     }
     else if (resource === ResourceNames.DEPARTMENT_PRICE) {
       const district = districts.find(({ id }) => id == filter?.district_id)
-      return departments.find(({ id }) => id === district?.department_id)?.delivery_price;
+      return departments.find(({ id }) => id === district?.department_id);
     }
 
     throw new Error('Not valid resource')

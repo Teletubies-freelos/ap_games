@@ -36,7 +36,7 @@ export default function ProductDetailBody({ productId }: Readonly<ProductDetailP
       productId: productId,
       price: product?.price,
       quantity: 1,
-      priceDiscount: 0,
+      priceDiscount: 0
     },
   });
 

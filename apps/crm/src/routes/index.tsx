@@ -5,6 +5,8 @@ const LazyHome = lazy(() => import('../pages/home'));
 const LazyCategories = lazy(() => import('../pages/categories'));
 const LazyOrders = lazy(() => import('../pages/orders'));
 const LazyProducts = lazy(() => import('../pages/products'));
+const LazyHomeSettings = lazy(() => import('../pages/settings/home'));
+const LazyPricingSettings = lazy(() => import('../pages/settings/pricing'));
 
 export const routes = createHashRouter([
   {
@@ -26,5 +28,13 @@ export const routes = createHashRouter([
   {
     path: '/categories',
     element: <LazyCategories />,
+  },
+  {
+    path: '/settings/home',
+    element: <LazyHomeSettings />,
+  },
+  {
+    path: '/settings/price',
+    element: <LazyPricingSettings />,
   },
 ]);

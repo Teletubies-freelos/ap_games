@@ -7,11 +7,11 @@ import { IDataPayment } from "../components/ConfirmOrder/ConfirmOrderDelivery";
 export const useGetPaymentInfo = () => {
   const queryClient = useQueryClient();
   const getClientData = useSyncGetOne<UserInfo>(ProviderNames.SESSION_STORAGE);
-  const {payment_method_id} =  getClientData()
+  const {payment_method_id} = getClientData()
 
   const data = queryClient.getQueryData<IDataPayment[] >(['payment_methods']);
 
-  const infoPayment = data?.find((item) => item.payment_method_id === Number(payment_method_id))
-  if(!infoPayment) throw new Error ('No hay informacion en la cache')
-  return infoPayment ?? {};
+  const infoPayment = data?.filter((item) => item.payment_method_id === Number(payment_method_id))
+  
+  return infoPayment ?? [];
 }
