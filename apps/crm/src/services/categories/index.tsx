@@ -4,11 +4,6 @@ interface CategoryCreate {
   name: string;
 }
 
-interface CategoryResponse {
-  category_id: string;
-  name: string;
-}
-
 interface ListOptions {
   limit?: number;
   offset?: number;

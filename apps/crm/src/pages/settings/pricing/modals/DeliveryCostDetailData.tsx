@@ -76,7 +76,7 @@ export const DeliveryCostDetailData = ({ data }: { data: IFormDeliveryCostData }
     const onDelete = (value: any) => () => {
         setSelections((prev) => {
             return [
-                ...prev.filter((item, i) => item.value != value)
+                ...prev.filter((item, _) => item.value != value)
             ]
         })
     };

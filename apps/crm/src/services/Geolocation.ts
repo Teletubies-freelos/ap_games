@@ -13,6 +13,7 @@ export interface IGeolocation {
 }
 
 export class GeolocationData implements IDataProvider {
+    // @ts-ignore
     constructor(private client: GraphQLClient) { }
 
     async getList({ filter }: IGetListParams, { path }: { path: GeolocationPathEnum })  {

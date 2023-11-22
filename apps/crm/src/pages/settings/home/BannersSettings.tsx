@@ -17,7 +17,7 @@ interface ISearchBarQuery {
     product_id: number;
 }
 
-const BannnerImage = ({ url, title, onClick }: { url: string, title: string, onClick: any }) => (
+const BannnerImage = ({ url, onClick }: { url: string, title: string, onClick: any }) => (
     <Box
         display="flex"
         height="9rem"
@@ -141,6 +141,7 @@ export const BannerSettings = () => {
         event: ChangeEvent<HTMLInputElement>,
         imageKey: string
     ) => {
+        console.log(imageKey);
         const [file] = event.target.files ?? [];
 
         const formData = new FormData();

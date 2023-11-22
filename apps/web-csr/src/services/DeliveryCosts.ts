@@ -46,7 +46,7 @@ export class DeliveryCostsData implements IDataProvider {
 
         return delivery_costs_aggregate?.nodes;
     }
-
+    // @ts-ignore   
     async getOne(params: IGetListParams, { department_id, district_id, category_id, sub_category_id }: { department_id: number, district_id: number, category_id: number, sub_category_id: number }): Promise<IDeliveryCostsDetailResponse[]> {
         const { delivery_costs_detail } = await this.client.request<{ delivery_costs_detail: IDeliveryCostsDetailResponse[] }>(
             GET_DELIVERY_COSTS_DETAIL_BY_PARAM, { department_id, district_id, category_id, sub_category_id }
