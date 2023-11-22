@@ -1,12 +1,16 @@
 import { Box, Link as MuiLink, Stack, Typography } from '@mui/material';
-
+import HomeIcon from '@mui/icons-material/Home';
 import { Link } from 'react-router-dom';
 import LocalMallIcon from '@mui/icons-material/LocalMall';
+import SettingsIcon from '@mui/icons-material/Settings';
 import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import { MainLogo } from '../../../../packages/ui/src';
 import { PropsWithChildren } from 'react';
+import { Modal } from '../components/modals';
 
 const Layout = ({ children }: PropsWithChildren) => {
+
   return (
     <Box display='flex'>
       <Stack
@@ -63,22 +67,44 @@ const Layout = ({ children }: PropsWithChildren) => {
             </Typography>
           </Box>
 
-          {/* <Box display='flex' gap='.5rem' alignItems='center'>
+          <Box display='flex' gap='.5rem' alignItems='center'>
             <SettingsIcon />
             <Typography fontSize='1.1rem'>
-              <MuiLink
-                sx={{ textDecoration: 'none' }}
-                component={Link}
-                to='/categories'
-                color={'#/categories' == location.hash ? 'primary' : 'text.primary'}
-              >
                 Ajustes
-              </MuiLink>
             </Typography>
-          </Box> */}
+          </Box>
+          <Box pl='2rem'>
+            <Box display='flex' gap='.5rem' alignItems='center'>
+              <HomeIcon />
+              <Typography fontSize='1.1rem'>
+                <MuiLink
+                  sx={{ textDecoration: 'none' }}
+                  component={Link}
+                  to='/settings/home'
+                  color={'#/settings/home' === location.hash ? 'primary' : 'text.primary'}
+                >
+                  Home
+                </MuiLink>
+              </Typography>
+            </Box>
+            <Box display='flex' gap='.5rem' alignItems='center'>
+              <AttachMoneyIcon />
+              <Typography fontSize='1.1rem'>
+                <MuiLink
+                  sx={{ textDecoration: 'none' }}
+                  component={Link}
+                  to='/settings/price'
+                  color={'#/settings/price' === location.hash ? 'primary' : 'text.primary'}
+                >
+                  Envío
+                </MuiLink>
+              </Typography>
+            </Box>
+          </Box>
         </Stack>
       </Stack>
       <Box sx={{ width: '87%' }}>{children}</Box>
+      <Modal />
     </Box>
   );
 };

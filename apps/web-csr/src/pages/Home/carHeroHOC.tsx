@@ -20,7 +20,7 @@ export const CardHeroHOC = ({
   price = 0,
   title = '',
   offer_price,
-  product_id
+  product_id,
 }: FeaturedDTO) => {
   const [inCart, setInCart] = useState<boolean>()
 
@@ -35,7 +35,7 @@ export const CardHeroHOC = ({
       priceDiscount: offer_price,
       price,
       quantity: 1,
-      productId: product_id
+      productId: product_id,
     },
   });
 

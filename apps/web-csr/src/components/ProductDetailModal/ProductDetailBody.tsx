@@ -36,7 +36,7 @@ export default function ProductDetailBody({ productId }: Readonly<ProductDetailP
       productId: productId,
       price: product?.price,
       quantity: 1,
-      priceDiscount: 0,
+      priceDiscount: 0
     },
   });
 
@@ -58,7 +58,7 @@ export default function ProductDetailBody({ productId }: Readonly<ProductDetailP
           marginBottom: "14px"
         }}
       > 
-        <Box>
+        <Box sx={{ display:'flex', alignItems: 'center'}}>
           <img width={200} src={product?.src} alt={product?.alt} />
         </Box>
         <Box
@@ -74,13 +74,13 @@ export default function ProductDetailBody({ productId }: Readonly<ProductDetailP
           <Box>
             <Typography
               variant="body1"
-              sx={{ paddingBottom: ".5rem", fontSize: 18, fontWeight: 500 }}
+              sx={{ paddingBottom: ".5rem", fontSize: '1.2rem', fontWeight: 800 }}
             >
               Nombre
             </Typography>
             <Typography
               variant="body1"
-              sx={{ fontSize: "1rem" }}
+              sx={{ fontSize: "0.9rem", fontWeight: 500 }}
             >
               { product?.title }
             </Typography>
@@ -88,13 +88,13 @@ export default function ProductDetailBody({ productId }: Readonly<ProductDetailP
           <Box>
             <Typography
               variant="body1"
-              sx={{ paddingBottom: ".5rem", fontSize: 18, fontWeight: 500 }}
+              sx={{ paddingBottom: ".5rem", fontSize: '1.2rem', fontWeight: 800 }}
             >
               Descripción
             </Typography>
             <Typography
               variant="body1"
-              sx={{ fontSize: "1rem", minHeight: '5rem', maxHeight: '35vh', overflow: 'scroll'}}
+              sx={{ fontSize: "0.9rem", fontWeight: 500, minHeight: '5rem', maxHeight: '35vh', overflow: 'scroll'}}
             >
               { product?.description }
             </Typography>
@@ -110,6 +110,7 @@ export default function ProductDetailBody({ productId }: Readonly<ProductDetailP
                 variant="body1"
                 sx={{
                   fontSize: "1.5rem",
+                  fontWeight: 700,
                   color: "text.subdued",
                   textDecorationLine: "line-through",
                 }}
@@ -118,7 +119,9 @@ export default function ProductDetailBody({ productId }: Readonly<ProductDetailP
               </Typography>
             )}
             
-            <Typography variant="body1" sx={{ fontSize: "1.5rem" }}>
+            <Typography variant="body1" sx={{ 
+                fontSize: "1.6rem",
+                fontWeight: 800, }}>
               S/. { product?.price }
             </Typography>
           </Box>

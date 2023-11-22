@@ -1,6 +1,6 @@
-import { IDataProvider } from 'data_providers';
+import { IDataProvider, IGetListParams } from 'data_providers';
 import { GraphQLClient } from 'graphql-request';
-import { GET_PRODUCTS, GET_PRODUCT_BY_ID } from '../../../request/src/graphql/queries';
+import { GET_PRODUCTS, GET_PRODUCTS_SEARCH, GET_PRODUCT_BY_ID } from '../../../request/src/graphql/queries';
 import {
   CREATE_PRODUCT,
   DELETE_PRODUCT,
@@ -26,7 +26,20 @@ export interface IProduct {
 export class ProductsData implements IDataProvider {
   constructor(private client: GraphQLClient) { }
 
-  async getList() {
+  async getList({ filter }: IGetListParams) {
+    const { name } = filter ?? {}
+    if (name) {
+      const { products } = await this.client.request<{ products: IProduct[] }>(
+        GET_PRODUCTS_SEARCH,
+        {
+          name: `%${name}%`
+        }
+      )
+
+      return products
+
+    }
+
     const { products } = await this.client.request<{ products: IProduct[] }>(
       GET_PRODUCTS
     );

@@ -11,7 +11,7 @@ import { ICategory } from '../services/Categories';
 import { setIsEditCategory } from '../observables';
 
 interface IUseQueryCategory {
-  reset: () => void;
+  reset?: () => void;
 }
 
 export const useQueryCategory = ({ reset }: IUseQueryCategory) => {
@@ -33,7 +33,7 @@ export const useQueryCategory = ({ reset }: IUseQueryCategory) => {
           ['all_categories_table'],
           newCategory?.category_id
         );
-        reset();
+        reset && reset();
       },
     }
   );
@@ -74,7 +74,7 @@ export const useQueryCategory = ({ reset }: IUseQueryCategory) => {
                 : category
             )
         );
-        reset();
+        reset && reset();
         setIsEditCategory(false);
       },
     }

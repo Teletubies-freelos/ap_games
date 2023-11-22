@@ -6,7 +6,6 @@ export type UserInfo = {
   address: string;
   email: string;
   province_id?: number;
-  department_id?: number;
   district_id: number;
   payment_method_id: number;
   order_status_id: number;

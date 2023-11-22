@@ -20,7 +20,8 @@ import {
   syncSessionStorageProvider,
   orderStatusProvider,
   deliveryWaysProvider,
-  configProvider
+  configProvider,
+  deliveryCostsProvider
 } from './modules';
 import { ProviderNames, SyncProviderNames } from './types/providers';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -44,6 +45,7 @@ const providers = {
   [ProviderNames.ORDER_STATUS]: orderStatusProvider,
   [ProviderNames.DELIVERY_WAYS]: deliveryWaysProvider,
   [ProviderNames.CONFIG]: configProvider,
+  [ProviderNames.DELIVERY_COSTS]: deliveryCostsProvider,
 };
 
 const syncProviders = {

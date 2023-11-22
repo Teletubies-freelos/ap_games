@@ -79,11 +79,105 @@ mutation UPDATE_STATUS_ORDER_BY_ID($order_id: uuid!, $order_status_id: Int!) {
 }
 `;
 
+export const CREATE_FEATURED = gql`
+  mutation CREATE_FEATURED(
+    $is_offer: Boolean
+    $product_id: Int!
+    $offer_price: Float
+    $price: Float
+    $banner_img_url: String!
+    $description: String!
+    $title: String!
+  ) {
+    insert_featureds_one(
+      object: {
+        is_offer: $is_offer
+        product_id: $product_id
+        offer_price: $offer_price
+        price: $price
+        banner_img_url: $banner_img_url
+        description: $description
+        title: $title
+      }
+    ) {
+      featured_id
+    }
+  }
+`;
+
+export const CREATE_DELIVERY_COSTS = gql`
+  mutation CREATE_DELIVERY_COSTS(
+    $description: String
+    $price: Int!
+    $type: String
+  ) {
+    insert_delivery_costs_one(
+      object: {
+        description: $description
+        price: $price
+        type: $type
+      }
+    ) {
+      delivery_costs_id
+    }
+  }
+`;
+
+export const UPDATE_FEATURED = gql`
+  mutation UPDATE_FEATURED(
+    $is_offer: Boolean
+    $featured_id: Int!
+    $product_id: Int!
+    $offer_price: Float
+    $price: Float
+    $banner_img_url: String!
+    $description: String!
+    $title: String!
+  ) {
+    update_featureds_by_pk(
+      pk_columns: { featured_id: $featured_id }
+      _set: {
+        is_offer: $is_offer
+        featured_id: $featured_id
+        product_id: $product_id
+        offer_price: $offer_price
+        price: $price
+        banner_img_url: $banner_img_url
+        description: $description
+        title: $title
+      }
+    ) {
+      featured_id
+    }
+  }
+`;
+
 export const DELETE_PRODUCT = gql`
   mutation DELETE_PRODUCT($product_id: Int!) {
     delete_products_by_pk(product_id: $product_id) {
       product_id
     }
+  }
+`;
+export const DELETE_FEATURED = gql`
+  mutation DELETE_FEATURED($featured_id: Int!) {
+    delete_featureds_by_pk(featured_id: $featured_id) {
+      featured_id
+    }
+  }
+`;
+
+export const DELETE_DELIVERY_COSTS_BY_ID = gql`
+  mutation DELETE_DELIVERY_COSTS($delivery_costs_id: Int!) {
+    delete_delivery_costs_by_pk(delivery_costs_id: $delivery_costs_id) {
+      delivery_costs_id
+    }
+  }
+`;
+
+export const DELETE_DELIVERY_COSTS_DETAIL_BY_ID = gql`
+  mutation DELETE_DELIVERY_COSTS($delivery_costs_id: Int!) {
+    delete_delivery_costs_detail(where: {delivery_costs_id: {_eq: $delivery_costs_id}})
   }
 `;
 
@@ -170,6 +264,18 @@ export const CREATE_ORDER_PRODUCTS = gql`
     insert_order_products(objects: $objects) {
       returning {
         order_id
+      }
+    }
+  }
+`;
+
+export const CREATE_DELIVERY_COSTS_DETAIL = gql`
+  mutation CREATE_DELIVERY_COSTS_DETAIL(
+    $objects: [delivery_costs_detail_insert_input!]!
+  ) {
+    insert_delivery_costs_detail(objects: $objects){
+      returning {
+        delivery_costs_detail_id
       }
     }
   }

@@ -12,12 +12,12 @@ export class Categories implements IDataProvider {
 
   async getList({ pagination }: IGetListParams ={}){
     const { limit = 20, page = 0} = pagination ?? {}
-    const { categories } = await this.client.request<{categories: ICategory[]}>(GET_CATEGORIES, {
+    const { categories_aggregate } = await this.client.request<{categories_aggregate: any}>(GET_CATEGORIES, {
       limit,
       offset: limit*page
     })
 
-    return categories
+    return categories_aggregate?.nodes
   }
 
 }
