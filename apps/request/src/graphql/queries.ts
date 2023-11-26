@@ -217,9 +217,32 @@ export const GET_FEATURED_PRODUCTS = gql`
       banner_img_url
       offer_price
       price
+      product {
+        name
+      }
     }
   }
 `;
+
+export const GET_ONE_DELIVERY_COSTS = gql`
+  query GET_DELIVERY_COSTS ($delivery_costs_id: Int!) {
+    delivery_costs_by_pk(delivery_costs_id: $delivery_costs_id) {
+      price
+      description
+      delivery_costs_id
+      type
+      delivery_costs_details {
+        delivery_costs_detail_id
+        delivery_costs_id
+        department_id
+        district_id
+        sub_category_id
+        category_id
+      }
+    }
+  }
+`;
+
 
 export const GET_DELIVERY_COSTS = gql`
   query GET_DELIVERY_COSTS {

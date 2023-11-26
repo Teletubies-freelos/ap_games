@@ -13,6 +13,7 @@ export const CREATE_PRODUCT = gql`
     $is_offer: Boolean
     $is_visible: Boolean
     $secondary_img_url: String
+    $sub_category_id: Int
   ) {
     insert_products_one(
       object: {
@@ -27,6 +28,7 @@ export const CREATE_PRODUCT = gql`
         is_offer: $is_offer
         is_visible: $is_visible
         secondary_img_url: $secondary_img_url
+        sub_category_id: $sub_category_id
       }
     ) {
       product_id
@@ -176,8 +178,10 @@ export const DELETE_DELIVERY_COSTS_BY_ID = gql`
 `;
 
 export const DELETE_DELIVERY_COSTS_DETAIL_BY_ID = gql`
-  mutation DELETE_DELIVERY_COSTS($delivery_costs_id: Int!) {
-    delete_delivery_costs_detail(where: {delivery_costs_id: {_eq: $delivery_costs_id}})
+  mutation DELETE_DELIVERY_COSTS_DETAIL_BY_ID($delivery_costs_id: Int!) {
+    delete_delivery_costs_detail(where: {delivery_costs_id: {_eq: $delivery_costs_id}}){
+      affected_rows
+    }
   }
 `;
 

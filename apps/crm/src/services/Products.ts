@@ -21,6 +21,7 @@ export interface IProduct {
   quantity: number;
   secondary_img_url?: string;
   updated_at?: string;
+  sub_category_id?: number;
 }
 
 export class ProductsData implements IDataProvider {

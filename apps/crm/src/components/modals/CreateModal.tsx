@@ -25,6 +25,7 @@ import { AsyncProviderNames } from '../../types/providers';
 import { useCreateOne, useGetList } from 'data_providers';
 import { DropDown } from '../../../../../packages/ui/src';
 import { ICategory } from '../../services/Categories';
+import { useQueryCategory } from '../../hooks/useQueryCategory';
 
 interface FormValues {
   name: string;
@@ -38,6 +39,7 @@ interface FormValues {
   price: number;
   quantity: number;
   secondary_img_url?: string;
+  sub_category_id: number;
 }
 
 const CreateModal = () => {
@@ -46,7 +48,8 @@ const CreateModal = () => {
     bannerUrl: '',
   });
 
-  const { control, register, handleSubmit, reset } = useForm<FormValues>({
+  const { data: categories } = useQueryCategory({});
+  const { control, register, handleSubmit, reset, watch} = useForm<FormValues>({
     defaultValues: {
       name: '',
       quantity: 0,
@@ -56,6 +59,7 @@ const CreateModal = () => {
       banner_img_url: '',
       description: '',
       category_id: 0,
+      sub_category_id: 0,
     },
   });
 
@@ -84,7 +88,15 @@ const CreateModal = () => {
       },
     }
   );
+  const categoriesDropDown = categories?.map(({ category_id, name }) => ({ label: name, value: category_id })) || [];
+  let subCategories = categories?.find(({ category_id }) => category_id === watch("category_id"))?.sub_categories?.map(({ sub_category_id, name }) => ({
+      label: name,
+      value: sub_category_id
+  })) || [];
 
+  if (watch("category_id") != 0) {
+      subCategories = [{ label: 'Todos', value: 0 }, ...subCategories];
+  }
   const onSubmit = async ({
     description,
     name,
@@ -94,6 +106,7 @@ const CreateModal = () => {
     category_id,
     is_offer,
     is_visible,
+    sub_category_id,
   }: FormValues) => {
     await mutateAsync({
       description,
@@ -106,6 +119,7 @@ const CreateModal = () => {
       category_id,
       is_offer,
       is_visible,
+      sub_category_id,
     });
 
     setIsOpenCreateProduct(false);
@@ -261,12 +275,8 @@ const CreateModal = () => {
                 )}
               />
             </Box>
-            <DropDown
-              textFieldProps={register('category_id')}
-              sxSelect={{ backgroundColor: 'background.paper' }}
-              items={parsedPaymentMethods}
-              placeHolder='Categorias'
-            ></DropDown>
+            <DropDown sxSelect={{ backgroundColor: 'background.paper' }} textFieldProps={register('category_id')} defaultValue={watch('category_id')} items={categoriesDropDown} placeHolder="Categorias" />
+            <DropDown sxSelect={{ backgroundColor: 'background.paper' }} textFieldProps={register('sub_category_id')} defaultValue={watch('sub_category_id')} items={subCategories} placeHolder="Sub Categorias" disabled={watch("category_id") == 0} />
             {/*   <TextField
               label='Url de la imagen del Producto'
               {...register('image', {

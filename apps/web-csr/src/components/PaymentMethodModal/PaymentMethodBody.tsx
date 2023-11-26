@@ -80,8 +80,8 @@ export default function PaymentMethodBody({
   };
 
   const getCartProducts = useGetList<ICartProduct>(ProviderNames.CART);
-  const getPaymentMethods = useGetList(ProviderNames.PAYMENT_METHODS);
   const { data } = useQuery(['cart'], async () => await getCartProducts());
+  const getPaymentMethods = useGetList(ProviderNames.PAYMENT_METHODS);
   const { data: paymentMethods } = useQuery(
     ['payment_methods'],
     async () => await getPaymentMethods()
@@ -98,7 +98,6 @@ export default function PaymentMethodBody({
 
   const getClientData = useGetOne<UserInfo>(ProviderNames.SESSION_STORAGE);
   const { data: orderData } = useQuery(['order'], async () => await getClientData());
-  console.log("🚀 ~ file: PaymentMethodBody.tsx:101 ~ orderData:", orderData)
   
   const deliveryInfo: IDeliveryInfo = useMemo((): IDeliveryInfo => ({
     address: ["Dirección", orderData?.address],
