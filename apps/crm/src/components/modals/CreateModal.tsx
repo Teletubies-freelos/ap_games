@@ -66,11 +66,6 @@ const CreateModal = () => {
   const queryClient = useQueryClient();
 
   const getCategories = useGetList(AsyncProviderNames.CATEGORIES);
-  const { data: dataCategories } = useQuery<ICategory[]>(
-    ['all_categories'],
-    async () => await getCategories()
-  );
-
   const createProduct = useCreateOne(AsyncProviderNames.PRODUCTS);
 
   const { mutateAsync } = useMutation(
