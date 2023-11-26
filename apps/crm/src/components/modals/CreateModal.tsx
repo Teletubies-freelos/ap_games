@@ -153,11 +153,6 @@ const CreateModal = () => {
     });
   };
 
-  const parsedPaymentMethods = dataCategories?.map((category) => ({
-    value: category.category_id,
-    label: category.name,
-  }));
-
   return (
     <Dialog open={!!isOpen} onClose={() => setIsOpenCreateProduct(false)}>
       <Stack

@@ -1,4 +1,4 @@
-import { IDataProvider, IGetOneParams, Meta } from "data_providers";
+import { IDataProvider, } from "data_providers";
 import { GET_DELIVERY_COSTS, GET_ONE_DELIVERY_COSTS } from "../../../request/src/graphql/queries";
 import { GraphQLClient } from "graphql-request";
 import { CREATE_DELIVERY_COSTS, CREATE_DELIVERY_COSTS_DETAIL, DELETE_DELIVERY_COSTS_BY_ID, DELETE_DELIVERY_COSTS_DETAIL_BY_ID } from "../../../request/src/graphql/mutations";

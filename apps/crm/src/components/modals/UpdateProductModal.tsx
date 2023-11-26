@@ -20,7 +20,7 @@ import { Photo } from '@mui/icons-material';
 import axios from 'axios';
 import { env } from '../../config';
 import { AsyncProviderNames } from '../../types/providers';
-import { useGetList, useGetOne, useUpdateOne } from 'data_providers';
+import { useGetOne, useUpdateOne } from 'data_providers';
 import { DropDown } from '../../../../../packages/ui/src';
 import { IProduct } from '../../services/Products';
 import { useQueryCategory } from '../../hooks/useQueryCategory';
