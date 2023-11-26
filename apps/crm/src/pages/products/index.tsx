@@ -10,7 +10,6 @@ export default function ProductsListPage() {
       <Layout>
         <Stack gap='1rem'>
           <NavBar name='Productos' />
-
           <ListProducts />
         </Stack>
       </Layout>

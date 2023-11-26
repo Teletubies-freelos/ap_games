@@ -48,7 +48,7 @@ const CreateModal = () => {
   });
 
   const { data: categories } = useQueryCategory({});
-  const { control, register, handleSubmit, reset, watch} = useForm<FormValues>({
+  const { control, register, handleSubmit, reset, watch } = useForm<FormValues>({
     defaultValues: {
       name: '',
       quantity: 0,
@@ -82,12 +82,12 @@ const CreateModal = () => {
   );
   const categoriesDropDown = categories?.map(({ category_id, name }) => ({ label: name, value: category_id })) || [];
   let subCategories = categories?.find(({ category_id }) => category_id === watch("category_id"))?.sub_categories?.map(({ sub_category_id, name }) => ({
-      label: name,
-      value: sub_category_id
+    label: name,
+    value: sub_category_id
   })) || [];
 
   if (watch("category_id") != 0) {
-      subCategories = [{ label: 'Todos', value: 0 }, ...subCategories];
+    subCategories = [{ label: 'Todos', value: 0 }, ...subCategories];
   }
   const onSubmit = async ({
     description,
@@ -96,7 +96,6 @@ const CreateModal = () => {
     price,
     quantity,
     category_id,
-    is_offer,
     is_visible,
     sub_category_id,
   }: FormValues) => {
@@ -109,7 +108,7 @@ const CreateModal = () => {
       price,
       quantity,
       category_id,
-      is_offer,
+      is_offer: discount_price != 0 && discount_price != undefined ? true : false,
       is_visible,
       sub_category_id,
     });
@@ -248,16 +247,6 @@ const CreateModal = () => {
                   <FormControlLabel
                     control={<Checkbox {...field} />}
                     label='Es Visible'
-                  />
-                )}
-              />
-              <Controller
-                name='is_offer'
-                control={control}
-                render={({ field }) => (
-                  <FormControlLabel
-                    control={<Checkbox {...field} />}
-                    label='Es Oferta'
                   />
                 )}
               />

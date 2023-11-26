@@ -30,12 +30,6 @@ export function ListColumns(): MRT_ColumnDef<IProduct>[] {
       size: 50,
     },
     {
-      header: 'Tag Oferta',
-      accessorKey: 'is_offer',
-      Cell: ({ renderedCellValue }) => (renderedCellValue ? 'Si' : 'No'),
-      size: 50,
-    },
-    {
       header: 'Visible',
       accessorKey: 'is_visible',
       Cell: ({ renderedCellValue }) => (renderedCellValue ? 'Si' : 'No'),

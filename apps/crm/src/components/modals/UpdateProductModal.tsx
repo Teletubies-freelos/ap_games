@@ -125,7 +125,6 @@ const UpdateProductModal = ({ productId }: { productId: number | undefined }) =>
         price,
         quantity,
         category_id,
-        is_offer,
         is_visible,
         sub_category_id,
     }: FormValues) => {
@@ -138,7 +137,7 @@ const UpdateProductModal = ({ productId }: { productId: number | undefined }) =>
             price,
             quantity,
             category_id,
-            is_offer: Boolean(is_offer),
+            is_offer: discount_price != 0 && discount_price != undefined ? true: false,
             is_visible: Boolean(is_visible),
             product_id: Number(productId),
             sub_category_id
@@ -264,6 +263,7 @@ const UpdateProductModal = ({ productId }: { productId: number | undefined }) =>
                             {...register('name', {
                                 required: 'El nombre del producto es obligatorio',
                             })}
+                            value={watch('name')}
                         />
                         <TextField
                             label='Cantidad'
@@ -297,16 +297,6 @@ const UpdateProductModal = ({ productId }: { productId: number | undefined }) =>
                                     )
                                 }}
                             />
-                            <Controller
-                                name='is_offer'
-                                control={control}
-                                render={({ field }) => (
-                                    <FormControlLabel
-                                        control={<Checkbox {...field} checked={watch('is_offer')} />}
-                                        label='Es Oferta'
-                                    />
-                                )}
-                            />
                         </Box>
                         {/* <DropDown
                             textFieldProps={register('category_id')}
@@ -323,6 +313,7 @@ const UpdateProductModal = ({ productId }: { productId: number | undefined }) =>
                             {...register('description', {
                                 required: 'La descripcion del producto es obligatorio',
                             })}
+                            value={watch('description')}
                         />
                         <Button variant='contained' type='submit'>
                             Guardar
