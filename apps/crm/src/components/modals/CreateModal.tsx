@@ -16,7 +16,7 @@ import {
   setIsOpenCreateProduct,
   useIsOpenCreateProduct,
 } from '../../observables';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { ChangeEvent, useState } from 'react';
 import { Photo } from '@mui/icons-material';
 import axios from 'axios';
@@ -24,7 +24,6 @@ import { env } from '../../config';
 import { AsyncProviderNames } from '../../types/providers';
 import { useCreateOne, useGetList } from 'data_providers';
 import { DropDown } from '../../../../../packages/ui/src';
-import { ICategory } from '../../services/Categories';
 import { useQueryCategory } from '../../hooks/useQueryCategory';
 
 interface FormValues {
@@ -64,8 +63,6 @@ const CreateModal = () => {
   });
 
   const queryClient = useQueryClient();
-
-  const getCategories = useGetList(AsyncProviderNames.CATEGORIES);
   const createProduct = useCreateOne(AsyncProviderNames.PRODUCTS);
 
   const { mutateAsync } = useMutation(
