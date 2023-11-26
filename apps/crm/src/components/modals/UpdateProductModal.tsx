@@ -22,8 +22,8 @@ import { env } from '../../config';
 import { AsyncProviderNames } from '../../types/providers';
 import { useGetList, useGetOne, useUpdateOne } from 'data_providers';
 import { DropDown } from '../../../../../packages/ui/src';
-import { ICategory } from '../../services/Categories';
 import { IProduct } from '../../services/Products';
+import { useQueryCategory } from '../../hooks/useQueryCategory';
 
 interface FormValues {
     name: string;
@@ -37,6 +37,7 @@ interface FormValues {
     price: number;
     quantity: number;
     product_id?: number;
+    sub_category_id?: number;
 }
 
 const UpdateProductModal = ({ productId }: { productId: number | undefined }) => {
@@ -54,7 +55,8 @@ const UpdateProductModal = ({ productId }: { productId: number | undefined }) =>
             category_id: 0,
             product_id: 0,
             is_visible: false,
-            is_offer: false
+            is_offer: false,
+            sub_category_id: 0,
         },
     });
 
@@ -64,7 +66,6 @@ const UpdateProductModal = ({ productId }: { productId: number | undefined }) =>
     });
 
     const getProduct = useGetOne(AsyncProviderNames.PRODUCTS);
-    const getCategories = useGetList(AsyncProviderNames.CATEGORIES);
     const updateProduct = useUpdateOne(AsyncProviderNames.PRODUCTS);
 
     const { data: product } = useQuery<IProduct>(
@@ -84,6 +85,7 @@ const UpdateProductModal = ({ productId }: { productId: number | undefined }) =>
             setValue("description", product?.description);
             setValue("is_offer", product?.is_offer);
             setValue("is_visible", product?.is_visible);
+            setValue("sub_category_id", product?.sub_category_id);
             // @ts-ignore
             setValue("category_id", product?.category?.category_id);
             
@@ -94,10 +96,7 @@ const UpdateProductModal = ({ productId }: { productId: number | undefined }) =>
         }
     }, [product, isOpen])
 
-    const { data: dataCategories } = useQuery<ICategory[]>(
-        ['all_categories'],
-        async () => await getCategories()
-    );
+    const { data: categories } = useQueryCategory({});
 
     const { mutateAsync } = useMutation(
         ['update_product'],
@@ -128,6 +127,7 @@ const UpdateProductModal = ({ productId }: { productId: number | undefined }) =>
         category_id,
         is_offer,
         is_visible,
+        sub_category_id,
     }: FormValues) => {
         await mutateAsync({
             description,
@@ -140,7 +140,8 @@ const UpdateProductModal = ({ productId }: { productId: number | undefined }) =>
             category_id,
             is_offer: Boolean(is_offer),
             is_visible: Boolean(is_visible),
-            product_id: Number(productId)
+            product_id: Number(productId),
+            sub_category_id
         });
 
         setIsOpenUpdateProduct(false);
@@ -171,12 +172,15 @@ const UpdateProductModal = ({ productId }: { productId: number | undefined }) =>
             [imageKey]: `${env.PHOTO_UPLOAD_URL}/${data}`,
         });
     };
+    const categoriesDropDown = categories?.map(({ category_id, name }) => ({ label: name, value: category_id })) || [];
+    let subCategories = categories?.find(({ category_id }) => category_id === watch("category_id"))?.sub_categories?.map(({ sub_category_id, name }) => ({
+        label: name,
+        value: sub_category_id
+    })) || [];
 
-    const parsedPaymentMethods = dataCategories?.map((category) => ({
-        value: category.category_id,
-        label: category.name,
-    }));
-    
+    if (watch("category_id") != 0) {
+        subCategories = [{ label: 'Todos', value: 0 }, ...subCategories];
+    }
     return (
         <Dialog open={!!isOpen} onClose={() => {
             reset();
@@ -304,12 +308,14 @@ const UpdateProductModal = ({ productId }: { productId: number | undefined }) =>
                                 )}
                             />
                         </Box>
-                        <DropDown
+                        {/* <DropDown
                             textFieldProps={register('category_id')}
                             sxSelect={{ backgroundColor: 'background.paper' }}
                             items={parsedPaymentMethods}
                             defaultValue={watch('category_id')}
-                        />
+                        /> */}
+                        <DropDown sxSelect={{ backgroundColor: 'background.paper' }} textFieldProps={register('category_id')} defaultValue={watch('category_id')} items={categoriesDropDown} placeHolder="Categorias" />
+                        <DropDown sxSelect={{ backgroundColor: 'background.paper' }} textFieldProps={register('sub_category_id')} defaultValue={watch('sub_category_id')} items={subCategories} placeHolder="Sub Categorias" disabled={watch("category_id") == 0} />
                         <TextField
                             label='Descripcion del Producto'
                             rows={3}

@@ -81,3 +81,7 @@ export enum ActionsEnum {
   DELETE,
   UPDATE,
 }
+
+export const getFirstElement = <T>(arr: T[]): T | undefined => {
+  return arr.length > 0 ? arr[0] : undefined;
+};

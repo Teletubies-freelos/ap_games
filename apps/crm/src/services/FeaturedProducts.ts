@@ -12,6 +12,9 @@ export interface IFeaturedProduct {
     banner_img_url: string;
     description: string;
     title: string;
+    product: {
+        name: string;
+    }
 }
 
 export class FeaturedProductsData implements IDataProvider {

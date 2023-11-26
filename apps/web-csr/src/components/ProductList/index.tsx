@@ -30,7 +30,6 @@ const sxProductListHeader: SxProps = {
 
 
 export default function ProductsList({ categoryId, categories }: { categoryId: number, categories: any }) {
-  console.log("🚀 ~ file: index.tsx:33 ~ ProductsList ~ categoryId:", categoryId)
   const [filters, setFilters] = useState<HookFilters>({});
 
   const { products, fetchNextPage } = useProducts(categoryId, filters);

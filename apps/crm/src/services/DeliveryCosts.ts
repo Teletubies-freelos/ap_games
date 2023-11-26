@@ -1,5 +1,5 @@
-import { IDataProvider } from "data_providers";
-import { GET_DELIVERY_COSTS } from "../../../request/src/graphql/queries";
+import { IDataProvider, IGetOneParams, Meta } from "data_providers";
+import { GET_DELIVERY_COSTS, GET_ONE_DELIVERY_COSTS } from "../../../request/src/graphql/queries";
 import { GraphQLClient } from "graphql-request";
 import { CREATE_DELIVERY_COSTS, CREATE_DELIVERY_COSTS_DETAIL, DELETE_DELIVERY_COSTS_BY_ID, DELETE_DELIVERY_COSTS_DETAIL_BY_ID } from "../../../request/src/graphql/mutations";
 
@@ -8,9 +8,8 @@ export interface IDeliveryCosts {
     price: number;
     type: string;
     description: string;
-    detail: IDeliveryCostsDetail[];
+    delivery_costs_details: Array<IDeliveryCostsDetail>;
 }
-
 export interface IDeliveryCostsDetail {
     department_id: number;
     district_id: number;
@@ -31,6 +30,16 @@ export const deliveryCostsTypesText: Record<DeliveryCostsTypes, string> = {
 export class DeliveryCostsData implements IDataProvider {
     constructor(private client: GraphQLClient) { }
 
+    async getOne({ id: delivery_costs_id }: { id: number }): Promise<IDeliveryCosts> {
+        const { delivery_costs_by_pk } = await this.client.request<{ delivery_costs_by_pk: IDeliveryCosts }>(
+            GET_ONE_DELIVERY_COSTS, {
+            delivery_costs_id
+        }
+        );
+
+        return delivery_costs_by_pk;
+    }
+
     async getList() {
         const { delivery_costs_aggregate } = await this.client.request<{ delivery_costs_aggregate: any }>(
             GET_DELIVERY_COSTS
@@ -39,21 +48,13 @@ export class DeliveryCostsData implements IDataProvider {
         return delivery_costs_aggregate?.nodes;
     }
 
-    // async updateOne(payload: IDeliveryCosts): Promise<any> {
-    //     const { update_features_by_pk } = await this.client.request<{ update_features_by_pk: boolean }>(
-    //         UPDATE_FEATURED, { ...payload }
-    //     );
-
-    //     return update_features_by_pk;
-    // }
-
     async createOne(payload: IDeliveryCosts): Promise<void | Partial<any>> {
         const { insert_delivery_costs_one } = await this.client.request<{ insert_delivery_costs_one: any }>(
             CREATE_DELIVERY_COSTS, {
-                description: payload.description,
-                price: payload.price,
-                type: payload.type
-            }
+            description: payload.description,
+            price: payload.price,
+            type: payload.type
+        }
         );
 
         if (!insert_delivery_costs_one) {
@@ -61,22 +62,22 @@ export class DeliveryCostsData implements IDataProvider {
         }
         const { response } = await this.client.request<{ response: any }>(
             CREATE_DELIVERY_COSTS_DETAIL, {
-                objects: payload.detail.map((value) => ({...value, delivery_costs_id : insert_delivery_costs_one?.delivery_costs_id }))
-            }
+            objects: payload.delivery_costs_details.map((value) => ({ ...value, delivery_costs_id: insert_delivery_costs_one?.delivery_costs_id }))
+        }
         );
 
         return response;
     }
 
     async deleteOne(id: number) {
-        const { delete_delivery_costs_by_pk } = await this.client.request<{ delete_delivery_costs_by_pk: boolean }>(
-            DELETE_DELIVERY_COSTS_BY_ID, { delivery_costs_id: id }
-        );
-
-        const { delete_delivery_costs_detail } = await this.client.request<{ delete_delivery_costs_detail: boolean }>(
+        await this.client.request<{ affected_rows: number }>(
             DELETE_DELIVERY_COSTS_DETAIL_BY_ID, { delivery_costs_id: id }
         );
 
-        return delete_delivery_costs_by_pk && delete_delivery_costs_detail;
+        await this.client.request<{ delete_delivery_costs_by_pk: boolean }>(
+            DELETE_DELIVERY_COSTS_BY_ID, { delivery_costs_id: id }
+        );
+
+        return true;
     }
 }

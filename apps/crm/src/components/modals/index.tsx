@@ -2,10 +2,12 @@ import { ModalState, setModalState, useModalState } from "../../observables";
 import { DeliveryCostDetailModal } from "../../pages/settings/pricing/modals/DeliveryCostDetailModal";
 import { DeliveryCostModal } from "../../pages/settings/pricing/modals/DeliveryCostModal";
 import { Modal as ModalMUI } from '@mui/material';
+import { DeliveryCostUpdateModal } from "../../pages/settings/pricing/modals/DeliveryCostUpdateModal";
 
 const modals = {
     [ModalState.DELIVERY_COSTS]: () => <DeliveryCostModal />,
     [ModalState.DELIVERY_COSTS_DETAIL]: (props?: any) => <DeliveryCostDetailModal data={props?.data}/>,
+    [ModalState.DELIVERY_COSTS_DETAIL_UPDATE]: (props?: any) => <DeliveryCostUpdateModal data={props?.data}/>,
 };
 
 export const Modal = () => {

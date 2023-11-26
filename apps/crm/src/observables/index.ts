@@ -6,6 +6,7 @@ import { ControlState, orderControlsLense } from '../utils';
 export enum ModalState {
   DELIVERY_COSTS = 'deliveryCostsClient',
   DELIVERY_COSTS_DETAIL = 'deliveryCostsDetail',
+  DELIVERY_COSTS_DETAIL_UPDATE = 'deliveryCostsDetailUpdate',
 }
 export interface ModalData {
   name: ModalState;

@@ -4,11 +4,6 @@ import { DeliveryCostsTypes, IDeliveryCosts, deliveryCostsTypesText } from '../.
 export function ListColumns(): MRT_ColumnDef<IDeliveryCosts>[] {
   return [
     {
-      header: 'Id',
-      accessorKey: 'delivery_costs_id',
-      size: 100,
-    },
-    {
       header: 'Nombre del costo de envío',
       accessorKey: 'type',
       Cell: ({ renderedCellValue }) => deliveryCostsTypesText[renderedCellValue as DeliveryCostsTypes],
@@ -17,6 +12,12 @@ export function ListColumns(): MRT_ColumnDef<IDeliveryCosts>[] {
     {
       header: 'Tipo',
       accessorKey: 'description',
+      size: 50,
+    },
+    {
+      header: 'Precio',
+      accessorKey: 'price',
+      Cell: ({ renderedCellValue }) => 'S/ ' + renderedCellValue,
       size: 50,
     },
   ];

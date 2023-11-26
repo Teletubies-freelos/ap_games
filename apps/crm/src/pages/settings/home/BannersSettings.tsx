@@ -52,26 +52,33 @@ const BannnerImage = ({ url, onClick }: { url: string, title: string, onClick: a
 
 export const BannerSettings = () => {
     const queryClient = useQueryClient();
+
     const [selectedFeaturedId, setSelectedFeatureId] = useState(0);
-    const [fileName, setFileName] = useState<string>("");
+
     const getAllFeatured = useGetList<IFeaturedProduct>(AsyncProviderNames.FEATURED);
     const updateFeatured = useUpdateOne(AsyncProviderNames.FEATURED);
     const deleteFeatured = useDeleteOne(AsyncProviderNames.FEATURED);
     const createFeatured = useCreateOne(AsyncProviderNames.FEATURED);
+
     const [search, setSearch] = useState<string>()
     const searchProduct = useGetList<ISearchBarQuery>(AsyncProviderNames.PRODUCTS)
     const [valueDebounced] = useDebounce(search, 1000);
     const handleSearchChange: ChangeEventHandler<HTMLInputElement> = (event: any) => {
         setSearch(event.target.value)
     }
-    const inputFile = useRef(null);
+    const [textChanged, setTextChanged] = useState(true);
 
+    const [fileName, setFileName] = useState<string>("");
+    const [productName, setProductName] = useState<string | undefined>(undefined);
+
+    const inputFile = useRef(null);
+    const autocompleteRef = useRef(null);
     const { data: featuredProducts } = useQuery(
         ['all_featured_table'],
         async () => await getAllFeatured()
     );
 
-    const { data: foundProducts } = useQuery(['search_products', valueDebounced], {
+    var { data: foundProducts } = useQuery(['search_products', valueDebounced], {
         queryFn: async () => await searchProduct({
             filter: {
                 name: valueDebounced,
@@ -96,6 +103,7 @@ export const BannerSettings = () => {
 
     useMemo(() => {
         const foundFeatured = featuredProducts?.find(({ featured_id }) => selectedFeaturedId === featured_id);
+
         if (foundFeatured) {
             setValue("is_offer", foundFeatured?.is_offer);
             setValue("featured_id", foundFeatured?.featured_id);
@@ -105,6 +113,12 @@ export const BannerSettings = () => {
             setValue("banner_img_url", foundFeatured?.banner_img_url);
             setValue("description", foundFeatured?.description);
             setValue("title", foundFeatured?.title);
+            setProductName(foundFeatured.product?.name);
+            setTextChanged(false);
+            if (autocompleteRef.current) {
+                //@ts-ignore
+                autocompleteRef.current.firstChild.firstChild.children[2].firstChild.click()
+            }
         }
     }, [selectedFeaturedId]);
 
@@ -129,6 +143,11 @@ export const BannerSettings = () => {
                 setSelectedFeatureId(0);
                 setFileName("");
                 setSearch("");
+                if (autocompleteRef.current) {
+                    //@ts-ignore
+                    autocompleteRef.current.firstChild.firstChild.children[2].firstChild.click()
+                }
+                setTextChanged(false);
             },
         }
     );
@@ -138,10 +157,8 @@ export const BannerSettings = () => {
     };
 
     const handleChange = async (
-        event: ChangeEvent<HTMLInputElement>,
-        imageKey: string
+        event: ChangeEvent<HTMLInputElement>
     ) => {
-        console.log(imageKey);
         const [file] = event.target.files ?? [];
 
         const formData = new FormData();
@@ -199,7 +216,7 @@ export const BannerSettings = () => {
                                             hidden
                                             type='file'
                                             accept='image/*'
-                                            onChange={(e) => handleChange(e, 'imgUrl')}
+                                            onChange={(e) => handleChange(e)}
                                             ref={inputFile}
                                         />
                                         <Button
@@ -209,9 +226,9 @@ export const BannerSettings = () => {
                                                 inputFile?.current.click()
                                             }}
                                         >
-                                            <Typography fontSize={'0.7rem'} fontWeight={500} lineHeight={"15px"} letterSpacing={"-0.2px"} >Subir Imagen</Typography>
+                                            <Typography fontSize={'0.7rem'} fontWeight={500} lineHeight={"15px"} letterSpacing={"-0.2px"}>Subir Imagen</Typography>
                                         </Button>
-                                        <Typography variant='h2' fontSize={'0.5rem'}>{fileName}</Typography>
+                                        <Typography variant='h2' fontSize={'0.7rem'}>{fileName}</Typography>
                                     </Stack>
                                 </Box>
                                 <Box padding={"1rem"}>
@@ -236,51 +253,78 @@ export const BannerSettings = () => {
                                 </Box>
                                 <Box padding={"1rem"}>
                                     <Typography variant='h2' fontSize={'1rem'} paddingBottom={1}>Producto</Typography>
-                                    <Autocomplete
-                                        options={foundProducts?.map(({ product_id, name }) => ({ name, product_id })) ?? []}
-                                        freeSolo
-                                        sx={{
-                                            width: {
-                                                xs: '90vw',
-                                                md: 'unset'
-                                            },
-                                            backgroundColor: "background.paper",
-                                            borderRadius: ".25rem",
-                                            "& .MuiAutocomplete-endAdornment": {
-                                                display: 'none'
-                                            }
-                                        }}
-                                        renderInput={(params) => (
-                                            <TextField
-                                                {...params}
-                                                onChange={handleSearchChange}
-                                                value={search}
-                                                InputProps={{
-                                                    ...params.InputProps,
-                                                    type: 'search',
-                                                    startAdornment: (<InputAdornment position="start" sx={{ paddingLeft: '0.5rem' }} children={<SearchIcon />} />)
+                                    {
+                                        textChanged ? (
+                                            <Autocomplete
+                                                ref={autocompleteRef}
+                                                options={foundProducts?.map(({ product_id, name }) => ({ name, product_id })) ?? []}
+                                                freeSolo
+                                                sx={{
+                                                    width: {
+                                                        xs: '90vw',
+                                                        md: 'unset'
+                                                    },
+                                                    backgroundColor: "background.paper",
+                                                    borderRadius: ".25rem",
+                                                    "& .MuiAutocomplete-endAdornment": {
+                                                        display: 'none'
+                                                    }
                                                 }}
+                                                renderInput={(params) => (
+                                                    <TextField
+                                                        {...params}
+                                                        value={search}
+                                                        onChange={handleSearchChange}
+                                                        InputProps={{
+                                                            ...params.InputProps,
+                                                            type: 'search',
+                                                            startAdornment: (<InputAdornment position="start" sx={{ paddingLeft: '0.5rem' }} children={<SearchIcon />} />)
+                                                        }}
+                                                    />
+                                                )}
+                                                getOptionLabel={(option: any) => {
+                                                    if (typeof option === 'string') {
+                                                        return option;
+                                                    } else {
+                                                        return option.name || '';
+                                                    }
+                                                }}
+                                                // @ts-ignore
+                                                onChange={(_, value) => { console.log("changed", value); setValue("product_id", value!.product_id) }}
                                             />
-                                        )}
-                                        getOptionLabel={(option: any) => {
-                                            if (typeof option === 'string') {
-                                                return option;
-                                            } else {
-                                                return option.name || '';
-                                            }
-                                        }}
-                                        // @ts-ignore
-                                        onChange={(_, value) => setValue("product_id", value!.product_id)}
+
+                                        ) :
+                                            <TextField
+                                                multiline
+                                                sx={{ backgroundColor: "background.paper" }}
+                                                type='text'
+                                                fullWidth
+                                                value={productName}
+                                                onChange={() => setTextChanged(true)}
+                                            />
+
+                                    }
+
+
+                                </Box>
+                                <Box padding={"1rem"}>
+                                    <Typography variant='h2' fontSize={'1rem'} paddingBottom={1}>Precio</Typography>
+                                    <TextField
+                                        multiline
+                                        sx={{ backgroundColor: "background.paper" }}
+                                        type='text'
+                                        fullWidth
+                                        {...register('price')}
                                     />
                                 </Box>
-                                <Box width={"100%"}>
+                                <Box width={"100%"} px={"1rem"} gap={2} display="flex">
                                     {
                                         selectedFeaturedId != 0 ?
                                             <>
-                                                <Button sx={{ width: "50%" }} onClick={handleDeleteFeatured}>Eliminar Producto</Button>
-                                                <Button sx={{ width: "50%" }} variant="contained" type='submit'>Guardar Producto</Button>
+                                                <Button sx={{ width: "50%", border: '1px solid' }} onClick={handleDeleteFeatured}>Eliminar Banner</Button>
+                                                <Button sx={{ width: "50%" }} variant="contained" type='submit'>Guardar Banner</Button>
                                             </>
-                                            : <Button sx={{ width: "100%" }} variant="contained" type='submit'>Crear Producto</Button>
+                                            : <Button sx={{ width: "100%" }} variant="contained" type='submit'>Crear Banner</Button>
                                     }
                                 </Box>
                             </form>
