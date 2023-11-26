@@ -49,6 +49,7 @@ export const UPDATE_PRODUCT = gql`
     $discount_price: Float!
     $quantity: Int
     $category_id: Int
+    $sub_category_id: Int
   ) {
     update_products_by_pk(
       pk_columns: { product_id: $product_id }
@@ -63,6 +64,7 @@ export const UPDATE_PRODUCT = gql`
         quantity: $quantity
         category_id: $category_id
         banner_img_url: $banner_img_url
+        sub_category_id: $sub_category_id
       }
     ) {
       product_id
