@@ -134,7 +134,7 @@ export default function Home() {
   const getFeaturedProducts = useGetList<FeaturedDTO>(ProviderNames.FEATURED);
   const { data: categories } = useCategories();
 
-  const categoryId = useCategoryIdSelected();
+  const categorySelected = useCategoryIdSelected();
   const { data } = useQuery(
     ['home featured'],
     async () => await getFeaturedProducts()
@@ -192,7 +192,7 @@ export default function Home() {
         <NintendoLogo sx={noMargin} onClick={() => getCategoryBySection(Categories.NINTENDO)}/>
         <XboxLogo sx={noMargin} onClick={() => getCategoryBySection(Categories.XBOX)}/>{' '}
       </Stack>
-      <ProductsList categoryId={categoryId} categories={categories}/>
+      <ProductsList categorySelected={categorySelected} categories={categories}/>
     </GeneralLayout>
   );
 }

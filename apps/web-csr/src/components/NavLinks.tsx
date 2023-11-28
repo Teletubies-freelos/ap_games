@@ -22,7 +22,7 @@ export default function NavLinks() {
         </MUILink>
       </CustomLink>
       <CustomLink to='/estado-pedido'>
-        {/* <MUILink
+        <MUILink
           sx={({ palette }) => ({
             display: { xs: 'none', md: 'block' },
             textDecoration: 'none',
@@ -33,7 +33,7 @@ export default function NavLinks() {
           })}
         >
           Estado de Pedido
-        </MUILink> */}
+        </MUILink>
       </CustomLink>
     </>
   );

@@ -5,6 +5,11 @@ import { GET_CATEGORIES } from "../../../request/src/graphql/queries";
 export interface ICategory{
   category_id: number;
   name: string;
+  sub_categories: {
+    name: string
+    sub_category_id: number;
+    category_id: number;
+  }
 }
 
 export class Categories implements IDataProvider {

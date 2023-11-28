@@ -8,6 +8,7 @@ import { useGetList } from 'data_providers';
 import { ProviderNames } from '../../../types/providers';
 import { CardProductProps } from '../../../../../../packages/ui/src/molecules/CardProduct';
 import { IProduct } from '../../../services/Products';
+import { ICategorySelected } from '../../../observables';
 
 export const serializeGames = ({
   name = '',
@@ -38,11 +39,11 @@ export interface HookFilters{
   isOffer?: boolean;
 }
 
-export const useProducts = (categoryId: number,{isLowerPrice, isOffer}:HookFilters = {}) => {
+export const useProducts = (categorySelected: ICategorySelected,{isLowerPrice, isOffer}:HookFilters = {}) => {
   const getProducts = useGetList(ProviderNames.PRODUCTS, {payload:{
     filter: {
       isOffer,
-      categoryId
+      categorySelected
     },
     sort: { 
       ...(isLowerPrice? {price: 'asc'}: {})
@@ -50,7 +51,7 @@ export const useProducts = (categoryId: number,{isLowerPrice, isOffer}:HookFilte
   }});
 
   const query = useInfiniteQuery({
-    queryKey: ['list_games', isLowerPrice, isOffer, categoryId],
+    queryKey: ['list_games', isLowerPrice, isOffer, categorySelected],
     queryFn: async ({ pageParam = 0 }) =>
       await getProducts({ pagination: { limit: 20, page: pageParam } }),
     getNextPageParam: getNextPage,

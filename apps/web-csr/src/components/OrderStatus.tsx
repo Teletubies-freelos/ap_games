@@ -19,8 +19,10 @@ import { useNavigate, useParams } from "react-router-dom";
 import { DeliveryWayEnum } from "../services/DeliveryWays";
 
 const translateStatus: Record<string, string> = {
-  canceled: "En camino",
+  paid: "En camino",
   delivered: "Entregado",
+  canceled: 'Cancelado',
+  pending: "En tienda"
 };
 
 const stepStatus = ["En tienda", "En camino", "Entregado"];
@@ -38,9 +40,10 @@ export default function OrderStatus() {
 
   const [orderStatus, setOrderStatus] = useState<string | undefined>();
   const refProducts = useRef<
-    (OrdersByIdResponse & { id: string }) | undefined
+  (OrdersByIdResponse & { id: string }) | undefined
   >();
   const getOrder = useGetOne(ProviderNames.ORDERS);
+  console.log("🚀 ~ file: OrderStatus.tsx:43 ~ OrderStatus ~ refProducts:", refProducts)
 
   const total = refProducts.current?.order_products.reduce(
     (acm, { quantity, product: { price, discount_price } }) =>
@@ -75,6 +78,7 @@ export default function OrderStatus() {
         status: true,
       },
     });
+    console.log("🚀 ~ file: OrderStatus.tsx:78 ~ loadOrderResume ~ order_status:", order_status)
 
     refProducts.current = {
       ...rest,
@@ -142,7 +146,7 @@ export default function OrderStatus() {
                     fontWeight='bolder'
                     display='flex'
                     justifyContent='flex-end'>
-                    S/. {(((discount_price ?? price)*quantity)).toFixed(2)}
+                    S/. {(((discount_price != 0 && discount_price != undefined ? discount_price : price)*quantity)).toFixed(2)}
                   </Typography>
                 </Box>
               )
