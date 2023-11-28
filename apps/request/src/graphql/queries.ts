@@ -13,7 +13,22 @@ export const GET_PRODUCTS = gql`
 export const GET_PRODUCTS_BY_CATEGORY = gql`
   query GET_PRODUCTS_BY_CATEGORY($limit: Int, $offset: Int, $categoryId: Int) {
     products(
-      where: { is_visible: { _eq: true }, category_id: { _eq: $categoryId } }
+      where: { is_visible: { _eq: true }, category_id: { _eq: $categoryId }}
+      limit: $limit
+      offset: $offset
+      order_by: { updated_at: desc }
+    ) {
+      ...PRODUCT_DATA
+    }
+  }
+
+  ${PRODUCT_DATA}
+`;
+
+export const GET_PRODUCTS_BY_SUB_CATEGORY = gql`
+  query GET_PRODUCTS_BY_SUB_CATEGORY($limit: Int, $offset: Int, $categoryId: Int, $subCategoryId: Int) {
+    products(
+      where: { is_visible: { _eq: true }, category_id: { _eq: $categoryId }, sub_category_id: { _eq: $subCategoryId } }
       limit: $limit
       offset: $offset
       order_by: { updated_at: desc }

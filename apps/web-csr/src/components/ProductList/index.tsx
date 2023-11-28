@@ -1,10 +1,14 @@
 import {
+  Accordion,
+  AccordionSummary,
   Box,
   Chip,
   MenuItem,
   Paper,
-  SelectChangeEvent,
+  Typography,
   type SxProps,
+  AccordionDetails,
+  Stack,
 } from "@mui/material";
 import { VirtuosoGrid } from "react-virtuoso";
 import { DropDown, Isotype } from "../../../../../packages/ui/src";
@@ -16,8 +20,8 @@ import Filters from "./Filters";
 import { itemContentRender } from "./Containers/itemContentRender";
 import { ItemContainer, ListContainer } from "./Containers/ListContainer";
 import { useCallback, useMemo, useState } from "react";
-import { setCategoryIdSelected, setIsWishList } from "../../observables";
-
+import { ICategorySelected, setCategoryIdSelected, setIsWishList } from "../../observables";
+import { ExpandMore as ExpandMoreIcon } from "@mui/icons-material";
 const sxProductListHeader: SxProps = {
   width: "100%",
   display: "flex",
@@ -28,24 +32,23 @@ const sxProductListHeader: SxProps = {
   gap: 2,
 };
 
-
-export default function ProductsList({ categoryId, categories }: { categoryId: number, categories: any }) {
+export default function ProductsList({ categorySelected, categories }: { categorySelected: ICategorySelected, categories: any }) {
   const [filters, setFilters] = useState<HookFilters>({});
 
-  const { products, fetchNextPage } = useProducts(categoryId, filters);
+  const { products, fetchNextPage } = useProducts(categorySelected, filters);
 
-  const _handleChange = (event: SelectChangeEvent) => {
-    event.preventDefault();
-    const id = Number(event.target.value);
+  const _handleChangeCategory = (category_id: number, sub_category_id: number) => {
 
-    setCategoryIdSelected(id);
+    setCategoryIdSelected({
+      category_id,
+      sub_category_id
+    });
   };
-
   const loadMore = useCallback(() => {
     fetchNextPage();
   }, [fetchNextPage]);
 
-  const ItemContent = useMemo(() => itemContentRender(()=>setIsWishList(true)), []);
+  const ItemContent = useMemo(() => itemContentRender(() => setIsWishList(true)), []);
 
   return (
     <Paper
@@ -68,22 +71,63 @@ export default function ProductsList({ categoryId, categories }: { categoryId: n
         />
         <DropDown
           selectProps={{
-            value: categoryId ?? "all"
+            value: categorySelected?.category_id ?? "all"
           }}
-          defaultValue={categoryId || "all"}
-          onChange={_handleChange}
+          defaultValue={categorySelected?.category_id || "all"}
+          // onChange={_handleChange}
           sxForm={{
             width: { xs: "100%", md: "30%" },
             order: { xs: "2", md: "3" },
           }}
         >
-          <MenuItem value={"all"}>
+          <MenuItem value={"all"} onClick={() => {_handleChangeCategory(0, 0)}}>
             Todos
           </MenuItem>
-          {categories?.map(({ category_id, name }: { category_id: number, name: string }) => (
-            <MenuItem value={category_id} key={category_id}>
-              Juegos {name}
-            </MenuItem>
+          {categories?.map(({ category_id, name, sub_categories }: { category_id: number, name: string, sub_categories: any[] }) => (
+            <Accordion
+              sx={{
+                background: "transparent",
+                boxShadow: "none",
+                margin: "0 !important"
+              }}
+            >
+              <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                sx={{
+                  minHeight: "0 !important",
+                  "& .MuiAccordionSummary-expandIconWrapper": {
+                    color: "text.secondary"
+                  }
+                }}
+              >
+                <Typography>{name}</Typography>
+              </AccordionSummary>
+              <AccordionDetails sx={{ padding: "0 0 1dvh 2dvh" }}>
+                <Stack>
+                  {sub_categories?.map(({ sub_category_id, name }) => (
+                    <MenuItem
+                      component="a"
+                      key={`category-${category_id}-${sub_category_id}`}
+                      onClick={() => _handleChangeCategory(category_id, sub_category_id)}
+                      sx={{ textDecoration: "none" }}
+                    >
+                      <Typography
+                        sx={{
+                          fontWeight: 400,
+                          color: "text.primary"
+                        }}
+                        onClick={() => {
+                          // handleClose()
+                          _handleChangeCategory(category_id, sub_category_id)
+                        }}
+                      >
+                        {name}
+                      </Typography>
+                    </MenuItem>
+                  ))}
+                </Stack>
+              </AccordionDetails>
+            </Accordion>
           ))}
         </DropDown>
         <Filters>

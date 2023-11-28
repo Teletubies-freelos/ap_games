@@ -115,9 +115,9 @@ export default function Menu() {
               </Stack>
             </AccordionDetails>
           </Accordion>
-          {/* <Label onClick={handleClose} to="/estado-pedido">
+          <Label onClick={handleClose} to="/estado-pedido">
             <LiItem label="Estado de pedido" />
-          </Label> */}
+          </Label>
           <Label onClick={handleClose} to="/terminos">
             <LiItem label="Terminos y condiciones" />
           </Label>

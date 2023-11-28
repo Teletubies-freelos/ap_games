@@ -46,20 +46,28 @@ export default function CardProduct({
       })}
       className={className}
     >
-      <Box onClick={onCardClick} display={"flex"} height="100%">
+      <Box
+        onClick={onCardClick}
+        display="flex"
+        >
         <Box
           sx={{
+            minWidth: '8rem',
+            height: '10rem',
+            overflow: 'hidden',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'flex-end',
           }}
         >
           <CardMedia
             component="img"
             alt={alt}
             src={src}
-            height={"100%"}
             sx={{
-              margin: "auto 0",
-              padding: "0.6rem",
-              width: "100%",
+              width: '90%',
+              height: '90%',
+              objectFit: 'cover',
             }}
           />
         </Box>
@@ -72,8 +80,17 @@ export default function CardProduct({
             width: "70%",
           }}
         >
-          <Box>
-            <Typography variant="h3">{title}</Typography>
+          <Box style={{maxWidth: '95%'}}>
+            <Typography
+              variant="h3"
+              style={{
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              {title}
+            </Typography>
             <Typography
               variant="body1"
               sx={{
@@ -116,28 +133,27 @@ export default function CardProduct({
         </CardContent>
       </Box>
       <Box
-          display="flex"
-          justifyContent="flex-end"
-          height={0}
-          alignItems="start"
+        display="flex"
+        justifyContent="flex-end"
+        height={0}
+        alignItems="start"
+      >
+        <Button
+          disabled={inCart}
+          onClick={onAdd}
+          variant="contained"
+          sx={{
+            position: "relative",
+            bottom: { xs: "3.15rem", sm: "3.2rem" },
+            right: "0.85rem",
+            padding: 0.6,
+            minWidth: "unset",
+            aspectRatio: !inCart ? 1 : 'unset',
+          }}
         >
-          {/* TODO: try to use translate instead to avoid shift layout */}
-          <Button
-            disabled={inCart}
-            onClick={onAdd}
-            variant="contained"
-            sx={{
-              position: "relative",
-              bottom: { xs: "3.15rem", sm: "3.2rem" },
-              right: "0.85rem",
-              padding: 0.6,
-              minWidth: "unset",
-              aspectRatio: !inCart ? 1 : 'unset',
-            }}
-          >
-            {inCart ? <Done /> : <Add />}
-          </Button>
-        </Box>
+          {inCart ? <Done /> : <Add />}
+        </Button>
+      </Box>
     </Card>
   );
 }

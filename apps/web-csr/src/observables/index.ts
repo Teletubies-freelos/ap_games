@@ -87,12 +87,19 @@ export const [useAnchorElMenu, anchorElMenuDefault$] = bind(
 export const [orderId$, setOrderId] = createSignal<string>();
 export const [useOrderId, orderIdDefault$] = bind(orderId$, '');
 
+
+// region Category Signal
+export interface ICategorySelected {
+  category_id?: number | null;
+  sub_category_id?: number | null; 
+}
 export const [categoryIdSelected$, setCategoryIdSelected] =
-  createSignal<number>();
+  createSignal<ICategorySelected>();
 export const [useCategoryIdSelected, categoryIdSelectedDefault$] = bind(
   categoryIdSelected$,
-  Number.NaN
+  { category_id: null, sub_category_id: null }
 );
+// endregion
 
 if (import.meta.env.DEV && isObserverDebugOn) {
   modalState$.subscribe((next) => console.log('modalState', next));
