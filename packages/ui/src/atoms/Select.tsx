@@ -28,6 +28,7 @@ export interface SelectFilterProps<T extends IOption = IOption> {
   placeHolder?: string;
   defaultValue?: any; 
   disabled?: boolean;
+  required?: boolean;
 }
 
 export default function SelectFilter({
@@ -40,7 +41,8 @@ export default function SelectFilter({
   textFieldProps,
   placeHolder,
   defaultValue,
-  disabled = false
+  disabled = false,
+  required = false
 }: PropsWithChildren<SelectFilterProps>) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -83,6 +85,7 @@ export default function SelectFilter({
         defaultValue={defaultValue}
         value={defaultValue}
         disabled={disabled}
+        required={required}
       >
         {items?.map(({ label, value }) => (
           <MenuItem value={value} key={label + value}>

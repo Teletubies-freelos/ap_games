@@ -18,6 +18,7 @@ import { UserInfo } from '../../services/SessionStorage';
 import { useMemo } from 'react';
 import { GeolocationProvider, ResourceNames } from '../../services/Geolocation';
 import { DeliveryWayEnum, IDeliveryWay } from '../../services/DeliveryWays';
+import { sumNumbers } from '../../utils';
 
 export interface PaymentMethodData {
   paymentMethod: string;
@@ -188,6 +189,7 @@ export default function PaymentMethodBody({
         textFieldProps={register('payment_method_id')}
         items={parsedPaymentMethods}
         placeHolder={"Indique su medio de pago"}
+        required
       ></DropDown>
 
       <TextField
@@ -199,6 +201,21 @@ export default function PaymentMethodBody({
         minRows={4}
         maxRows={5}
       />
+      <Box
+        display='flex'
+        justifyContent='space-between'
+        alignItems='center'
+        padding='0 1rem'
+      >
+        <Typography variant='h6'>Sub-Total</Typography>
+        <Typography
+          component='p'
+          variant='body2'
+          sx={{ color: 'text.secondary' }}
+        >
+          S/ {totalPrice?.toFixed(2)}
+        </Typography>
+      </Box>
       <Box
         display='flex'
         justifyContent='space-between'
@@ -218,7 +235,7 @@ export default function PaymentMethodBody({
         display='flex'
         justifyContent='space-between'
         alignItems='center'
-        padding='0 1rem'
+        padding='0.5rem 1rem'
       >
         <Typography variant='h6'>Total</Typography>
         <Typography
@@ -226,7 +243,7 @@ export default function PaymentMethodBody({
           variant='body2'
           sx={{ color: 'text.secondary' }}
         >
-          S/ {totalPrice?.toFixed(2)}
+          S/ {sumNumbers(totalPrice, orderData?.delivery_price)}
         </Typography>
       </Box>
       <Box

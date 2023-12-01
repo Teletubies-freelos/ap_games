@@ -85,7 +85,6 @@ export default function ClientDataBody() {
       }
     }
     const orderedDeliveryCostsDetail = deliveryCostsDetail.sort((a, b) => b.delivery_cost.price - a.delivery_cost.price);
-    console.log("🚀 ~ file: ClientDataBody.tsx:90 ~ const_handleSubmit:SubmitHandler<UserInfo>=useCallback ~ orderedDeliveryCostsDetail:", orderedDeliveryCostsDetail)
 
     const newData = {
       ...data,
@@ -132,6 +131,7 @@ export default function ClientDataBody() {
         data-testid='email'
         type='email'
         inputMode='email'
+        required
       />
       <FormControl>
         <RadioGroup
@@ -199,17 +199,20 @@ export default function ClientDataBody() {
           }
         )}
         label='Distrito'
+        required
       />
       <CustomTextField
         textfieldProps={register('address')}
         width='100%'
         label='Dirección'
         data-testid='address'
+        required
       />
       <CustomTextField
         textfieldProps={register('reference')}
         width='100%'
         label='Referencia'
+        required
         data-testid='reference'
       />
       <Button

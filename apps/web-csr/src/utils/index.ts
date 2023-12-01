@@ -58,3 +58,17 @@ export async function getConfig(){
   // paso 3 : si la configuracion no existe o esta vencida traerla del backend
   //paso 4: con el resultado poblar la cache de react query
 }
+
+export function sumNumbers(num1?: number, num2?: number): number | string | undefined {
+  // Use the nullish coalescing operator to default to 0 if num1 or num2 is undefined
+  // @ts-ignore
+  const result : number = parseInt(num1 ?? 0) + parseInt(num2 ?? 0);
+
+  // Check if result is undefined
+  if (result === undefined) {
+    return undefined;
+  }
+
+  // Return the result as a string with two decimal places
+  return result.toFixed(2);
+}

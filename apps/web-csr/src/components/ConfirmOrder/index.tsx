@@ -3,14 +3,14 @@ import CheckCircleOutlineOutlinedIcon from '@mui/icons-material/CheckCircleOutli
 import Typography from '@mui/material/Typography';
 import { LabelStepStatus } from '../../../../../packages/ui/src';
 import totalMoney from '../common/total.svg';
-import { 
-  usePurchaseCode, 
+import {
+  usePurchaseCode,
 } from '../../observables';
 import { useGetList } from 'data_providers';
 import { ProviderNames } from '../../types/providers';
 import { useQuery } from '@tanstack/react-query';
 import { useMemo } from 'react';
-import { reduceTotalPrice } from '../../utils';
+import { reduceTotalPrice, sumNumbers } from '../../utils';
 
 interface ConfirmedOrderProps {
   footer: JSX.Element;
@@ -18,6 +18,7 @@ interface ConfirmedOrderProps {
   priceDelivery?: JSX.Element;
   stepStatus: JSX.Element;
   sx?: SxProps;
+  deliveryPrice: number | undefined
 }
 
 export default function ConfirmedOrder({
@@ -25,13 +26,14 @@ export default function ConfirmedOrder({
   infoPayment,
   priceDelivery,
   stepStatus,
+  deliveryPrice = 0
 }: ConfirmedOrderProps) {
   const code = usePurchaseCode();
   const getCartProductList = useGetList(ProviderNames.CART)
 
-  const { data , isFetching } = useQuery(['totalProductsConfirmOrder'], async ()=> await getCartProductList())
+  const { data, isFetching } = useQuery(['totalProductsConfirmOrder'], async () => await getCartProductList())
 
-  const total = useMemo(()=> reduceTotalPrice(data) ?? 0, [data])
+  const total = useMemo(() => reduceTotalPrice(data) ?? 0, [data])
 
   return (
     <Stack
@@ -63,16 +65,28 @@ export default function ConfirmedOrder({
         {infoPayment}
       </Stack>
       <Stack marginTop='1.5rem'>
+        {
+          !!deliveryPrice && <LabelStepStatus
+            property='Sub Total'
+            value={`S/. ${total.toFixed(2)}`}
+            sx={{
+              fontSize: '1rem !important',
+              marginBottom: '-1rem !important',
+            }}
+          />
+        }
         {priceDelivery}
-        { isFetching ? <CircularProgress /> :  <LabelStepStatus
-          property='TOTAL'
-          icon={<img src={totalMoney} alt='money' />}
-          value={`S/. ${total.toFixed()}`}
-          sx={{
-            fontWeight: 'bold !important',
-            fontSize: '1.1rem !important',
-          }}
-        />}
+        {isFetching ? <CircularProgress /> :
+          <LabelStepStatus
+            property='TOTAL'
+            icon={<img src={totalMoney} alt='money' />}
+            value={`S/. ${sumNumbers(total, deliveryPrice)}`}
+            sx={{
+              paddingTop: '1.2rem',
+              fontWeight: 'bold !important',
+              fontSize: '1.1rem !important',
+            }}
+          />}
         <LabelStepStatus
           property='Número de pedido'
           value={code}

@@ -69,12 +69,18 @@ export default function PickupInfoModalBody() {
           width='50%'
           label='Nombres y Apellidos'
           data-testid='fullname'
+          type='text'
+          inputMode='text'
+          required
         />
         <CustomTextField
           textfieldProps={register('phone')}
           width='50%'
           label='Teléfono'
           data-testid='numberPhone'
+          type='number'
+          inputMode='numeric'
+          required
         />
       </Box>
       <CustomTextField
@@ -82,12 +88,16 @@ export default function PickupInfoModalBody() {
         width='100%'
         label='Correo electrónico'
         data-testid='email'
+        type='email'
+        inputMode='email'
+        required
       />
       
       <DropDown
         textFieldProps={register('payment_method_id')}
         items={parsedPaymentMethods}
         placeHolder={"Indique su medio de pago"}
+        required
       ></DropDown>
 
       <TextField
@@ -99,21 +109,6 @@ export default function PickupInfoModalBody() {
         minRows={4}
         maxRows={5}
       />
-      <Box
-        display='flex'
-        justifyContent='space-between'
-        alignItems='center'
-        padding='0 1rem'
-      >
-        <Typography variant='h6'>Costo de delivery</Typography>
-        <Typography
-          component='p'
-          variant='body2'
-          sx={{ color: 'text.secondary' }}
-        >
-          S/ 20.00
-        </Typography>
-      </Box>
       <Box
         display='flex'
         justifyContent='space-between'

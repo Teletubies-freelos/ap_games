@@ -5,13 +5,13 @@ export function ListColumns(): MRT_ColumnDef<IDeliveryCosts>[] {
   return [
     {
       header: 'Nombre del costo de envío',
-      accessorKey: 'type',
-      Cell: ({ renderedCellValue }) => deliveryCostsTypesText[renderedCellValue as DeliveryCostsTypes],
+      accessorKey: 'description',
       size: 50,
     },
     {
       header: 'Tipo',
-      accessorKey: 'description',
+      accessorKey: 'type',
+      Cell: ({ renderedCellValue }) => deliveryCostsTypesText[renderedCellValue as DeliveryCostsTypes],
       size: 50,
     },
     {

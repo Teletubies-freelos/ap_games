@@ -26,4 +26,5 @@ export { default as TotalIcon } from './atoms/TotalIcon';
 export { default as Tag } from './atoms/Tag';
 export { default as FacebookLogo } from './atoms/FacebookLogo';
 export { default as InstagramLogo } from './atoms/InstagramLogo';
+export { default as TiktokLogo } from './atoms/TiktokLogo';
 export { default as Discount } from './atoms/Discount';

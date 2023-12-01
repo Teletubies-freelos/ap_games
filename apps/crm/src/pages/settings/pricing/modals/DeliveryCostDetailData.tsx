@@ -35,8 +35,8 @@ export const DeliveryCostDetailData = ({ data }: { data: IFormDeliveryCostData }
             description: data.description,
             department_id: 0,
             district_id: 0,
-            category_id: 0,
-            sub_category_id: 0
+            category_id: -1,
+            sub_category_id: -1
         }
     });
 
@@ -98,7 +98,9 @@ export const DeliveryCostDetailData = ({ data }: { data: IFormDeliveryCostData }
             },
         }
     );
-    const categoriesDropDown = categories?.map(({ category_id, name }) => ({ label: name, value: category_id })) || [];
+    let categoriesDropDown = categories?.map(({ category_id, name }) => ({ label: name, value: category_id })) || [];
+    categoriesDropDown = [{ label: 'Todos', value: 0 }, ...categoriesDropDown];
+
     let subCategories = categories?.find(({ category_id }) => category_id === watch("category_id"))?.sub_categories?.map(({ sub_category_id, name }) => ({
         label: name,
         value: sub_category_id
@@ -106,6 +108,10 @@ export const DeliveryCostDetailData = ({ data }: { data: IFormDeliveryCostData }
 
     if(watch("category_id") != 0){
         subCategories = [{ label: 'Todos', value: 0 }, ...subCategories];
+    }
+    else if(watch("category_id") == 0){
+        subCategories = [{ label: 'Consolas', value: 1 }, { label: 'Videojuegos', value: 2 }, { label: 'Accesorios', value: 3 }, { label: 'Coleccionables', value: 4 }];
+
     }
 
     const handleFinish = async (data: IFormDeliveryCostDetail) => {
@@ -215,7 +221,7 @@ export const DeliveryCostDetailData = ({ data }: { data: IFormDeliveryCostData }
             </Box>
             <Typography>Asigna la categoría y subcategoría del costo de envío (Si no seleccionas ninguno aplicará a todos)</Typography>
             <DropDown textFieldProps={register('category_id')} items={categoriesDropDown} placeHolder="Categorias" />
-            <DropDown textFieldProps={register('sub_category_id')} items={subCategories} placeHolder="Sub Categorias" disabled={watch("category_id") == 0} />
+            <DropDown textFieldProps={register('sub_category_id')} items={subCategories} placeHolder="Sub Categorias" disabled={watch("category_id") == -1} />
             <Button variant="contained" type="submit">Agregar</Button>
         </Box>
     )

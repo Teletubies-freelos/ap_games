@@ -15,6 +15,7 @@ const ConfirmOrderPickup = () => {
 
   return(
     <ConfirmedOrder 
+      deliveryPrice={undefined}
       stepStatus={
         <StepStatus
           steps={[{label: 'En tienda', isActive: true}, {label:'Entregado'}]}
