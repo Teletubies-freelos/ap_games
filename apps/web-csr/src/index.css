@@ -22,10 +22,19 @@
 
 #input-with-icon-textfield{
   -webkit-box-shadow: unset;
+  box-shadow: unset;
   -webkit-text-fill-color: unset;
   caret-color: unset;
 }
 
 .MuiStepLabel-label{
   font-weight: 600 !important;
+}
+input:-webkit-autofill,
+input:-webkit-autofill:hover, 
+input:-webkit-autofill:focus {
+    -webkit-text-fill-color: white;
+    -webkit-box-shadow: 0 0 0px 1000px #1F1D2B inset;
+    transition: background-color 5000s ease-in-out 0s;
+    caret-color: white;
 }

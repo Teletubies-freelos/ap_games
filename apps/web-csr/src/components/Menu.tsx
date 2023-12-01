@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { Accordion, AccordionDetails, AccordionSummary, Box, Paper, Popover, Stack, Typography, styled } from "@mui/material";
 import { ExpandMore as ExpandMoreIcon } from "@mui/icons-material";
-import { FacebookLogo, InstagramLogo } from "../../../../packages/ui/src";
+import { FacebookLogo, InstagramLogo, TiktokLogo } from "../../../../packages/ui/src";
 import { setAnchorElMenu, setCategoryIdSelected, useAnchorElMenu } from "../observables";
 import { useGetList } from "data_providers";
 import { ProviderNames } from "../types/providers";
@@ -125,11 +125,14 @@ export default function Menu() {
           <Box sx={{ display: "flex", justifyContent: "flex-end", gap: "1rem", alignItems: "center" }}>
             <Typography variant="body1" sx={{ fontSize: "1rem" }}>Síguenos</Typography>
 
-            <Link to="https://www.facebook.com" target="_blank">
+            <Link to="https://www.facebook.com/apgames.pe" target="_blank">
               <FacebookLogo />
             </Link>
-            <Link to="https://www.instagram.com" target="_blank">
+            <Link to="https://www.instagram.com/apgames.pe/" target="_blank">
               <InstagramLogo />
+            </Link>
+            <Link to="https://www.tiktok.com/@apgames_oficial?is_from_webapp=1&sender_device=pc" target="_blank">
+              <TiktokLogo />
             </Link>
           </Box>
         </Stack>

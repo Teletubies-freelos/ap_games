@@ -21,7 +21,7 @@ export default function CustomTextField({
 }: CustomTextFieldProps) {
   return (
     <TextField
-      id='standard-basic'
+      id={`standard-basic-${label?.replace(/ /g,"-")}`}
       variant='standard'
       required={required}
       type={type}
@@ -37,12 +37,17 @@ export default function CustomTextField({
         padding: '0.5rem  !important',
         '& .MuiFormLabel-root': {
           left: '.5rem',
-          '&.Mui-focused': {
-            top: '0.65rem !important',
-          },
+          top: '.3rem',
+          position: 'absolute',
+          pointerEvents: 'none',  backgroundColor: 'transparent !important',
+
+        },'& .MuiInputBase-input:-internal-autofill-selected': {
+          backgroundColor: 'transparent !important',
         },
         '& .MuiInputBase-input': {
           height: '.5em !important',
+          backgroundColor: 'transparent !important',
+
         },
         '& .MuiInputBase-root': {
           padding: '0 !important',

@@ -83,7 +83,7 @@ export default function PickupStorePreConfirmationBody() {
     const totalPrice = reduceTotalPrice(data);
 
     const parsedPaymentMethods = paymentMethods?.reduce((hash, method) => {
-        hash[method.payment_method_id] = method.name;
+        hash[method.payment_method_id] = method.meta;
         return hash;
     }, {});
 
@@ -177,21 +177,6 @@ export default function PickupStorePreConfirmationBody() {
                 maxRows={5}
                 value={orderData?.comment}
             />
-            <Box
-                display='flex'
-                justifyContent='space-between'
-                alignItems='center'
-                padding='0 1rem'
-            >
-                <Typography variant='h6'>Costo de delivery</Typography>
-                <Typography
-                    component='p'
-                    variant='body2'
-                    sx={{ color: 'text.secondary' }}
-                >
-                    S/ 20.00
-                </Typography>
-            </Box>
             <Box
                 display='flex'
                 justifyContent='space-between'

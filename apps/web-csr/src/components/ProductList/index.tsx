@@ -1,27 +1,20 @@
 import {
-  Accordion,
-  AccordionSummary,
   Box,
   Chip,
   MenuItem,
   Paper,
-  Typography,
   type SxProps,
-  AccordionDetails,
-  Stack,
 } from "@mui/material";
 import { VirtuosoGrid } from "react-virtuoso";
 import { DropDown, Isotype } from "../../../../../packages/ui/src";
 import { HookFilters, useProducts } from "./hooks/useFeaturedProducts";
 import { Loading } from "./Loading";
-
 import Filters from "./Filters";
 
 import { itemContentRender } from "./Containers/itemContentRender";
 import { ItemContainer, ListContainer } from "./Containers/ListContainer";
 import { useCallback, useMemo, useState } from "react";
 import { ICategorySelected, setCategoryIdSelected, setIsWishList } from "../../observables";
-import { ExpandMore as ExpandMoreIcon } from "@mui/icons-material";
 const sxProductListHeader: SxProps = {
   width: "100%",
   display: "flex",
@@ -34,22 +27,45 @@ const sxProductListHeader: SxProps = {
 
 export default function ProductsList({ categorySelected, categories }: { categorySelected: ICategorySelected, categories: any }) {
   const [filters, setFilters] = useState<HookFilters>({});
-
   const { products, fetchNextPage } = useProducts(categorySelected, filters);
 
   const _handleChangeCategory = (category_id: number, sub_category_id: number) => {
-
     setCategoryIdSelected({
       category_id,
       sub_category_id
     });
   };
+
   const loadMore = useCallback(() => {
     fetchNextPage();
   }, [fetchNextPage]);
 
   const ItemContent = useMemo(() => itemContentRender(() => setIsWishList(true)), []);
+  const generateSelectedValue = () => {
+    if (categorySelected?.category_id === 0 && categorySelected?.sub_category_id === 0) {
+      return 'all';
+    } else {
+      return `${categorySelected?.category_id}${categorySelected?.sub_category_id !== 0 ? `-${categorySelected?.sub_category_id}` : ''}`;
+    }
+  };
+  const options = categories?.reduce((acc: any, { category_id, name, sub_categories }: { category_id: number, name: string, sub_categories: any[] }) => {
+    acc.push(
+      <MenuItem key={category_id} value={category_id} onClick={() => { _handleChangeCategory(category_id, 0) }}>
+        {name}
+      </MenuItem>
+    );
 
+    sub_categories?.forEach(({ sub_category_id, name: subCategoryName }: { sub_category_id: number, name: string }) => {
+      acc.push(
+        <MenuItem sx={{ paddingLeft: '2rem' }} key={`${category_id}-${sub_category_id}`} value={`${category_id}-${sub_category_id}`}
+          onClick={() => { _handleChangeCategory(category_id, sub_category_id) }}>
+          {subCategoryName}
+        </MenuItem>
+      );
+    });
+
+    return acc;
+  }, []);
   return (
     <Paper
       id="product-list"
@@ -71,19 +87,20 @@ export default function ProductsList({ categorySelected, categories }: { categor
         />
         <DropDown
           selectProps={{
-            value: categorySelected?.category_id ?? "all"
+            value: generateSelectedValue()
           }}
-          defaultValue={categorySelected?.category_id || "all"}
+          defaultValue={generateSelectedValue()}
           // onChange={_handleChange}
           sxForm={{
             width: { xs: "100%", md: "30%" },
             order: { xs: "2", md: "3" },
           }}
         >
-          <MenuItem value={"all"} onClick={() => {_handleChangeCategory(0, 0)}}>
+          <MenuItem value={"all"} onClick={() => { _handleChangeCategory(0, 0) }}>
             Todos
           </MenuItem>
-          {categories?.map(({ category_id, name, sub_categories }: { category_id: number, name: string, sub_categories: any[] }) => (
+          {options}
+          {/* {categories?.map(({ category_id, name, sub_categories }: { category_id: number, name: string, sub_categories: any[] }) => (
             <Accordion
               sx={{
                 background: "transparent",
@@ -106,10 +123,10 @@ export default function ProductsList({ categorySelected, categories }: { categor
                 <Stack>
                   {sub_categories?.map(({ sub_category_id, name }) => (
                     <MenuItem
-                      component="a"
                       key={`category-${category_id}-${sub_category_id}`}
                       onClick={() => _handleChangeCategory(category_id, sub_category_id)}
                       sx={{ textDecoration: "none" }}
+                      value={`${sub_category_id}-${category_id}`}
                     >
                       <Typography
                         sx={{
@@ -128,7 +145,7 @@ export default function ProductsList({ categorySelected, categories }: { categor
                 </Stack>
               </AccordionDetails>
             </Accordion>
-          ))}
+          ))} */}
         </DropDown>
         <Filters>
           <Chip

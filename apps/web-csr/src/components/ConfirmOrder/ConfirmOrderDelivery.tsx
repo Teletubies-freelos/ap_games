@@ -34,6 +34,7 @@ const ConfirmOrderDelivery = () => {
 
   return (
     <ConfirmedOrder
+      deliveryPrice={orderData?.delivery_price}
       stepStatus={
         <StepStatus
           steps={[{ label: 'En tienda', isActive: true }, { label: 'Entregado' }]}
@@ -55,16 +56,16 @@ const ConfirmOrderDelivery = () => {
       priceDelivery={<DeliveryPriceLocal deliveryPrice={orderData?.delivery_price} />}
       infoPayment={
         <InfoPayment
-          titleInfo='Números de cuenta'
+          titleInfo='Método de Pago'
           content={
             <>
               {
                 paymentsInfo?.map(({ meta, name, owner, type, number, alternative_number }) => (
                   <>
                     <Typography>
-                      {meta ?? name} - {owner}
+                      {meta ?? name} { owner && `- ${owner}`}
                     </Typography>
-                    <Typography>{type}: {number}</Typography>
+                    {!!number && <Typography>{type}: {number}</Typography>}
                     {!!alternative_number && <Typography>CCI interbancario: {alternative_number}</Typography>}
                   </>
                 ))
