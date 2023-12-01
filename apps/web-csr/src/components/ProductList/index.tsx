@@ -42,7 +42,7 @@ export default function ProductsList({ categorySelected, categories }: { categor
 
   const ItemContent = useMemo(() => itemContentRender(() => setIsWishList(true)), []);
   const generateSelectedValue = () => {
-    if (categorySelected?.category_id === 0 && categorySelected?.sub_category_id === 0) {
+    if ((categorySelected?.category_id === 0 && categorySelected?.sub_category_id === 0) || (categorySelected?.category_id == null && categorySelected?.sub_category_id == null ) ) {
       return 'all';
     } else {
       return `${categorySelected?.category_id}${categorySelected?.sub_category_id !== 0 ? `-${categorySelected?.sub_category_id}` : ''}`;
