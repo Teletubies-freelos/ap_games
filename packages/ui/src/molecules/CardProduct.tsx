@@ -3,7 +3,6 @@ import {
   Box,
   Button,
   Card,
-  CardContent,
   CardMedia,
   Typography,
 } from "@mui/material";
@@ -49,15 +48,17 @@ export default function CardProduct({
       <Box
         onClick={onCardClick}
         display="flex"
-        >
+        width={"100%"}
+      >
         <Box
+          width={"30%"}
           sx={{
-            minWidth: '8rem',
-            height: '10rem',
+            height: '11rem',
             overflow: 'hidden',
             display: 'flex',
             justifyContent: 'center',
             alignItems: 'flex-end',
+            paddingLeft: '.2rem'
           }}
         >
           <CardMedia
@@ -65,22 +66,22 @@ export default function CardProduct({
             alt={alt}
             src={src}
             sx={{
-              width: '90%',
-              height: '90%',
-              objectFit: 'cover',
+              width: '100%',
+              height: '100%',
+              objectFit: 'contain',
             }}
           />
         </Box>
-        <CardContent
+        <Box
+          width="70%"
           sx={{
             padding: "1rem !important",
             display: "flex",
             flexDirection: "column",
             justifyContent: "space-between",
-            width: "70%",
           }}
         >
-          <Box style={{maxWidth: '95%'}}>
+          <Box style={{ maxWidth: '95%' }}>
             <Typography
               variant="h3"
               style={{
@@ -130,7 +131,7 @@ export default function CardProduct({
               {!!previousPrice && <Tag label="Oferta" icon={<Discount />} />}
             </Box>
           </Box>
-        </CardContent>
+        </Box>
       </Box>
       <Box
         display="flex"
