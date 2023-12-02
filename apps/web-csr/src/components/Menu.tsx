@@ -94,8 +94,7 @@ export default function Menu() {
                   <Box
                     component="a"
                     key={`category-${category_id}`}
-                    href="/#product-list"
-                    sx={{ textDecoration: "none" }}
+                    sx={{ textDecoration: "none", cursor:'pointer' }}
                   >
                     <Typography
                       variant="h3"
@@ -105,7 +104,7 @@ export default function Menu() {
                       }}
                       onClick={() => {
                         handleClose()
-                        setCategoryIdSelected(category_id);
+                        setCategoryIdSelected({category_id, sub_category_id: 0});
                       }}
                     >
                       {name || category_id}
