@@ -13,9 +13,10 @@ import { ICartProduct } from '../../data/indexedDB';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useConfirmRequest } from '../../hooks/useConfirmRequest';
 import { UserInfo } from '../../services/SessionStorage';
-import { useMemo } from 'react';
+import { useMemo, useState } from 'react';
 import { DeliveryWayEnum, IDeliveryWay } from '../../services/DeliveryWays';
 import { reduceQuantity, reduceTotalPrice } from '../../utils';
+import { LoadingPage } from '../../../../../packages/ui/src';
 
 export interface PickUpInfo {
     paymentMethod: string;
@@ -38,11 +39,14 @@ export default function PickupStorePreConfirmationBody() {
     const { handleSubmit } = useForm<PickUpInfo>();
     const createToSession = useCreateOne(ProviderNames.SESSION_STORAGE);
     const confirmRequest = useConfirmRequest();
-    const queryClient = useQueryClient()
+    const queryClient = useQueryClient();
+
+    const [isCreatingOrder, setIsCreatingOrder] = useState<boolean>(false);
 
     const getClientData = useGetOne<UserInfo>(ProviderNames.SESSION_STORAGE);
     const { data: orderData } = useQuery(['order'], async () => await getClientData());
     const handleFinish = async (data: PickUpInfo) => {
+        setIsCreatingOrder(true);
         const orderStatuses: { order_status_id: number; name: string }[] | undefined = queryClient.getQueryData(['orderStatus'])
 
         const deliveryWays: IDeliveryWay[] | undefined = queryClient.getQueryData(['deliveryWays'])
@@ -64,7 +68,7 @@ export default function PickupStorePreConfirmationBody() {
         await createToSession(newDataPayment);
         const requestOrderId = await confirmRequest(newDataPayment);
         requestOrderId && setPurchaseCode(requestOrderId);
-        
+        setIsCreatingOrder(false);
         setModalState({
             data: {
                 name: ModalState.IN_STORE_CONFIRMATION,
@@ -94,6 +98,9 @@ export default function PickupStorePreConfirmationBody() {
         email: ["Correo", orderData?.email],
         phone: ["Teléfono", orderData?.phone?.toString()],
     }), [orderData]);
+
+    if(isCreatingOrder)
+        return (<LoadingPage minHeight={"40vh"}/>);
 
     return (
         <Box
