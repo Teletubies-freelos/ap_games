@@ -20,12 +20,11 @@ interface ISearchBarQuery {
 const BannnerImage = ({ url, onClick }: { url: string, title: string, onClick: any }) => (
     <Box
         display="flex"
-        height="9rem"
-        width="25rem"
+        height="15rem"
+        width="24.5rem"
         alignItems="center"
         borderRadius={2.5}
-        position="relative"
-    >
+        position="relative">
         <IconButton
             sx={{
                 position: "absolute",
@@ -34,8 +33,7 @@ const BannnerImage = ({ url, onClick }: { url: string, title: string, onClick: a
                 backgroundColor: 'rgba(0,0,0,0.5);'
             }}
             onClick={onClick}
-            children={<KeyboardArrowUpIcon />}
-        />
+            children={<KeyboardArrowUpIcon />} />
         <img
             src={url}
             srcSet={url}
@@ -45,8 +43,7 @@ const BannnerImage = ({ url, onClick }: { url: string, title: string, onClick: a
                 width: "100%",
                 contain: "fit",
             }}
-            loading="lazy"
-        />
+            loading="lazy" />
     </Box>
 );
 
