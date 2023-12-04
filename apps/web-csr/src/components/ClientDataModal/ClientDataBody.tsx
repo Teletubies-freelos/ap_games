@@ -7,7 +7,6 @@ import {
   FormControlLabel,
 } from '@mui/material';
 import { SubmitHandler, useForm } from 'react-hook-form';
-import CustomTextField from '../common/CustomTextField';
 import SelectModals from '../common/SelectModals';
 import { Button } from '../../../../../packages/ui/src';
 
@@ -23,6 +22,7 @@ import {
 import { IDeliveryCostsDetailResponse } from '../../services/DeliveryCosts';
 import { useQuery } from '@tanstack/react-query';
 import { ICartProduct } from '../../data/indexedDB';
+import CustomInputField from '../common/CustomInputField';
 
 type UserInfo = {
   client_name: string;
@@ -41,7 +41,8 @@ const parseDestination = (destination: Destination) =>
 export default function ClientDataBody() {
   const getGeolocation: typeof GeolocationProvider.prototype.getList = useSyncGetList(SyncProviderNames.GEOLOCATION);
   const getGeolocationOne: typeof GeolocationProvider.prototype.getOne = useSyncGetOne(SyncProviderNames.GEOLOCATION);
-  const { register, handleSubmit } = useForm<UserInfo>();
+  const { register, handleSubmit, formState: { errors }, control } = useForm<UserInfo>({ criteriaMode: "all", });
+  console.log("🚀 ~ file: ClientDataBody.tsx:45 ~ ClientDataBody ~ errors:", errors)
   const createToSession = useCreateOne(ProviderNames.SESSION_STORAGE);
   const getOneDeliveryCost = useGetOne<IDeliveryCostsDetailResponse[]>(ProviderNames.DELIVERY_COSTS)
   const [destination, setDestination] = useState<Destination>('capital');
@@ -51,8 +52,8 @@ export default function ClientDataBody() {
   const getCartProducts = useGetList<ICartProduct>(ProviderNames.CART);
   const { data: products } = useQuery(['cart'], async () => await getCartProducts());
   const getProducts = useGetList(ProviderNames.PRODUCTS);
-  
-  
+
+
   const _handleSubmit: SubmitHandler<UserInfo> = useCallback(async (data) => {
     const department_id = getGeolocationOne({
       filter: {
@@ -105,33 +106,52 @@ export default function ClientDataBody() {
       padding='1.4rem'
     >
       <Box display='flex' gap='1rem'>
-        <CustomTextField
-          textfieldProps={register('client_name')}
+
+        <CustomInputField
+          name="client_name"
+          control={control}
+          label='Nombres y Apellidos'
+          data-testid='name'
+          type='text'
+          inputMode='text'
+          error={!!errors.client_name}
+          helperText={errors.client_name?.message}
+          rules={{ required: 'Ingresar Nombres y Apellidos' }}
+          width='50%'
+        />
+        {/* <CustomTextField
+          textfieldProps={register('client_name', { required: "ERROR EN EL CAMPO"})}
           width='50%'
           label='Nombres y Apellidos'
           data-testid='name'
           type='text'
           inputMode='text'
           required
-        />
-        <CustomTextField
-          textfieldProps={register('phone')}
-          width='50%'
+        /> */}
+        <CustomInputField
+          name="phone"
+          control={control}
           label='Teléfono'
           data-testid='numberPhone'
           type='number'
           inputMode='numeric'
-          required
+          error={!!errors.phone}
+          helperText={errors.phone?.message}
+          rules={{ required: 'Ingresar Teléfono' }}
+          width='50%'
         />
       </Box>
-      <CustomTextField
-        textfieldProps={register('email')}
+      <CustomInputField
+        name="email"
+        control={control}
         width='100%'
         label='Correo electrónico'
         data-testid='email'
         type='email'
         inputMode='email'
-        required
+        error={!!errors.email}
+        helperText={errors.email?.message}
+        rules={{ required: 'Ingresar Correo' }}
       />
       <FormControl>
         <RadioGroup
@@ -201,19 +221,29 @@ export default function ClientDataBody() {
         label='Distrito'
         required
       />
-      <CustomTextField
-        textfieldProps={register('address')}
+      <CustomInputField
+        name="address"
+        control={control}
         width='100%'
         label='Dirección'
         data-testid='address'
-        required
+        type='text'
+        inputMode='text'
+        error={!!errors.address}
+        helperText={errors.address?.message}
+        rules={{ required: 'Ingresar Dirección' }}
       />
-      <CustomTextField
-        textfieldProps={register('reference')}
+      <CustomInputField
+        name="reference"
+        control={control}
         width='100%'
         label='Referencia'
-        required
         data-testid='reference'
+        type='text'
+        inputMode='text'
+        error={!!errors.reference}
+        helperText={errors.reference?.message}
+        rules={{ required: 'Ingresar Referencia' }}
       />
       <Button
         type={'submit'}

@@ -151,7 +151,7 @@ export default function Home() {
   const getCategoryBySection = (category: Categories) =>{
     const id = categories?.find(({name}) => name == category)?.category_id;
     if(id){
-      setCategoryIdSelected(id);
+      setCategoryIdSelected({category_id: id, sub_category_id: 0});
     }
   }
 
