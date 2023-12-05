@@ -26,7 +26,6 @@ export default function CustomInputField({
     error,
     helperText
 }: CustomInputFieldProps) {
-    console.log("🚀 ~ file: CustomInputField.tsx:29 ~ error:", error)
     return (
         <Controller
             name={name}
@@ -48,25 +47,21 @@ export default function CustomInputField({
                         width: { width },
                         background: `${palette.background.default} !important`,
                         border: `1px solid ${palette.primary.main} !important`,
-                        fontSize: '16px',
                         borderRadius: '0.3rem !important',
-                        padding: '0.5rem  !important',
+                        paddingLeft: '0.5rem  !important',
                         '& .MuiFormLabel-root': {
                             left: '.5rem',
                             top: '.3rem',
-                            position: 'absolute',
-                            pointerEvents: 'none', backgroundColor: 'transparent !important',
-
+                            pointerEvents: 'none', 
+                            backgroundColor: 'transparent !important',
                         }, 
                         '& .MuiInputBase-input:-internal-autofill-selected': {
                             backgroundColor: 'transparent !important',
                         },
                         '& .MuiInputBase-input': {
-                            height: '.5em !important',
                             backgroundColor: 'transparent !important',
                         },
                         '& .MuiInputBase-root': {
-                            padding: '0 !important',
                             border: 'none !important',
                             '&:after': {
                                 border: 'none !important',
