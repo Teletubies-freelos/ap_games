@@ -49,6 +49,7 @@ export default function CustomInputField({
                         border: `1px solid ${palette.primary.main} !important`,
                         borderRadius: '0.3rem !important',
                         paddingLeft: '0.5rem  !important',
+                        paddingBottom: '.6rem',
                         '& .MuiFormLabel-root': {
                             left: '.5rem',
                             top: '.3rem',
