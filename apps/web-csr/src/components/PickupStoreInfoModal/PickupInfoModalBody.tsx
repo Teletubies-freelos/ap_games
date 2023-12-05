@@ -11,7 +11,7 @@ import { useForm } from 'react-hook-form';
 import { ICartProduct } from '../../data/indexedDB';
 import { useQuery } from '@tanstack/react-query';
 import { reduceTotalPrice } from '../../utils';
-import CustomTextField from '../common/CustomTextField';
+import CustomInputField from '../common/CustomInputField';
 
 export interface PickUpInfo {
   paymentMethod: string;
@@ -24,7 +24,7 @@ export interface PickUpInfo {
 }
 
 export default function PickupInfoModalBody() {
-  const { register, handleSubmit } = useForm<PickUpInfo>();
+  const { register, handleSubmit, formState: { errors }, control } = useForm<PickUpInfo>({ criteriaMode: "all", });
 
   const createToSession = useCreateOne(ProviderNames.SESSION_STORAGE);
 
@@ -64,40 +64,51 @@ export default function PickupInfoModalBody() {
       padding='1.4rem'
     >
       <Box display='flex' gap='1rem'>
-        <CustomTextField
-          textfieldProps={register('client_name')}
-          width='50%'
+      <CustomInputField
+          name="client_name"
+          control={control}
           label='Nombres y Apellidos'
           data-testid='fullname'
           type='text'
           inputMode='text'
-          required
-        />
-        <CustomTextField
-          textfieldProps={register('phone')}
+          error={!!errors.client_name}
+          helperText={errors.client_name?.message}
+          rules={{ required: 'Ingresar Nombres y Apellidos' }}
           width='50%'
-          label='Teléfono'
-          data-testid='numberPhone'
-          type='number'
-          inputMode='numeric'
-          required
         />
+        <CustomInputField
+        name="phone"
+        control={control}
+        label='Teléfono'
+        data-testid='numberPhone'
+        type='number'
+        inputMode='numeric'
+        error={!!errors.phone}
+        helperText={errors.phone?.message}
+        rules={{ required: 'Ingresar Teléfono' }}
+        width='50%'
+      />
       </Box>
-      <CustomTextField
-        textfieldProps={register('email')}
+      <CustomInputField
+        name="email"
+        control={control}
         width='100%'
         label='Correo electrónico'
         data-testid='email'
         type='email'
         inputMode='email'
-        required
+        error={!!errors.email}
+        helperText={errors.email?.message}
+        rules={{ required: 'Ingresar Correo' }}
       />
-      
       <DropDown
         textFieldProps={register('payment_method_id')}
         items={parsedPaymentMethods}
         placeHolder={"Indique su medio de pago"}
         required
+        sxSelect={{
+          height: "4rem"
+        }}
       ></DropDown>
 
       <TextField
