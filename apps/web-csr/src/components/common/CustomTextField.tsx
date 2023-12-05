@@ -47,7 +47,6 @@ export default function CustomTextField({
         '& .MuiInputBase-input': {
           height: '.5em !important',
           backgroundColor: 'transparent !important',
-
         },
         '& .MuiInputBase-root': {
           padding: '0 !important',

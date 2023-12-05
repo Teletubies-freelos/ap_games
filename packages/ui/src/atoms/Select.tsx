@@ -66,9 +66,24 @@ export default function SelectFilter({
 
   return (
     <FormControl sx={sxForm}>
-      {
-        placeHolder && <InputLabel>{placeHolder}</InputLabel>
-      }
+      {placeHolder && (
+        <InputLabel
+          sx={{
+            top: "1rem !important",
+            "& .MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input ": {
+              top: "2rem !important",
+            },
+            "& .MuiInputLabel-shrink": {
+              top: "-4% !important",
+            },
+            "& .MuiFormLabel-root MuiInputLabel-root ": {
+              top: ".3rem !important",
+            },
+          }}
+        >
+          {placeHolder}
+        </InputLabel>
+      )}
       <MUISelect
         // @ts-expect-error no idea why
         onChange={onChange}
