@@ -1,5 +1,5 @@
-import { TextField, TextFieldProps } from '@mui/material';
-import { Control, Controller, FieldErrors, RegisterOptions } from 'react-hook-form';
+import { TextField } from '@mui/material';
+import { Control, Controller, RegisterOptions } from 'react-hook-form';
 
 interface CustomInputFieldProps {
     name: string;
