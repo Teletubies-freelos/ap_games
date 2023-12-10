@@ -52,6 +52,9 @@ export function GeneralLayout({
               transform: 'translate(-10px,-40px) scale(1.1)',
             },
           }}
+          onClick={() => {
+            window.open('https://wa.link/n2r4gb', '_blank');
+          }}
         />
       </Box>
       <Modal />
