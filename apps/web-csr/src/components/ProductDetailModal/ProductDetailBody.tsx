@@ -55,17 +55,25 @@ export default function ProductDetailBody({ productId }: Readonly<ProductDetailP
           display: "flex",
           flexDirection: "row",
           gap: 3,
-          marginBottom: "14px"
+          marginBottom: "14px",
+          '@media (max-width: 600px)': {
+            flexDirection: 'column', // Switch to column layout on smaller screens
+          },
         }}
       > 
-        <Box sx={{ display:'flex', alignItems: 'center'}}>
+        <Box sx={{ 
+          display:'flex', 
+          alignItems: 'center',
+          '@media (max-width: 600px)': {
+            justifyContent: 'center'
+          },}}>
           <img width={200} src={product?.src} alt={product?.alt} />
         </Box>
         <Box
           sx={{
             display: "flex",
             flexDirection: "column",
-            gap: "1rem"
+            gap: "1rem",
           }}
         >
           {!!product?.previousPrice && (
@@ -94,7 +102,19 @@ export default function ProductDetailBody({ productId }: Readonly<ProductDetailP
             </Typography>
             <Typography
               variant="body1"
-              sx={{ fontSize: "0.9rem", fontWeight: 500, minHeight: '5rem', maxHeight: '35vh', overflow: 'scroll'}}
+              sx={{
+                fontSize: "0.9rem",
+                fontWeight: 500,
+                minHeight: '5rem',
+                maxHeight: '35vh',
+                overflow: 'scroll',
+                '@media (max-width: 600px)': {
+                  display: '-webkit-box',
+                  WebkitLineClamp: 8,
+                  WebkitBoxOrient: 'vertical',
+                  textOverflow: 'ellipsis',
+                }
+              }}
             >
               { product?.description }
             </Typography>
@@ -102,7 +122,10 @@ export default function ProductDetailBody({ productId }: Readonly<ProductDetailP
           <Box
             sx={{
               display: "flex",
-              gap: "2.25rem"
+              gap: "2.25rem",
+              '@media (max-width: 600px)': {
+                justifyContent: 'center'
+              },
             }}
           >
             {!!product?.previousPrice && (
