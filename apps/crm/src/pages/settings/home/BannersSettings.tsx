@@ -163,7 +163,7 @@ export const BannerSettings = () => {
         formData.append('file', file);
 
         const { data } = await axios.post(
-            `${env.PHOTO_UPLOAD_URL}/index.php`,
+            `${env.PHOTO_UPLOAD_URL}/upload.php`,
             formData,
             {
                 headers: {
@@ -171,8 +171,9 @@ export const BannerSettings = () => {
                 },
             }
         );
-        setFileName(data);
-        setValue("banner_img_url", `${env.PHOTO_UPLOAD_URL}/${data}`);
+        const { imagePath } = data ?? {};
+        setFileName(imagePath.replace("uploads/", ""));
+        setValue("banner_img_url", `${env.PHOTO_UPLOAD_URL}/${imagePath}`);
     };
 
     const handleDeleteFeatured = async () => {

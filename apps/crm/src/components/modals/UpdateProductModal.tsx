@@ -157,19 +157,21 @@ const UpdateProductModal = ({ productId }: { productId: number | undefined }) =>
         formData.append('file', file);
 
         const { data } = await axios.post(
-            `${env.PHOTO_UPLOAD_URL}/index.php`,
+            `${env.PHOTO_UPLOAD_URL}/upload.php`,
             formData,
             {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
+              headers: {
+                'Content-Type': 'multipart/form-data',
+              },
             }
-        );
-
-        setImageUrls({
+          );
+      
+          const { imagePath } = data ?? {};
+      
+          setImageUrls({
             ...imageUrls,
-            [imageKey]: `${env.PHOTO_UPLOAD_URL}/${data}`,
-        });
+            [imageKey]: `${env.PHOTO_UPLOAD_URL}/${imagePath}`,
+          });
     };
     const categoriesDropDown = categories?.map(({ category_id, name }) => ({ label: name, value: category_id })) || [];
     let subCategories = categories?.find(({ category_id }) => category_id === watch("category_id"))?.sub_categories?.map(({ sub_category_id, name }) => ({

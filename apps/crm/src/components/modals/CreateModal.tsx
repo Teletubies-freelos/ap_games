@@ -129,7 +129,7 @@ const CreateModal = () => {
     formData.append('file', file);
 
     const { data } = await axios.post(
-      `${env.PHOTO_UPLOAD_URL}/index.php`,
+      `${env.PHOTO_UPLOAD_URL}/upload.php`,
       formData,
       {
         headers: {
@@ -138,9 +138,11 @@ const CreateModal = () => {
       }
     );
 
+    const { imagePath } = data ?? {};
+
     setImageUrls({
       ...imageUrls,
-      [imageKey]: `${env.PHOTO_UPLOAD_URL}/${data}`,
+      [imageKey]: `${env.PHOTO_UPLOAD_URL}/${imagePath}`,
     });
   };
 

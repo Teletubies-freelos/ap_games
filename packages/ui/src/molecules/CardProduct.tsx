@@ -112,7 +112,7 @@ export default function CardProduct({
               {!!previousPrice && (
                 <Typography
                   variant="body2"
-                  sx={{ textDecoration: "line-through", fontSize: "1.3rem", }}
+                  sx={{ textDecoration: "line-through", fontSize: "1.1rem", }}
                 >
                   S/ {previousPrice}
                 </Typography>
@@ -120,7 +120,7 @@ export default function CardProduct({
               <Typography
                 variant="body2"
                 sx={{
-                  fontSize: "1.3rem",
+                  fontSize: "1.1rem",
                   color: (theme) => theme.palette.text.primary,
                 }}
               >
