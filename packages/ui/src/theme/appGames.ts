@@ -29,7 +29,7 @@ const typography = {
     fontSize: "0.75rem",
   },
   body2: {
-    color: "#444",
+    color: "#767676a8",
     fontWeight: "bold",
   },
 };
