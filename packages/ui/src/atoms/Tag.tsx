@@ -1,12 +1,14 @@
 import React from "react";
-import { Box, Typography } from "@mui/material";
+import { Box, SxProps, Typography } from "@mui/material";
 
 interface TagProps {
   icon: React.ReactNode;
   label: string;
+  sx?: SxProps<any>;
+  backgrounded?: boolean;
 }
 
-export default function Tag({ icon, label }: Readonly<TagProps>) {
+export default function Tag({ icon, label, sx, backgrounded = true }: Readonly<TagProps>) {
   return (
     <Box
       sx={{
@@ -16,7 +18,8 @@ export default function Tag({ icon, label }: Readonly<TagProps>) {
         gap: "9px",
         borderRadius: "5px",
         width: "fit-content",
-        backgroundColor: "success.light",
+        backgroundColor: backgrounded ? "success.light" : "",
+        ...sx
       }}
     >
       {icon}
