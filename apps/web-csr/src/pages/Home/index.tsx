@@ -34,7 +34,7 @@ interface ISearchBarQuery {
   price: number;
   product_id: number;
 }
-const SearchBar = ()=>{
+export const SearchBar = ()=>{
   const searchProduct = useGetList<ISearchBarQuery>(ProviderNames.PRODUCTS)
   const [value, setValue] = useState<string>()
   const [valueDebounced] = useDebounce(value, 1000);

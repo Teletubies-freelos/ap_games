@@ -1,6 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Menu as MenuIcon } from '@mui/icons-material';
-import { Box, Button, IconButton, Stack, Typography } from '@mui/material';
+import { Box, IconButton, Stack, Typography } from '@mui/material';
 
 import {
   ColorSwitch,
@@ -9,7 +9,6 @@ import {
   FacebookLogo,
   InstagramLogo,
   Isotype,
-  SearchBar,
 } from '../../../../../packages/ui/src';
 import { GeneralLayout } from '../../layout/GeneralLayout';
 
@@ -18,6 +17,7 @@ import NavLinks from '../../components/NavLinks';
 import { setAnchorElMenu, useAnchorElMenu } from '../../observables';
 import { CartIconReactive } from '../../components/cart/cartReactiveIcon';
 import { reduceQuantity } from '../../utils';
+import { SearchBar } from '../Home';
 
 export default function Terminos() {
   const toggleColor = useToggleColor();
@@ -42,10 +42,7 @@ export default function Terminos() {
             </Link>
           }
           searchBar={
-            <SearchBar
-              onSubmit={() => 4}
-              buttonSearch={<Button variant='contained'>Buscar</Button>}
-            />
+            <SearchBar />
           }
           menu={
             <IconButton onClick={_handleOpenMenu} size='small'>
