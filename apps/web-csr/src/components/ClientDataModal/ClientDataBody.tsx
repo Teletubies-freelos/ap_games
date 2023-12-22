@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import { SubmitHandler, useForm } from 'react-hook-form';
 import SelectModals from '../common/SelectModals';
-import { Button } from '../../../../../packages/ui/src';
+import { Button, CustomInputField } from '../../../../../packages/ui/src';
 
 import { ModalState, setNextState } from '../../observables';
 import { useCreateOne, useGetList, useGetOne, useSyncGetList, useSyncGetOne } from 'data_providers';
@@ -22,7 +22,6 @@ import {
 import { IDeliveryCostsDetailResponse } from '../../services/DeliveryCosts';
 import { useQuery } from '@tanstack/react-query';
 import { ICartProduct } from '../../data/indexedDB';
-import CustomInputField from '../common/CustomInputField';
 
 type UserInfo = {
   client_name: string;
@@ -42,7 +41,6 @@ export default function ClientDataBody() {
   const getGeolocation: typeof GeolocationProvider.prototype.getList = useSyncGetList(SyncProviderNames.GEOLOCATION);
   const getGeolocationOne: typeof GeolocationProvider.prototype.getOne = useSyncGetOne(SyncProviderNames.GEOLOCATION);
   const { register, handleSubmit, formState: { errors }, control } = useForm<UserInfo>({ criteriaMode: "all", });
-  console.log("🚀 ~ file: ClientDataBody.tsx:45 ~ ClientDataBody ~ errors:", errors)
   const createToSession = useCreateOne(ProviderNames.SESSION_STORAGE);
   const getOneDeliveryCost = useGetOne<IDeliveryCostsDetailResponse[]>(ProviderNames.DELIVERY_COSTS)
   const [destination, setDestination] = useState<Destination>('capital');
@@ -63,33 +61,50 @@ export default function ClientDataBody() {
       resource: ResourceNames.DEPARTMENT_PRICE
       // @ts-ignore
     })?.id;
-
-    var deliveryCostsDetail: IDeliveryCostsDetailResponse[] = []
-
+    const province_id = getGeolocationOne({
+      filter: {
+        district_id: data.district_id
+      }
+    }, {
+      resource: ResourceNames.DEPARTMENT_PRICE
+      // @ts-ignore
+    })?.id;
+    
+    const categories = []
+    const subCategories = []
     if (products) {
-      for (var product of products) {
-        var productFound = (await getProducts({
+      for (const product of products) {
+        const productFound = (await getProducts({
           pagination: { limit: 1, page: 0 }, filter: {
             productId: product.productId
           }
         })).find(x => x.product_id);
-        const deliveryCost = (await getOneDeliveryCost({
-          filter: {}
-        }, {
-          department_id: department_id,
-          district_id: data?.district_id,
-          category_id: productFound?.category_id ?? 0,
-          sub_category_id: productFound?.sub_category_id ?? 0
-        })
-        );
-        deliveryCostsDetail = [...deliveryCostsDetail, ...deliveryCost];
+        categories.push(productFound?.category_id ?? 0);
+        subCategories.push(productFound?.sub_category_id ?? 0);
+
       }
     }
-    const orderedDeliveryCostsDetail = deliveryCostsDetail.sort((a, b) => b.delivery_cost.price - a.delivery_cost.price);
+
+    const deliveryCost = (await getOneDeliveryCost({
+      filter: {}
+    }, {
+      deparments: [department_id],
+      districts: [data?.district_id],
+      provinces: [province_id],
+      categories,
+      subCategories,
+    }));
+
+    let delivery_price = 30;
+    
+    if(deliveryCost.length > 0){
+      const orderedDeliveryCostsDetail = deliveryCost.sort((a, b) => b.delivery_cost.price - a.delivery_cost.price);
+      delivery_price = orderedDeliveryCostsDetail[0]?.delivery_cost.price
+    }
 
     const newData = {
       ...data,
-      delivery_price: orderedDeliveryCostsDetail[0]?.delivery_cost.price
+      delivery_price
     }
     await createToSession(newData);
 

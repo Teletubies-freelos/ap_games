@@ -62,7 +62,8 @@ export default function PickupStorePreConfirmationBody() {
             ...data,
             order_status_id,
             delivery_way_id,
-            delivery_price: 0
+            delivery_price: 0,
+            total: totalPrice
         };
         
         await createToSession(newDataPayment);

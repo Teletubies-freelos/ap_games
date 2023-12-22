@@ -31,6 +31,7 @@ import { Initializer } from './components/Initializer';
 import * as Ably from 'ably'
 import { AblyProvider } from 'ably/react';
 import { ablyToken } from './config/ably';
+import { HelmetProvider } from 'react-helmet-async';
 
 const providers = {
   [ProviderNames.PRODUCTS]: productsProvider,
@@ -74,20 +75,22 @@ const client = new Ably.Realtime.Promise({ key: ablyToken });
 
 function App() {
   return (
-    <DataProvider providers={providers} syncProviders={syncProviders}>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider>
-          <Initializer>
-            <AblyProvider client={client}>
-              <Suspense fallback={<LoadingPage />}>
-                <RouterProvider router={routes} />
-              </Suspense>
-            </AblyProvider>
-          </Initializer>
-        </ThemeProvider>
-        {/* <ReactQueryDevtools initialIsOpen /> */}
-      </QueryClientProvider>
-    </DataProvider>
+    <HelmetProvider>
+      <DataProvider providers={providers} syncProviders={syncProviders}>
+        <QueryClientProvider client={queryClient}>
+          <ThemeProvider>
+            <Initializer>
+              <AblyProvider client={client}>
+                <Suspense fallback={<LoadingPage />}>
+                  <RouterProvider router={routes} />
+                </Suspense>
+              </AblyProvider>
+            </Initializer>
+          </ThemeProvider>
+          {/* <ReactQueryDevtools initialIsOpen /> */}
+        </QueryClientProvider>
+      </DataProvider>
+    </HelmetProvider>
   );
 }
 

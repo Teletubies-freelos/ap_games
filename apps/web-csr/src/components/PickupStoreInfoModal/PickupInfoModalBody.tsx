@@ -1,6 +1,6 @@
 import { Box, TextField, Typography, Button } from '@mui/material';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import { DropDown } from '../../../../../packages/ui/src';
+import { CustomInputField, DropDown } from '../../../../../packages/ui/src';
 import { ModalState, setModalState } from '../../observables';
 import {
   useCreateOne,
@@ -11,7 +11,6 @@ import { useForm } from 'react-hook-form';
 import { ICartProduct } from '../../data/indexedDB';
 import { useQuery } from '@tanstack/react-query';
 import { reduceTotalPrice } from '../../utils';
-import CustomInputField from '../common/CustomInputField';
 
 export interface PickUpInfo {
   paymentMethod: string;

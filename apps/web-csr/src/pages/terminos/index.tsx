@@ -18,6 +18,7 @@ import { setAnchorElMenu, useAnchorElMenu } from '../../observables';
 import { CartIconReactive } from '../../components/cart/cartReactiveIcon';
 import { reduceQuantity } from '../../utils';
 import { SearchBar } from '../Home';
+import { Helmet } from 'react-helmet-async';
 
 export default function Terminos() {
   const toggleColor = useToggleColor();
@@ -28,6 +29,10 @@ export default function Terminos() {
   };
 
   return (
+    <>
+    <Helmet>
+      <meta name="robots" content="noindex" />
+    </Helmet>
     <GeneralLayout
       navBar={
         <NavBar
@@ -120,5 +125,6 @@ export default function Terminos() {
         </Box>
       </Stack>
     </GeneralLayout>
+    </>
   );
 }

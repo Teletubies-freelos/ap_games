@@ -113,13 +113,11 @@ export const CREATE_DELIVERY_COSTS = gql`
   mutation CREATE_DELIVERY_COSTS(
     $description: String
     $price: Int!
-    $type: String
   ) {
     insert_delivery_costs_one(
       object: {
         description: $description
         price: $price
-        type: $type
       }
     ) {
       delivery_costs_id
@@ -194,11 +192,24 @@ export const CREATE_CATEGORY = gql`
     }
   }
 `;
-
+export const CREATE_SUB_CATEGORY = gql`
+  mutation CREATE_SUB_CATEGORY($objects: [sub_categories_insert_input!]!) {
+    insert_sub_categories(objects: $objects) {
+      affected_rows
+    }
+  }
+`;
 export const DELETE_CATEGORY = gql`
   mutation DELETE_CATEGORY($category_id: Int!) {
     delete_categories_by_pk(category_id: $category_id) {
       category_id
+    }
+  }
+`;
+export const DELETE_SUB_CATEGORY = gql`
+  mutation DELETE_SUB_CATEGORY($subCategoryIds: [Int]) {
+    delete_sub_categories(where: {sub_category_id: {_in: $subCategoryIds}}) {
+      affected_rows
     }
   }
 `;
@@ -230,6 +241,7 @@ export const CREATE_ORDER = gql`
     $wsp_value: String
     $wsp_message: String
     $delivery_price: Int
+    $total: Int
   ) {
     insert_orderers_one(
       object: {
@@ -246,6 +258,7 @@ export const CREATE_ORDER = gql`
         wsp_value: $wsp_value
         wsp_message: $wsp_message
         delivery_price: $delivery_price
+        total: $total
       }
     ) {
       order_id

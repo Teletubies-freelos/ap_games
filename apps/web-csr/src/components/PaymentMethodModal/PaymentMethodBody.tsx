@@ -48,29 +48,45 @@ export default function PaymentMethodBody({
   const getGeolocation: typeof GeolocationProvider.prototype.getOne = useSyncGetOne(SyncProviderNames.GEOLOCATION);
   const createToSession = useCreateOne(ProviderNames.SESSION_STORAGE);
   const confirmRequest = useConfirmRequest();
-  const queryClient = useQueryClient()
 
+  const getClientData = useGetOne<UserInfo>(ProviderNames.SESSION_STORAGE);
+  const { data: orderData } = useQuery(['order'], async () => await getClientData());
+  const queryClient = useQueryClient()
+  const isLima = useMemo(() => {
+    return getGeolocation(
+      {
+        filter: {
+          district_id: orderData?.district_id,
+        },
+      },
+      {
+        resource: ResourceNames.IS_LIMA,
+      }
+    )
+  }, [orderData])
   const handleFinish = async (data: PaymentMethodData) => {
     const orderStatuses: { order_status_id: number; name: string }[] | undefined = queryClient
       .getQueryData(['orderStatus'])
 
-    const deliveryWays : IDeliveryWay[] | undefined = queryClient.getQueryData(['deliveryWays'])
-    
+    const deliveryWays: IDeliveryWay[] | undefined = queryClient.getQueryData(['deliveryWays'])
+
     const { delivery_way_id } = deliveryWays?.find(({ token }) => token === DeliveryWayEnum.DELIVERY) ?? {}
-    
-    const { order_status_id } = orderStatuses?.find(({name})=>name === 'pending') ?? {}
-    
-    if(!order_status_id)
+
+    const { order_status_id } = orderStatuses?.find(({ name }) => name === 'pending') ?? {}
+
+    if (!order_status_id)
       throw new Error('Order status not found')
 
     const newDataPayment = {
       ...data,
       order_status_id,
-      delivery_way_id
+      delivery_way_id,
+      // @ts-ignore
+      total: parseInt(totalPrice ?? 0) + parseInt(orderData?.delivery_price)
     };
 
     await createToSession(newDataPayment);
-    const requestOrderId =  await confirmRequest(newDataPayment);
+    const requestOrderId = await confirmRequest(newDataPayment);
     requestOrderId && setPurchaseCode(requestOrderId);
 
     setModalState({
@@ -90,16 +106,14 @@ export default function PaymentMethodBody({
 
   const totalPrice = reduceTotalPrice(data);
 
-  const parsedPaymentMethods = paymentMethods?.map((method) => ({
+  var parsedPaymentMethods = paymentMethods?.map((method) => ({
     value: method.payment_method_id,
     label: method.meta,
   }));
+  parsedPaymentMethods = isLima ? parsedPaymentMethods : (parsedPaymentMethods?.filter(x => x.value != 9) ?? []);
 
   const totalQunatity = reduceQuantity(data);
 
-  const getClientData = useGetOne<UserInfo>(ProviderNames.SESSION_STORAGE);
-  const { data: orderData } = useQuery(['order'], async () => await getClientData());
-  
   const deliveryInfo: IDeliveryInfo = useMemo((): IDeliveryInfo => ({
     address: ["Dirección", orderData?.address],
     // @ts-ignore
@@ -184,7 +198,6 @@ export default function PaymentMethodBody({
           </Box>
         }
       />
-
       <DropDown
         textFieldProps={register('payment_method_id')}
         items={parsedPaymentMethods}

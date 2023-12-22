@@ -84,7 +84,7 @@ const UpdateProductModal = ({ productId }: { productId: number | undefined }) =>
             setValue("banner_img_url", product?.banner_img_url);
             setValue("description", product?.description);
             setValue("is_offer", product?.is_offer);
-            setValue("is_visible", product?.is_visible);
+            setValue("is_visible", !product?.is_visible);
             setValue("sub_category_id", product?.sub_category_id);
             // @ts-ignore
             setValue("category_id", product?.category?.category_id);
@@ -138,7 +138,7 @@ const UpdateProductModal = ({ productId }: { productId: number | undefined }) =>
             quantity,
             category_id,
             is_offer: discount_price != 0 && discount_price != undefined ? true: false,
-            is_visible: Boolean(is_visible),
+            is_visible: !Boolean(is_visible),
             product_id: Number(productId),
             sub_category_id
         });
@@ -294,7 +294,7 @@ const UpdateProductModal = ({ productId }: { productId: number | undefined }) =>
                                     return (
                                         <FormControlLabel
                                             control={<Checkbox {...field} checked={watch('is_visible')} />}
-                                            label='Es Visible'
+                                            label='No Visible'
                                         />
                                     )
                                 }}

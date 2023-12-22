@@ -3,8 +3,8 @@ import ConfirmedOrder from '.';
 import { StepStatus } from '../../../../../packages/ui/src';
 import FooterModal from '../common/FooterModal';
 import InfoPayment from '../common/InfoPayment';
-import { useDeleteMany, useGetOne } from 'data_providers';
-import { ProviderNames } from '../../types/providers';
+import { useDeleteMany, useGetOne,  } from 'data_providers';
+import { ProviderNames,  } from '../../types/providers';
 import { DeliveryPriceLocal } from '../DeliveryPrice';
 import { setModalState } from '../../observables';
 import { useGetPaymentInfo } from '../../hooks/useGetPaymentInfo';
@@ -53,7 +53,7 @@ const ConfirmOrderDelivery = () => {
           }}
         />
       }
-      priceDelivery={<DeliveryPriceLocal deliveryPrice={orderData?.delivery_price} />}
+      priceDelivery={<DeliveryPriceLocal deliveryPrice={orderData?.delivery_price}/>}
       infoPayment={
         <InfoPayment
           titleInfo='Método de Pago'

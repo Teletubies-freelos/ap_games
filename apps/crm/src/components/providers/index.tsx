@@ -17,6 +17,7 @@ export const Providers = ({ children }: PropsWithChildren) => {
   const client = new Ably.Realtime.Promise({ key: env.ABLY_SUBSCRIBER_TOKEN });
 
   return (
+    // @ts-ignore
     <DataProvider providers={providerNames}>
       <ThemeProvider>
         <QueryClientProvider client={queryClient}>

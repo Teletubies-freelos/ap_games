@@ -1,17 +1,11 @@
 import { MRT_ColumnDef } from 'material-react-table';
-import { DeliveryCostsTypes, IDeliveryCosts, deliveryCostsTypesText } from '../../../services/DeliveryCosts';
+import { IDeliveryCosts,  } from '../../../services/DeliveryCosts';
 
 export function ListColumns(): MRT_ColumnDef<IDeliveryCosts>[] {
   return [
     {
       header: 'Nombre del costo de envío',
       accessorKey: 'description',
-      size: 50,
-    },
-    {
-      header: 'Tipo',
-      accessorKey: 'type',
-      Cell: ({ renderedCellValue }) => deliveryCostsTypesText[renderedCellValue as DeliveryCostsTypes],
       size: 50,
     },
     {

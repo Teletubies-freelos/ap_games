@@ -28,3 +28,4 @@ export { default as FacebookLogo } from './atoms/FacebookLogo';
 export { default as InstagramLogo } from './atoms/InstagramLogo';
 export { default as TiktokLogo } from './atoms/TiktokLogo';
 export { default as Discount } from './atoms/Discount';
+export { default as CustomInputField } from './common/CustomInputField';

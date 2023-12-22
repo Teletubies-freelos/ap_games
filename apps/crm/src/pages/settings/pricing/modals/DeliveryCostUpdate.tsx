@@ -1,113 +1,149 @@
 import { useForm } from "react-hook-form";
-import { Autocomplete, Box, Button, Chip, InputAdornment, TextField, Typography } from "@mui/material";
-import { DropDown } from "../../../../../../../packages/ui/src";
-import { DeliveryCostsTypes, IDeliveryCosts, IDeliveryCostsDetail, deliveryCostsTypesText } from "../../../../services/DeliveryCosts";
+import { Box, Button, TextField, Typography } from "@mui/material";
+import { DropDown, LoadingPage } from "../../../../../../../packages/ui/src";
+import { IDeliveryCosts, IDeliveryCostsDetail } from "../../../../services/DeliveryCosts";
 import { useCreateOne, useGetList } from "data_providers";
 import { AsyncProviderNames } from "../../../../types/providers";
 import { useDebounce } from "use-debounce";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { ChangeEventHandler, useMemo, useState } from "react";
-import SearchIcon from '@mui/icons-material/Search';
 import { GeolocationPathEnum, IGeolocation, SubPath } from "../../../../services/Geolocation";
 import { useQueryCategory } from "../../../../hooks/useQueryCategory";
 import { setModalState } from "../../../../observables";
 import { IFormDeliveryCostDetail } from "./DeliveryCostDetailData";
 import { getFirstElement } from "../../../../utils";
 import { useDeliveryCosts } from "../../../../hooks/useDeliveryCosts";
-
+import FilterChips from "../../../../components/common/FilterChips";
 
 export const DeliveryCostUpdate = ({ data }: { data: IDeliveryCosts }) => {
-
+    console.log("🚀 ~ file: DeliveryCostUpdate.tsx:19 ~ DeliveryCostUpdate ~ data:", data)
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const { data: categories } = useQueryCategory({});
     const { mutateDelete } = useDeliveryCosts({});
+
+    const geolocationService = useGetList<IGeolocation>(AsyncProviderNames.GEOLOCATION);
+    const createOneDeliveryCosts = useCreateOne<any>(AsyncProviderNames.DELIVERY_COSTS);
+
     const { register, handleSubmit, watch, reset } = useForm<IFormDeliveryCostDetail>({
         defaultValues: {
             type: data.type,
             description: data.description,
             department_id: 0,
-            district_id: 0,
+            province_id: 0,
             price: data.price,
             category_id: getFirstElement(data.delivery_costs_details)?.category_id,
             sub_category_id: getFirstElement(data.delivery_costs_details)?.sub_category_id
         }
     });
 
+    const [deparmentSelections, setDeparmentsSelections] = useState<any[]>([]);
+    const [provinceSelections, setProvicesSelections] = useState<any[]>([]);
+    const [districtSelections, setDistrictsSelections] = useState<any[]>([]);
 
-    const searchDistrictsInLima = useGetList<IGeolocation>(AsyncProviderNames.GEOLOCATION)
-    const searchDepartments = useGetList<IGeolocation>(AsyncProviderNames.GEOLOCATION)
-    const [deliveryCostType, _] = useState<DeliveryCostsTypes>(data?.type as DeliveryCostsTypes);
-    const [selections, setSelections] = useState<any[]>([]);
-    const { data: categories } = useQueryCategory({});
+    const [department, setDepartment] = useState<string>();
+    const [province, setProvince] = useState<string>();
+    const [district, setDistrict] = useState<string>();
+
+    const handleDeparmentSearchChange: ChangeEventHandler<HTMLInputElement> = (event: any) => {
+        setDepartment(event.target.value)
+    }
+    const handleProvinceSearchChange: ChangeEventHandler<HTMLInputElement> = (event: any) => {
+        setProvince(event.target.value)
+    }
+    const handleDistrictSearchChange: ChangeEventHandler<HTMLInputElement> = (event: any) => {
+        setDistrict(event.target.value)
+    }
+
+    const [deparmentDebounced] = useDebounce(department, 500);
+
+    const { data: departments } = useQuery(['search_deparments', deparmentDebounced], {
+        queryFn: async () => {
+            return await geolocationService({
+                filter: {
+                    search: department,
+                },
+            }, {
+                path: GeolocationPathEnum.GET_DEPARMENT,
+                subPath: SubPath.GET_FILTERED
+            })
+        },
+        enabled: !!deparmentDebounced
+    })
+    const { data: allDepartments } = useQuery(['search_deparments_all'], {
+        queryFn: async () => {
+            return await geolocationService({
+                filter: {
+                    search: "",
+                },
+            }, {
+                path: GeolocationPathEnum.GET_DEPARMENT,
+                subPath: SubPath.GET_FILTERED
+            })
+        }
+    })
+    const [allProvinces, setAllProvinces] = useState<IGeolocation[]>();
+
+    useMemo(async () => {
+        const all = await geolocationService({
+            filter: {
+                deparments: deparmentSelections.map(({ value }) => value),
+                search: ""
+            },
+        }, {
+            path: GeolocationPathEnum.GET_PROVINCE,
+            subPath: SubPath.GET_FILTERED
+        })
+        setAllProvinces(all);
+    }, [deparmentSelections, province])
+
+    const [allDistricts, setAllDistricts] = useState<IGeolocation[]>();
+    useMemo(async () => {
+        const all = await geolocationService({
+            filter: {
+                deparments: deparmentSelections.map(({ value }) => value),
+                provinces: provinceSelections.map(({ value }) => value),
+                search: "",
+            },
+        }, {
+            path: GeolocationPathEnum.GET_DISTRICTS,
+            subPath: SubPath.GET_FILTERED
+        })
+        setAllDistricts(all);
+    }
+        , [provinceSelections, district])
 
     useMemo(async () => {
         if (data) {
-            if (deliveryCostType == DeliveryCostsTypes.CONFIG_BY_DEPARTMENT) {
-                const departmentIds = data?.delivery_costs_details?.map(({ department_id }) => department_id) || [];
+            const districtIds = data?.delivery_costs_details?.map(({ district_id }) => "0" + district_id?.toString()) || [];
+            const departmentsIds = data?.delivery_costs_details?.map(({ department_id }) => "0" + department_id?.toString()) || [];
+            const provincesIds = data?.delivery_costs_details?.map(({ province_id }) => "0" + province_id?.toString()) || [];
+            // @ts-ignore
+            const {
+                // @ts-ignore
+                deparments: departmentsObj = [],
+                // @ts-ignore
+                provinces: provincesObj = [],
+                // @ts-ignore
+                districts: districtsObj = []
+            } = await geolocationService({
+                filter: {
+                    departmentsIds,
+                    provincesIds,
+                    districtIds
+                },
+            }, {
+                path: GeolocationPathEnum.GET_ALL,
+                subPath: SubPath.GET_FILTERED
+            })
 
-                setSelections(await searchDepartments({
-                    filter: {
-                        values: departmentIds,
-                    },
-                }, {
-                    path: GeolocationPathEnum.BY_DEPARTMENT,
-                    subPath: SubPath.GET_ALL
-                }))
-            } else {
-                const districtIds = data?.delivery_costs_details?.map(({ district_id }) => district_id) || [];
-                setSelections(await searchDistrictsInLima({
-                    filter: {
-                        values: districtIds,
-                    },
-                }, {
-                    path: GeolocationPathEnum.ONLY_DISTRICTS_LIMA,
-                    subPath: SubPath.GET_ALL
-                }))
-            }
+            setDeparmentsSelections(departmentsObj);
+            setProvicesSelections(provincesObj);
+            setDistrictsSelections(districtsObj);
         }
     }, [data])
 
     const queryClient = useQueryClient();
 
-    const handleSearchChange: ChangeEventHandler<HTMLInputElement> = (event: any) => {
-        setSearch(event.target.value)
-    }
-
-    const [search, setSearch] = useState<string>();
-    const createOneDeliveryCosts = useCreateOne<any>(AsyncProviderNames.DELIVERY_COSTS)
-
-    const [valueDebounced] = useDebounce(search, 1000);
-
-    const { data: locations } = useQuery(['search_geolocation', valueDebounced], {
-        queryFn: async () => {
-            if (deliveryCostType == DeliveryCostsTypes.CONFIG_BY_DEPARTMENT) {
-                return await searchDepartments({
-                    filter: {
-                        search: valueDebounced,
-                    },
-                }, {
-                    path: GeolocationPathEnum.BY_DEPARTMENT,
-                    subPath: SubPath.GET_FILTERED
-                })
-            }
-            return await searchDistrictsInLima({
-                filter: {
-                    search: valueDebounced,
-                },
-            }, {
-                path: GeolocationPathEnum.ONLY_DISTRICTS_LIMA,
-                subPath: SubPath.GET_FILTERED
-            })
-        },
-        enabled: !!valueDebounced
-    })
-
-
-    const onDelete = (value: any) => () => {
-        setSelections((prev) => {
-            return [
-                ...prev.filter((item, _) => item.value != value)
-            ]
-        })
-    };
 
     const { mutateAsync } = useMutation(
         ['create_delivery_cost'],
@@ -126,7 +162,8 @@ export const DeliveryCostUpdate = ({ data }: { data: IDeliveryCosts }) => {
         }
     );
 
-    const categoriesDropDown = categories?.map(({ category_id, name }) => ({ label: name, value: category_id })) || [];
+    let categoriesDropDown = categories?.map(({ category_id, name }) => ({ label: name, value: category_id })) || [];
+    categoriesDropDown = [{ label: 'Todos', value: 0 }, ...categoriesDropDown];
     let subCategories = categories?.find(({ category_id }) => category_id === watch("category_id"))?.sub_categories?.map(({ sub_category_id, name }) => ({
         label: name,
         value: sub_category_id
@@ -134,45 +171,59 @@ export const DeliveryCostUpdate = ({ data }: { data: IDeliveryCosts }) => {
 
     if (watch("category_id") != 0) {
         subCategories = [{ label: 'Todos', value: 0 }, ...subCategories];
+    }    
+    else if (watch("category_id") == 0) {
+        subCategories = [{ label: 'Consolas', value: 1 }, { label: 'Videojuegos', value: 2 }, { label: 'Accesorios', value: 3 }, { label: 'Coleccionables', value: 4 }];
     }
 
     const handleFinish = async (newData: IFormDeliveryCostDetail) => {
-        let newValue: IDeliveryCosts = {
-            delivery_costs_id: 0,
-            price: newData?.price,
-            description: newData?.description,
-            type: newData?.type,
-            delivery_costs_details: selections.map(({ value }) => {
-                let newDetail: IDeliveryCostsDetail = {
-                    category_id: newData?.category_id,
-                    sub_category_id: newData?.sub_category_id,
-                    department_id: 0,
-                    district_id: 0,
-                    delivery_costs_id: 0
-                };
+        try {
+            setIsLoading(true);
 
-                if (deliveryCostType == DeliveryCostsTypes.CONFIG_BY_DEPARTMENT) {
-                    newDetail.department_id = value;
-                }
-                else if (deliveryCostType == DeliveryCostsTypes.ONLY_LIMA) {
-                    newDetail.department_id = 15;
-                    newDetail.district_id = value;
-                }
+            const permutations: IDeliveryCostsDetail[] = [];
+            for (const { value: deparmentValue } of deparmentSelections) {
+                for (const { value: provinceValue } of (provinceSelections.length > 0 ? provinceSelections : [{ value: 0 }])) {
+                    for (const { value: districtValue } of (districtSelections.length > 0 ? districtSelections : [{ value: 0 }])) {
+                        const newDetail: IDeliveryCostsDetail = {
+                            delivery_costs_id: 0,
+                            department_id: deparmentValue,
+                            district_id: districtValue,
+                            province_id: provinceValue,
+                            category_id: newData?.category_id,
+                            sub_category_id: newData?.sub_category_id,
+                        };
 
-                return newDetail;
-            })
+                        permutations.push(newDetail);
+                    }
+                }
+            }
+
+            let newValue: IDeliveryCosts = {
+                delivery_costs_id: 0,
+                price: newData?.price,
+                description: newData?.description,
+                type: newData?.type,
+                delivery_costs_details: permutations
+            };
+
+            if (data.delivery_costs_id) {
+                await mutateDelete(data.delivery_costs_id);
+                await mutateAsync(newValue);
+            }
+        } 
+        catch (error) 
+        {
+            console.error(error)
         }
-        if (data.delivery_costs_id) {
-            await mutateDelete(data.delivery_costs_id);
-            await mutateAsync(newValue);
+        finally
+        {
+            setIsLoading(false);
         }
     };
 
-    const deliveryCostTypes = Object.values(DeliveryCostsTypes).map((key, _) => ({
-        value: key,
-        label: deliveryCostsTypesText[key as DeliveryCostsTypes],
-    }))
-
+    if(isLoading){
+        return <LoadingPage minHeight={"50rem"}/>
+    }
     return (
         <Box
             component={'form'}
@@ -183,64 +234,38 @@ export const DeliveryCostUpdate = ({ data }: { data: IDeliveryCosts }) => {
             padding='1.4rem'
         >
             <TextField {...register("description")} sx={{ backgroundColor: 'background.default' }} placeholder="Ingresa un nombre para identificarlo" />
-            <DropDown textFieldProps={register('type')} defaultValue={watch('type')} items={deliveryCostTypes} placeHolder="Elige un tipo de costo" />
+            {/* <DropDown textFieldProps={register('type')} defaultValue={watch('type')} items={deliveryCostTypes} placeHolder="Elige un tipo de costo" /> */}
             <TextField {...register("price")} type="number" sx={{ backgroundColor: 'background.default' }} placeholder="Ingresar precio" />
-            <Autocomplete
-                options={locations?.map(({ label, value }) => ({ label, value })) ?? []}
-                freeSolo
-                sx={{
-                    width: {
-                        xs: '90vw',
-                        md: 'unset'
-                    },
-                    backgroundColor: "background.default",
-                    borderRadius: ".25rem",
-                    "& .MuiAutocomplete-endAdornment": {
-                        display: 'none'
-                    }
-                }}
-                renderInput={(params) => (
-                    <TextField
-                        {...params}
-                        onChange={handleSearchChange}
-                        value={search}
-                        InputProps={{
-                            ...params.InputProps,
-                            type: 'search',
-                            placeholder: deliveryCostType == DeliveryCostsTypes.CONFIG_BY_DEPARTMENT ? 'Buscar por departamento' : 'Buscar por distritos',
-                            startAdornment: (<InputAdornment position="start" sx={{ paddingLeft: '0.5rem' }} children={<SearchIcon />} />)
-                        }}
-                    />
-                )}
-                getOptionLabel={(option: any) => {
-                    if (typeof option === 'string') {
-                        return option;
-                    } else {
-                        return option.label || '';
-                    }
-                }}
-                onChange={(_, value) => {
-                    // @ts-ignore
-                    if (value.value && selections.find(({ value: r }) => r == value?.value) == null) {
-                        // @ts-ignore
-                        setSelections(prev => [...prev, { label: value?.label, value: value?.value }])
-                    }
-                }}
+            <FilterChips
+                values={department != "" && department != undefined ? departments : allDepartments}
+                selections={deparmentSelections}
+                handleSelections={setDeparmentsSelections}
+                debounceValueSearch={department}
+                handleSearchChange={handleDeparmentSearchChange}
+                placeholder={"Buscar por departamento"}
+                disabled={false}
             />
-            <Box
-                sx={{
-                    '& > :not(:last-child)': { mr: 1, pt: '0.1rem' },
-                    '& > *': { mr: 1, mt: 1 },
-                }}
-            >
-                {
-                    selections.map(({ value, label }) => <Chip key={value} label={label} onDelete={onDelete(value)} />)
-                }
-            </Box>
+            <FilterChips
+                values={[{ label: "Todos", value: 0 },...(allProvinces ?? []) ]}
+                selections={provinceSelections}
+                handleSelections={setProvicesSelections}
+                debounceValueSearch={province}
+                handleSearchChange={handleProvinceSearchChange}
+                placeholder={"Buscar por provincia"}
+                disabled={deparmentSelections.length <= 0}
+            />
+            <FilterChips
+                values={[{ label: "Todos", value: 0 },...(allDistricts ?? []) ]}
+                selections={districtSelections}
+                handleSelections={setDistrictsSelections}
+                debounceValueSearch={district}
+                handleSearchChange={handleDistrictSearchChange}
+                placeholder={"Buscar por distrito"}
+                disabled={provinceSelections.length <= 0}
+            />
             <Typography>Asigna la categoría y subcategoría del costo de envío</Typography>
             <DropDown textFieldProps={register('category_id')} defaultValue={watch('category_id')} items={categoriesDropDown} placeHolder="Categorias" />
-            <DropDown textFieldProps={register('sub_category_id')} defaultValue={watch('sub_category_id')} items={subCategories} placeHolder="Sub Categorias" disabled={watch("category_id") == 0} />
-            <Button variant="contained" type="submit">Agregar</Button>
+            <DropDown textFieldProps={register('sub_category_id')} defaultValue={watch('sub_category_id')} items={subCategories} placeHolder="Sub Categorias" disabled={watch("category_id") == -1} />           <Button variant="contained" type="submit">Actualizar</Button>
         </Box>
     )
 }

@@ -31,6 +31,35 @@ export class Categories {
     }
   `;
 
+  static GET_SUB_CATEGORIES_DELIVERY_COSTS = gql`
+    query GET_SUB_CATEGORIES_DELIVERY_COSTS {
+      sub_categories() {
+        category_id
+        name
+      }
+    }
+  `;
+
+  static GET_SUB_CATEGORIES_PRODUCTS = gql`
+    query GET_SUB_CATEGORIES_PRODUCTS(
+      subCategoryId: [Int]
+    ) {
+      products(where: {sub_category_id: {_in: subCategoryId}}) {
+        product_id,
+        sub_category_id
+      }
+    }
+  `;
+
+  static DELETE_SUB_CATEGORY_ = gql `
+    query DELETE_SUB_CATEGORY_ {
+      sub_categories() {
+        category_id
+        name
+      }
+    }
+  `
+
   constructor(private client: GraphQLClient) {}
 
   async createOne(name: string) {
