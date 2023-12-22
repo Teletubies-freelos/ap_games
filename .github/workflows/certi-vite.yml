@@ -9,12 +9,12 @@ name: 🚀 Deploy website on push
 jobs:
   web-deploy:
     env:
-      VITE_MASTER_TOKEN: ${{ vars.MASTER_TOKEN }}
-      VITE_GRAPHQL_URL: ${{ vars.GRAPHQL_URL }}
+      VITE_MASTER_TOKEN: ${{ vars.HASURA_SECRET }}
+      VITE_GRAPHQL_URL: ${{ vars.HASURA_BASE_URLs }}
       VITE_IS_HASH_PROVIDER: true
       VITE_WOOPRA_DOMAIN: ${{ vars.WOOPRA_DOMAIN }}
       VITE_ABLY_TOKEN: ${{ vars.ABLY_TOKEN }}
-    name: 🎉 Deploy
+    name: 🎉 Deploy Web
     runs-on: ubuntu-latest
     steps:
     - name: 🚚 Get latest code
@@ -38,5 +38,7 @@ jobs:
         server: ${{ secrets.FTP_HOST }}
         username: ${{ secrets.FTP_USERNAME }}
         password: ${{ secrets.FTP_PASSWORD }}
+        port: ${{ secrets.FTP_PORT }}
+        log-level: verbose
         local-dir: ./apps/web-csr/dist/
-        server-dir: /cert.apgames.pe/public_html/
+        server-dir: public_html/

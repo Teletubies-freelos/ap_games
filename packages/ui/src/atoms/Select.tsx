@@ -26,7 +26,7 @@ export interface SelectFilterProps<T extends IOption = IOption> {
   selectProps?: SelectProps;
   textFieldProps?: TextFieldProps;
   placeHolder?: string;
-  defaultValue?: any; 
+  defaultValue?: any;
   disabled?: boolean;
   required?: boolean;
 }
@@ -65,18 +65,19 @@ export default function SelectFilter({
   );
 
   return (
-    <FormControl sx={sxForm}>
+    <FormControl variant="outlined" sx={sxForm}>
       {placeHolder && (
         <InputLabel
+          variant="outlined"
           sx={{
-            top: "1rem !important",
-            "& .MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input ": {
-              top: "2rem !important",
+            top: ".1rem !important",
+            ".MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input": {
+              top: "1rem !important",
             },
-            "& .MuiInputLabel-shrink": {
+            ".MuiInputLabel-shrink": {
               top: "-4% !important",
             },
-            "& .MuiFormLabel-root MuiInputLabel-root ": {
+            ".MuiFormLabel-root.MuiInputLabel-root": {
               top: ".3rem !important",
             },
           }}
@@ -85,7 +86,7 @@ export default function SelectFilter({
         </InputLabel>
       )}
       <MUISelect
-        // @ts-expect-error no idea why
+        // @ts-ignore
         onChange={onChange}
         onOpen={() => setIsOpen(true)}
         onClose={() => setIsOpen(false)}
@@ -101,6 +102,7 @@ export default function SelectFilter({
         value={defaultValue}
         disabled={disabled}
         required={required}
+        variant="outlined" 
       >
         {items?.map(({ label, value }) => (
           <MenuItem value={value} key={label + value}>

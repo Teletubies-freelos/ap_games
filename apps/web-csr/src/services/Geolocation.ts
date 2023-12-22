@@ -8,7 +8,9 @@ export enum ResourceNames {
   DEPARTMENT = 'department',
   PROVINCE = 'province',
   DISTRICT = 'district',
-  DEPARTMENT_PRICE = 'departmentPrice'
+  DEPARTMENT_PRICE = 'departmentPrice',
+  PROVINCE_PRICE = 'provincePrice',
+  IS_LIMA = 'isLima'
 }
 
 export class GeolocationProvider implements IDataSyncProvider{
@@ -45,6 +47,14 @@ export class GeolocationProvider implements IDataSyncProvider{
     else if (resource === ResourceNames.DEPARTMENT_PRICE) {
       const district = districts.find(({ id }) => id == filter?.district_id)
       return departments.find(({ id }) => id === district?.department_id);
+    }
+    else if (resource === ResourceNames.PROVINCE_PRICE) {
+      const district = districts.find(({ id }) => id == filter?.district_id)
+      return provincies.find(({ id }) => id === district?.province_id);
+    }
+    else if( resource === ResourceNames.IS_LIMA){
+      const districtFound = districts.find(({ id }) => id == filter?.district_id);
+      return districtFound?.province_id === "1501";
     }
 
     throw new Error('Not valid resource')

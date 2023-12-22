@@ -42,14 +42,16 @@ export default function OrderStatus() {
   const refProducts = useRef<
   (OrdersByIdResponse & { id: string }) | undefined
   >();
-  const getOrder = useGetOne(ProviderNames.ORDERS);
   console.log("🚀 ~ file: OrderStatus.tsx:43 ~ OrderStatus ~ refProducts:", refProducts)
+  const getOrder = useGetOne(ProviderNames.ORDERS);
 
   const total = refProducts.current?.order_products.reduce(
     (acm, { quantity, product: { price, discount_price } }) =>
-      acm + quantity * (discount_price ?? price),
+      // @ts-ignore
+      acm + quantity * (discount_price != 0 ? discount_price : price),
     0
   );
+  console.log("🚀 ~ file: OrderStatus.tsx:53 ~ OrderStatus ~ total:", total)
 
   const _handleSearchOrder = ({ search: id }: { search: string }) => {
     if(coolDownRef.current && dayjs(new Date()).diff(coolDownRef.current, 'second') <= 30)
@@ -78,7 +80,6 @@ export default function OrderStatus() {
         status: true,
       },
     });
-    console.log("🚀 ~ file: OrderStatus.tsx:78 ~ loadOrderResume ~ order_status:", order_status)
 
     refProducts.current = {
       ...rest,
@@ -157,7 +158,8 @@ export default function OrderStatus() {
         <LabelStepStatus
           property="TOTAL"
           icon={<img src={totalMoney} alt="money" />}
-          value={`S/. ${(total ?? 0 + (refProducts.current?.delivery_price ?? 0))?.toFixed()}`}
+          // @ts-ignore
+          value={`S/. ${(total + (refProducts.current?.delivery_price ?? 0))}`}
           sx={{
             fontWeight: "bold !important",
             fontSize: "1.1rem !important",

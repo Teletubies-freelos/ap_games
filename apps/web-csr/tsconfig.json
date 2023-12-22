@@ -20,6 +20,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
+  "include": ["src", "../../packages/ui/src/common/CustomInputField.tsx", "../../packages/ui/src/common/CustomInputField.tsx"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

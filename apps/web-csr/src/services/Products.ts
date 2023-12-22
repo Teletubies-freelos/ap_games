@@ -1,6 +1,6 @@
 import { GraphQLClient } from 'graphql-request';
 import { IDataProvider, IGetListParams } from 'data_providers';
-import { GET_PRODUCTS, GET_PRODUCTS_BY_CATEGORY, GET_PRODUCTS_BY_ID, GET_PRODUCTS_BY_SUB_CATEGORY, GET_PRODUCTS_SEARCH, GET_PRODUCT_DATA_IS_OFFER, GET_PRODUCT_DATA_IS_OFFER_BY_CATEGORY_ID, GET_PRODUCT_DATA_LOW_PRICE, GET_PRODUCT_DATA_LOW_PRICE_BY_CATEGORY } from '../../../request/src/graphql/queries';
+import { GET_PRODUCTS_BY_CATEGORY, GET_PRODUCTS_BY_ID, GET_PRODUCTS_BY_SUB_CATEGORY, GET_PRODUCTS_SEARCH, GET_PRODUCTS_VISIBLE, GET_PRODUCT_DATA_IS_OFFER, GET_PRODUCT_DATA_IS_OFFER_BY_CATEGORY_ID, GET_PRODUCT_DATA_LOW_PRICE, GET_PRODUCT_DATA_LOW_PRICE_BY_CATEGORY } from '../../../request/src/graphql/queries';
 
 export interface IProduct {
   product_id: number;
@@ -30,7 +30,7 @@ export class Products implements IDataProvider {
       if (isLowerPrice)
         return GET_PRODUCT_DATA_LOW_PRICE
 
-      return GET_PRODUCTS
+      return GET_PRODUCTS_VISIBLE
     }
 
     if (isOffer)

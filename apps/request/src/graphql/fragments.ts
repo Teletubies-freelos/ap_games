@@ -53,5 +53,7 @@ export const ORDER_DATA = gql`
     delivery_way {
       name
     }
+    delivery_price
+    total
   }
 `;

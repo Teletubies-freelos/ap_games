@@ -3,6 +3,10 @@ import { MRT_ColumnDef } from 'material-react-table';
 export interface ICategory {
   category_id: number;
   name: string;
+  sub_categories: [{
+    name: string;
+    sub_category_id: number;
+  }]
 }
 
 export function ListColumns(): MRT_ColumnDef<ICategory>[] {

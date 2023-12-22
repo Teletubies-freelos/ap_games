@@ -4,36 +4,15 @@ import { Discount, Tag } from "../../../../../packages/ui/src";
 import { useCreateOne } from "data_providers";
 import { ProviderNames } from "../../types/providers";
 import { CardProductProps } from "../../../../../packages/ui/src/molecules/CardProduct";
-import { ProductDetailPorps } from ".";
-import { useQueryClient } from "@tanstack/react-query";
-import { useMemo } from "react";
-import { serializeGames, useProductsById } from "../ProductList/hooks/useFeaturedProducts";
-import { Maybe } from "../../types";
-import { IProduct } from "../../services/Products";
 
-export default function ProductDetailBody({ productId }: Readonly<ProductDetailPorps>) {
-  const queryClient = useQueryClient()
-
-  const query = queryClient.getQueryData<{pages: IProduct[][]}>(["list_games", null, null, null])
-  const { product: productById } = useProductsById(Number(productId));
-
-  const product: Maybe<CardProductProps> = useMemo(
-    () => {
-      const result = query?.pages.flat().map(serializeGames)?.find(( product: CardProductProps) => product.productId == productId)
-      if(!result){
-        return productById;
-      }
-      return result;
-    },
-    [productId, query?.pages, productById]
-  );
+export default function ProductDetailBody({ product }: { product: Readonly<CardProductProps | undefined> }) {
 
   const createCartProduct = useCreateOne(ProviderNames.CART, {
     payload: {
       imageUrl: product?.src,
       name: product?.title,
       description: product?.description,
-      productId: productId,
+      productId: product?.productId,
       price: product?.price,
       quantity: 1,
       priceDiscount: 0
@@ -41,8 +20,8 @@ export default function ProductDetailBody({ productId }: Readonly<ProductDetailP
   });
 
   const _handleAddProduct = async () => {
-    if(!product) return
-  
+    if (!product) return
+
     await createCartProduct()
     setModalState(undefined);
     setIsWishList(true);
@@ -60,14 +39,30 @@ export default function ProductDetailBody({ productId }: Readonly<ProductDetailP
             flexDirection: 'column', // Switch to column layout on smaller screens
           },
         }}
-      > 
-        <Box sx={{ 
-          display:'flex', 
+      >
+        <Box sx={{
+          display: 'flex',
           alignItems: 'center',
+          position: 'relative',
           '@media (max-width: 600px)': {
             justifyContent: 'center'
-          },}}>
+          },
+        }}>
           <img width={200} src={product?.src} alt={product?.alt} />
+          <Tag
+            sx={{
+              '@media (max-width: 600px)': {
+                justifyContent: 'center',
+                visibility: 'visible',
+                backgroundColor: 'background.default',
+              },
+              visibility: 'hidden',
+              position: 'absolute',
+              right: '2rem',
+              top: 0
+            }}
+            icon={<Discount />}
+            label="Oferta" />
         </Box>
         <Box
           sx={{
@@ -77,22 +72,15 @@ export default function ProductDetailBody({ productId }: Readonly<ProductDetailP
           }}
         >
           {!!product?.previousPrice && (
-            <Tag icon={<Discount />} label="Oferta" />
+            <Tag
+              icon={<Discount />}
+              sx={{
+                '@media (max-width: 600px)': {
+                  display: 'none'
+                }
+              }}
+              label="Oferta" />
           )}
-          <Box>
-            <Typography
-              variant="body1"
-              sx={{ paddingBottom: ".5rem", fontSize: '1.2rem', fontWeight: 800 }}
-            >
-              Nombre
-            </Typography>
-            <Typography
-              variant="body1"
-              sx={{ fontSize: "0.9rem", fontWeight: 500 }}
-            >
-              { product?.title }
-            </Typography>
-          </Box>
           <Box>
             <Typography
               variant="body1"
@@ -103,7 +91,7 @@ export default function ProductDetailBody({ productId }: Readonly<ProductDetailP
             <Typography
               variant="body1"
               sx={{
-                fontSize: "0.9rem",
+                fontSize: "0.8rem",
                 fontWeight: 500,
                 minHeight: '5rem',
                 maxHeight: '35vh',
@@ -116,7 +104,7 @@ export default function ProductDetailBody({ productId }: Readonly<ProductDetailP
                 }
               }}
             >
-              { product?.description }
+              {product?.description}
             </Typography>
           </Box>
           <Box
@@ -138,14 +126,15 @@ export default function ProductDetailBody({ productId }: Readonly<ProductDetailP
                   textDecorationLine: "line-through",
                 }}
               >
-                S/. { product?.previousPrice }
+                S/. {product?.previousPrice}
               </Typography>
             )}
-            
-            <Typography variant="body1" sx={{ 
-                fontSize: "1.6rem",
-                fontWeight: 800, }}>
-              S/. { product?.price }
+
+            <Typography variant="body1" sx={{
+              fontSize: "1.6rem",
+              fontWeight: 800,
+            }}>
+              S/. {product?.price}
             </Typography>
           </Box>
         </Box>

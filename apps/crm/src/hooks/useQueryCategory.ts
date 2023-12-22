@@ -9,6 +9,7 @@ import { ICategoryName } from '../pages/categories/ListCategories';
 import { AsyncProviderNames } from '../types/providers';
 import { ICategory } from '../services/Categories';
 import { setIsEditCategory } from '../observables';
+import useToast from './useToast';
 
 interface IUseQueryCategory {
   reset?: () => void;
@@ -41,38 +42,43 @@ export const useQueryCategory = ({ reset }: IUseQueryCategory) => {
   const deleteCategory = useDeleteOne(AsyncProviderNames.CATEGORIES);
   const { mutate: mutateDelete } = useMutation(
     ['delete_category'],
-    async (category_id: number) => {
-      deleteCategory(category_id);
+    // @ts-ignore
+    async ({category_id, sub_categories}) => {
+       // @ts-ignore
+      return deleteCategory({category_id, sub_categories});
     },
     {
       onSuccess: (_data, variables) => {
-        queryClient.setQueryData<ICategory[]>(
+        queryClient.invalidateQueries(
           ['all_categories_table'],
-          (prevCategories) =>
-            prevCategories?.filter(
-              (category) => category.category_id !== variables
-            )
+           // @ts-ignore
+          variables?.category_id
         );
       },
-    }
+      onError: (error, variables) => {
+        // @ts-ignore
+        useToast({ message: error?.message, isError: true })
+        queryClient.invalidateQueries(
+          ['all_categories_table'],
+           // @ts-ignore
+          variables?.category_id
+        );
+      }
+    },
   );
 
   const updateCategory = useUpdateOne(AsyncProviderNames.CATEGORIES);
   const { mutate: mutateUpdate } = useMutation(
     ['delete_category'],
-    async ({ category_id, name }: ICategory) => {
-      return await updateCategory({ category_id, name });
+    async ({ category_id, name, sub_categories, sub_categories_to_create, sub_categories_to_delete }: ICategory) => {
+      return await updateCategory({ category_id, name, sub_categories, sub_categories_to_create, sub_categories_to_delete });
     },
     {
       onSuccess: (_data, variables) => {
-        queryClient.setQueryData<ICategory[]>(
+        // @ts-ignore
+        queryClient.invalidateQueries(
           ['all_categories_table'],
-          (prevCategories) =>
-            prevCategories?.map((category) =>
-              category.category_id === variables.category_id
-                ? variables
-                : category
-            )
+          variables?.category_id
         );
         reset && reset();
         setIsEditCategory(false);

@@ -41,10 +41,16 @@ export function ListColumns(): MRT_ColumnDef<IOrders>[] {
       Cell: ({ renderedCellValue }) => isEmpty(renderedCellValue),
     },
     {
+      header: 'Precio Delivery',
+      accessorKey: 'delivery_price',
+      size: 100,
+      Cell: ({ renderedCellValue }) => (renderedCellValue ? "S/. " + renderedCellValue : "No Aplica"),
+    },
+    {
       header: 'Total',
       accessorKey: 'total',
       size: 100,
-      Cell: ({ renderedCellValue }) => isEmpty(renderedCellValue),
+      Cell: ({ renderedCellValue }) => renderedCellValue ? "S/. " + renderedCellValue : isEmpty(renderedCellValue),
     },
     {
       header: 'Método de pago',

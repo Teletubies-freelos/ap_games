@@ -7,6 +7,8 @@ export enum ModalState {
   DELIVERY_COSTS = 'deliveryCostsClient',
   DELIVERY_COSTS_DETAIL = 'deliveryCostsDetail',
   DELIVERY_COSTS_DETAIL_UPDATE = 'deliveryCostsDetailUpdate',
+  CATEGORY_DETAIL_CREATE = 'category',
+  CATEGORY_DETAIL_UPDATE = 'categoryUpdate',
 }
 export interface ModalData {
   name: ModalState;

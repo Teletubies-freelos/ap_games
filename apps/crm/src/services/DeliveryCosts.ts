@@ -12,6 +12,7 @@ export interface IDeliveryCosts {
 }
 export interface IDeliveryCostsDetail {
     department_id: number;
+    province_id: number;
     district_id: number;
     category_id: number;
     sub_category_id: number;
@@ -19,13 +20,10 @@ export interface IDeliveryCostsDetail {
 }
 export enum DeliveryCostsTypes {
     CONFIG_BY_DEPARTMENT = 'configByDepartment',
-    ONLY_LIMA = 'onlyLima'
+    ONLY_LIMA = 'onlyLima',
+    SEARCH_PROVINCES = 'searchProvinces',
+    SEARCH_DISTRICTS = 'searchDistrics'
 }
-
-export const deliveryCostsTypesText: Record<DeliveryCostsTypes, string> = {
-    [DeliveryCostsTypes.CONFIG_BY_DEPARTMENT]: 'Configuración por Departamento',
-    [DeliveryCostsTypes.ONLY_LIMA]: 'Configuración distritos de Lima',
-};
 
 export class DeliveryCostsData implements IDataProvider {
     constructor(private client: GraphQLClient) { }
@@ -51,10 +49,9 @@ export class DeliveryCostsData implements IDataProvider {
     async createOne(payload: IDeliveryCosts): Promise<void | Partial<any>> {
         const { insert_delivery_costs_one } = await this.client.request<{ insert_delivery_costs_one: any }>(
             CREATE_DELIVERY_COSTS, {
-            description: payload.description,
-            price: payload.price,
-            type: payload.type
-        }
+                description: payload.description,
+                price: payload.price
+            }
         );
 
         if (!insert_delivery_costs_one) {
@@ -62,8 +59,8 @@ export class DeliveryCostsData implements IDataProvider {
         }
         const { response } = await this.client.request<{ response: any }>(
             CREATE_DELIVERY_COSTS_DETAIL, {
-            objects: payload.delivery_costs_details.map((value) => ({ ...value, delivery_costs_id: insert_delivery_costs_one?.delivery_costs_id }))
-        }
+                objects: payload.delivery_costs_details.map((value) => ({ ...value, delivery_costs_id: insert_delivery_costs_one?.delivery_costs_id }))
+            }
         );
 
         return response;

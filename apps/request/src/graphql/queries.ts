@@ -10,6 +10,17 @@ export const GET_PRODUCTS = gql`
 
   ${PRODUCT_DATA}
 `;
+
+export const GET_PRODUCTS_VISIBLE = gql`
+  query GET_PRODUCTS($limit: Int, $offset: Int) {
+    products(limit: $limit, offset: $offset, order_by: { updated_at: desc }, where: { is_visible: { _eq: true }}) {
+      ...PRODUCT_DATA
+    }
+  }
+
+  ${PRODUCT_DATA}
+`;
+
 export const GET_PRODUCTS_BY_CATEGORY = gql`
   query GET_PRODUCTS_BY_CATEGORY($limit: Int, $offset: Int, $categoryId: Int) {
     products(
@@ -245,7 +256,6 @@ export const GET_ONE_DELIVERY_COSTS = gql`
       price
       description
       delivery_costs_id
-      type
       delivery_costs_details {
         delivery_costs_detail_id
         delivery_costs_id
@@ -253,6 +263,7 @@ export const GET_ONE_DELIVERY_COSTS = gql`
         district_id
         sub_category_id
         category_id
+        province_id
       }
     }
   }
@@ -270,8 +281,8 @@ export const GET_DELIVERY_COSTS = gql`
           department_id
           district_id
           sub_category_id
-        }
-        type
+          province_id
+        } 
         price
         description
         delivery_costs_id
@@ -281,28 +292,28 @@ export const GET_DELIVERY_COSTS = gql`
 `;
 
 export const GET_DELIVERY_COSTS_DETAIL_BY_PARAM = gql`
-  query GET_DELIVERY_COSTS ($category_id: Int, $department_id: Int, $district_id: Int, $sub_category_id: Int){
+  query GET_DELIVERY_COSTS ($categories: [Int], $deparments: [Int], $districts: [Int], $subCategories: [Int], $provinces: [Int]){
     delivery_costs_detail(
       where: {
         _or: [
-          { category_id: { _eq: $category_id } },
-          { sub_category_id: { _eq: $sub_category_id } },
-          { district_id: { _eq: $district_id } },
-          { department_id: { _eq: $department_id } }
+          { category_id: { _in: $categories } },
+          { sub_category_id: { _in: $subCategories } },
+          { district_id: { _in: $districts } },
+          { department_id: { _in: $deparments } },
+          { province_id: { _in: $provinces } }
         ]
       }
-      
       ) {
       delivery_cost {
         price
         description
-        type
       }
       district_id
       department_id
       delivery_costs_id
       delivery_costs_detail_id
       sub_category_id
+      province_id
     }
   }
 `;
@@ -375,3 +386,46 @@ export const GET_ORDER_STATUSES = gql`
     }
   }`;
 
+export const GET_SUB_CATEGORIES_PRODUCTS = gql`
+  query GET_SUB_CATEGORIES_PRODUCTS(
+    $subCategoryId: [Int]
+  ) {
+    products(where: {sub_category_id: {_in: $subCategoryId}}) {
+      product_id,
+      sub_category_id
+    }
+  }
+`;
+
+export const GET_SUB_CATEGORIES_DELIVERY_COSTS = gql`
+  query GET_SUB_CATEGORIES_DELIVERY_COSTS(
+    $subCategoryId: [Int]
+  ) {
+    delivery_costs_detail(where: {sub_category_id: {_in: $subCategoryId}}) {
+      delivery_costs_detail_id,
+      sub_category_id
+    }
+  }
+`;
+
+export const GET_CATEGORIES_PRODUCTS = gql`
+  query GET_SUB_CATEGORIES_PRODUCTS(
+    $categoryId: Int
+  ) {
+    products(where: {category_id: { _eq: $categoryId}}) {
+      product_id,
+      category_id
+    }
+  }
+`;
+
+export const GET_CATEGORIES_DELIVERY_COSTS = gql`
+  query GET_SUB_CATEGORIES_DELIVERY_COSTS(
+    $categoryId: Int
+  ) {
+    delivery_costs_detail(where: {category_id: { _eq: $categoryId}}) {
+      delivery_costs_detail_id,
+      category_id
+    }
+  }
+`;

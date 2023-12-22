@@ -1,4 +1,4 @@
-import { Stack,  IconButton, Autocomplete, TextField, Box, InputAdornment } from '@mui/material';
+import { Stack, IconButton, Autocomplete, TextField, Box, InputAdornment } from '@mui/material';
 import { Link } from 'react-router-dom';
 import {
   ColorSwitch,
@@ -28,22 +28,24 @@ import { reduceQuantity } from '../../utils';
 import { FeaturedDTO } from '../../../../migrations/src/types/tables'
 import { ChangeEventHandler, useState } from 'react';
 import { useDebounce } from 'use-debounce';
+import { Helmet } from 'react-helmet-async';
+
 interface ISearchBarQuery {
   name: string;
   img_url: string;
   price: number;
   product_id: number;
 }
-const SearchBar = ()=>{
+export const SearchBar = () => {
   const searchProduct = useGetList<ISearchBarQuery>(ProviderNames.PRODUCTS)
   const [value, setValue] = useState<string>()
   const [valueDebounced] = useDebounce(value, 1000);
-  const handleChange: ChangeEventHandler<HTMLInputElement>  = (event)=>{
+  const handleChange: ChangeEventHandler<HTMLInputElement> = (event) => {
     setValue(event.target.value)
   }
-  
+
   const _hamdleCardClick = (value: any) => {
-    if(!value) return;
+    if (!value) return;
 
     setModalState({
       data: {
@@ -55,9 +57,9 @@ const SearchBar = ()=>{
     })
   }
 
-  const { data }= useQuery(['search_products', valueDebounced], {
-    queryFn: async ()=> await searchProduct({
-      filter:{
+  const { data } = useQuery(['search_products', valueDebounced], {
+    queryFn: async () => await searchProduct({
+      filter: {
         name: valueDebounced,
         isAlike: true
       },
@@ -65,10 +67,10 @@ const SearchBar = ()=>{
     enabled: !!valueDebounced
   })
 
-  return(<Autocomplete
-    options={data?.map(({name, img_url, price, product_id})=> ({ name, img_url, price, product_id })) ?? []}
+  return (<Autocomplete
+    options={data?.map(({ name, img_url, price, product_id }) => ({ name, img_url, price, product_id })) ?? []}
     freeSolo
-    sx={{ 
+    sx={{
       width: {
         xs: '90vw',
         md: 'unset'
@@ -89,7 +91,7 @@ const SearchBar = ()=>{
         InputProps={{
           ...params.InputProps,
           type: 'search',
-          startAdornment: (<InputAdornment position="start" sx={{paddingLeft: '0.5rem'}} children={<SearchIcon /> } />)
+          startAdornment: (<InputAdornment position="start" sx={{ paddingLeft: '0.5rem' }} children={<SearchIcon />} />)
         }}
       />
     )}
@@ -147,52 +149,59 @@ export default function Home() {
   const _handleOpenMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorElMenu(anchorEl ? null : event.currentTarget);
   };
-  
-  const getCategoryBySection = (category: Categories) =>{
-    const id = categories?.find(({name}) => name == category)?.category_id;
-    if(id){
-      setCategoryIdSelected({category_id: id, sub_category_id: 0});
+
+  const getCategoryBySection = (category: Categories) => {
+    const id = categories?.find(({ name }) => name == category)?.category_id;
+    if (id) {
+      setCategoryIdSelected({ category_id: id, sub_category_id: 0 });
     }
   }
 
   return (
-    <GeneralLayout
-      navBar={
-        <NavBar
-          actionsComponent={
-            <ColorSwitch onChange={toggleColor} overrideCheckBg />
-          }
-          cartComponent={<CartIconReactive reduceQuantity={reduceQuantity} />}
-          navigatorLinks={<NavLinks />}
-          mainLogo={
-            <Link to='/'>
-              <MainLogo sx={{ width: { xs: '70%', md: '8rem' } }} />
-            </Link>
-          }
-          searchBar={<SearchBar />}
-          menu={
-            <IconButton onClick={_handleOpenMenu} size='small'>
-              <MenuIcon />
-            </IconButton>
-          }
-        />
-      }
-    >
-      {!!data?.length && (
-        <ResponsiveCarousel data={data ?? []} itemRender={render} />
-      )}
-      <Stack
-        direction='row'
-        gap={{ sm: 6 }}
-        justifyContent={{ xs: 'space-evenly', sm: 'center' }}
-        sx={sxInnerStack}
+    <>
+      <Helmet>
+        <title>AP Games: Tu Tienda de Videojuegos, Consolas y Accesorios para PS4, PS5, Xbox y Nintendo Switch</title>
+        <meta name="description" content="¡Descubre el paraíso del gaming en AP Games! Explora nuestra amplia colección de videojuegos, consolas y accesorios para PS4, PS5, Xbox y Nintendo Switch. Ya seas un gamer experimentado o estés dando tus primeros pasos, encuentra todo lo que necesitas para una experiencia de juego inmersiva. Disfruta de precios competitivos, servicio al cliente de primera y envío rápido. Entra al mundo de AP Games y lleva tu experiencia de juego al siguiente nivel hoy mismo." />
+      </Helmet>
+      <GeneralLayout
+        navBar={
+          <NavBar
+            actionsComponent={
+              <ColorSwitch onChange={toggleColor} overrideCheckBg />
+            }
+            cartComponent={<CartIconReactive reduceQuantity={reduceQuantity} />}
+            navigatorLinks={<NavLinks />}
+            mainLogo={
+              <Link to='/'>
+                <MainLogo sx={{ width: { xs: '70%', md: '8rem' } }} />
+              </Link>
+            }
+            searchBar={<SearchBar />}
+            menu={
+              <IconButton onClick={_handleOpenMenu} size='small'>
+                <MenuIcon />
+              </IconButton>
+            }
+          />
+        }
       >
-        <PlayStation4Logo sx={noMargin} onClick={() => getCategoryBySection(Categories.PS4)}/>
-        <PlayStation5Logo sx={noMargin} onClick={() => getCategoryBySection(Categories.PS5)}/>
-        <NintendoLogo sx={noMargin} onClick={() => getCategoryBySection(Categories.NINTENDO)}/>
-        <XboxLogo sx={noMargin} onClick={() => getCategoryBySection(Categories.XBOX)}/>{' '}
-      </Stack>
-      <ProductsList categorySelected={categorySelected} categories={categories}/>
-    </GeneralLayout>
+        {!!data?.length && (
+          <ResponsiveCarousel data={data ?? []} itemRender={render} />
+        )}
+        <Stack
+          direction='row'
+          gap={{ sm: 6 }}
+          justifyContent={{ xs: 'space-evenly', sm: 'center' }}
+          sx={sxInnerStack}
+        >
+          <PlayStation4Logo sx={noMargin} onClick={() => getCategoryBySection(Categories.PS4)} />
+          <PlayStation5Logo sx={noMargin} onClick={() => getCategoryBySection(Categories.PS5)} />
+          <NintendoLogo sx={noMargin} onClick={() => getCategoryBySection(Categories.NINTENDO)} />
+          <XboxLogo sx={noMargin} onClick={() => getCategoryBySection(Categories.XBOX)} />{' '}
+        </Stack>
+        <ProductsList categorySelected={categorySelected} categories={categories} />
+      </GeneralLayout>
+
+    </>
   );
 }

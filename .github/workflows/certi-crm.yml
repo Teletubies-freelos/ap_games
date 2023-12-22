@@ -6,15 +6,15 @@ on:
 name: 🚀 Deploy website on push
 
 jobs:
-  web-deploy:
+  web-deploy-crm:
     env:
-      VITE_HASURA_GRAPHQL_MASTER_TOKEN: ${{ vars.MASTER_TOKEN }}
-      VITE_HASURA_GRAPHQL_URL: ${{ vars.GRAPHQL_URL }}
+      VITE_HASURA_GRAPHQL_MASTER_TOKEN: ${{ vars.HASURA_SECRET }}
+      VITE_HASURA_GRAPHQL_URL: ${{ vars.HASURA_BASE_URLs }}
       VITE_AUTH0_ID: ${{ vars.OAUTH_ID }}
       VITE_AUTH0_DOMAIN: ${{ vars.OAUTH_DOMAIN }}
       VITE_PHOTO_UPLOAD_URL: ${{ vars.PHOTO_UPLOAD_URL }}
       VITE_ABLY_SUBSCRIBER: ${{ vars.ABLY_SUBSCRIBER }}
-    name: 🎉 Deploy
+    name: 🎉 Deploy CMS
     runs-on: ubuntu-latest
     steps:
       - name: 🚚 Get latest code
@@ -38,5 +38,7 @@ jobs:
           server: ${{ secrets.FTP_HOST }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
+          port: ${{ secrets.FTP_PORT }}
+          log-level: verbose
           local-dir: ./apps/crm/dist/
-          server-dir: /cert.apgames.pe/public_html/cms/
+          server-dir: public_html/cms/

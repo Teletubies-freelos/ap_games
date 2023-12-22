@@ -109,7 +109,7 @@ const CreateModal = () => {
       quantity,
       category_id,
       is_offer: discount_price != 0 && discount_price != undefined ? true : false,
-      is_visible,
+      is_visible: !is_visible,
       sub_category_id,
     });
 
@@ -248,7 +248,7 @@ const CreateModal = () => {
                 render={({ field }) => (
                   <FormControlLabel
                     control={<Checkbox {...field} />}
-                    label='Es Visible'
+                    label='No Visible'
                   />
                 )}
               />

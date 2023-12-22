@@ -21,7 +21,6 @@ export class PaymentMethods implements IDataProvider {
       limit,
       offset: limit * page,
     });
-    console.log("🚀 ~ file: PaymentMethods.ts:19 ~ PaymentMethods ~ getList ~ payment_methods:", payment_methods)
 
     return payment_methods;
   }

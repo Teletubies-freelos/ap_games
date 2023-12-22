@@ -288,7 +288,7 @@ export const BannerSettings = () => {
                                                     }
                                                 }}
                                                 // @ts-ignore
-                                                onChange={(_, value) => { console.log("changed", value); setValue("product_id", value!.product_id) }}
+                                                onChange={(_, value) => { setValue("product_id", value!.product_id) }}
                                             />
 
                                         ) :
